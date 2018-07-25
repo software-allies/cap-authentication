@@ -1,8 +1,8 @@
 export default {
     input: 'dist/index.js',
     output: {
-      file: 'dist/bundles/capauthorization.umd.js',
-      name: 'ng.capauthorization',
+      file: 'dist/bundles/capauthentication.umd.js',
+      name: 'ng.capauthentication',
       globals: {
         '@angular/core': 'ng.core'
       },

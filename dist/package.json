@@ -1,13 +1,13 @@
 {
     "name": "cap-authorization",
-    "version": "0.0.5",
-    "description": "Module for Authentication in CAP generated application",
-    "main": "bundles/caplocalnotifications.umd.js",
+    "version": "0.0.1",
+    "description": "Module for authentication in a CAP generated application",
+    "main": "bundles/capauthentication.umd.js",
     "module": "index.js",
     "typings": "index.d.ts",
     "keywords": [
         "cap",
-        "authorization",
+        "authentication",
         "module",
         "ionic3"
     ],
@@ -15,7 +15,7 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/software-allies/cap-authorization.git"
+        "url": "https://github.com/software-allies/cap-authentication.git"
     },
     "peerDependencies": {
         "@angular/core": "^5.2.11"
