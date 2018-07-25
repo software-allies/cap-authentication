@@ -1,6 +1,6 @@
 {
     "name": "cap-authorization",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Module for authentication in a CAP generated application",
     "main": "bundles/capauthentication.umd.js",
     "module": "index.js",

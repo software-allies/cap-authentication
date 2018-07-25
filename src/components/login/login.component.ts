@@ -8,10 +8,12 @@ import { AuthenticationService } from './../../authentication.service';
 
 @Component({
     selector: "auth-app-login",
-    template: `
+    template: ` 
+<ion-grid>
+   <ion-row>
+     <ion-col  col-12 col-xl-8 offset-xl-2 col-lg-10 offset-lg-1>
         <ion-list>
             <form [formGroup]="loginform" (ngSubmit)="onSubmit()">
-
             <ion-item>
                 <ion-label stacked primary>Email</ion-label>
                 <ion-input [(ngModel)]="credentials.email" formControlName="email"
@@ -23,12 +25,13 @@ import { AuthenticationService } from './../../authentication.service';
                 <ion-input [(ngModel)]="credentials.password" formControlName="password" type="text" id="password" ngDefaultControl>
                 </ion-input>
             </ion-item>
-
             <button ion-button type="submit" block primary [disabled]="!loginform.valid">Login</button>
             <button ion-button type="submit" block secondary (click)="createAccount()">Create an account</button>
-
             </form>
         </ion-list>
+     </ion-col>
+   </ion-row>
+ </ion-grid>
         `,
     styles: [``],
   encapsulation: ViewEncapsulation.Emulated
