@@ -16,17 +16,16 @@ export function getAuthServiceConfigs() {
       [
         {
           id: FacebookLoginProvider.PROVIDER_ID,
-          provider: new FacebookLoginProvider("1776062755846628")
+          provider: new FacebookLoginProvider("")
         },
         {
           id: GoogleLoginProvider.PROVIDER_ID,
-	      provider: new GoogleLoginProvider("136230663300-64tm5v1laad62q52aec3t6n05913p4c6.apps.googleusercontent.com")
+	      provider: new GoogleLoginProvider("")
         },
       ]
   )
   return config;
 }
-
 @NgModule({
   declarations: [
     AuthLoginComponent,
