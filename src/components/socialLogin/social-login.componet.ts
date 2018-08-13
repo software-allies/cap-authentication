@@ -1,5 +1,7 @@
 // import { SocialMediaService } from '../../services/social-media.service';
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from '../../services/authentication.service';
+
 import { AuthService, FacebookLoginProvider, GoogleLoginProvider, AuthServiceConfig } from 'angular5-social-login';
 
 @Component({
@@ -29,7 +31,7 @@ export class SocialLoginComponent implements OnInit {
       icon: 'googleplus'
     }
   ];
-  constructor( private socialAuthService: AuthService ) { }
+  constructor( private socialAuthService: AuthService, private authenticationService:AuthenticationService ) { }
 
   ngOnInit() { }
 
@@ -44,6 +46,7 @@ export class SocialLoginComponent implements OnInit {
       
       this.socialAuthService.signIn(socialPlatformProvider).then(
         (userData) => {
+          this.authenticationService.isLoggedIn = true;
           console.log(socialPlatform+" sign in data : " , userData);
           // Now sign-in with userData       
         }
