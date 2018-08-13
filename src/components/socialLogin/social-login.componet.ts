@@ -8,7 +8,7 @@ import { AuthService, FacebookLoginProvider, GoogleLoginProvider, AuthServiceCon
     `
       <div *ngIf="socialMedia">
       <div *ngFor="let social of socialMedia" >
-        <button ion-button color="{{social.color}}" type="submit" block secondary (click)="socialSignIn('facebook')">
+        <button ion-button color="{{social.color}}" type="submit" block secondary (click)="socialSignIn(social.name)">
           <ion-icon md="logo-{{ social.icon }}" name="logo-{{ social.icon }}" item-right> {{ social.name }}  </ion-icon>
         </button>
       </div>
@@ -36,9 +36,9 @@ export class SocialLoginComponent implements OnInit {
   socialSignIn(socialPlatform : string) {
       // console.log('socialPlatform: ', socialPlatform);
       let socialPlatformProvider:any;
-      if(socialPlatform == "facebook"){
+      if(socialPlatform == "Facebook"){
         socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
-      }else if(socialPlatform == "google"){
+      }else if(socialPlatform == "Google"){
         socialPlatformProvider = GoogleLoginProvider.PROVIDER_ID;
       }
       
