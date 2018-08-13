@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from "@angular/forms"
 import { CredentialsInterface } from './../../credentials.interface';
 
 // import { AuthenticationService } from 'authmodule-angular6-module-example';
-import { AuthenticationService } from './../../authentication.service';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({ 
   selector: "auth-app-change-password",

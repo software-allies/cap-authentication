@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from "@angular/forms"
 import { CredentialsInterface } from './../../credentials.interface';
 
 // import { AuthenticationService } from 'authmodule-angular6-module-example';
-import { AuthenticationService } from './../../authentication.service';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: "auth-app-register",
@@ -31,6 +31,7 @@ import { AuthenticationService } from './../../authentication.service';
                 </ion-item>
                 <button ion-button type="submit" block full primary [disabled]="!registerform.valid">Register</button>
                 <button ion-button type="submit" block secondary (click)="loginAccount()">Login to account</button>
+                <social-login></social-login>
             </form>
         </ion-list>
      </ion-col>

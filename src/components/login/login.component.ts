@@ -1,10 +1,10 @@
 import { Component, Output, EventEmitter, ViewEncapsulation } from '@angular/core'; 
 import { FormGroup, FormBuilder, FormControl, Validators } from "@angular/forms";
 import { CredentialsInterface } from './../../credentials.interface';
+import { AuthService, FacebookLoginProvider, GoogleLoginProvider, AuthServiceConfig } from 'angular5-social-login';
+import { AuthenticationService } from '../../services/authentication.service';
 
 
-// import { AuthenticationService } from 'authmodule-angular6-module-example';
-import { AuthenticationService } from './../../authentication.service';
 
 @Component({
     selector: "auth-app-login",
@@ -27,6 +27,7 @@ import { AuthenticationService } from './../../authentication.service';
             </ion-item>
             <button ion-button type="submit" block primary [disabled]="!loginform.valid">Login</button>
             <button ion-button type="submit" block secondary (click)="createAccount()">Create an account</button>
+            <social-login></social-login>
             </form>
         </ion-list>
      </ion-col>
@@ -53,9 +54,11 @@ export class AuthLoginComponent {
 
     constructor(
         private authenticationService: AuthenticationService,
-        public formBuilder: FormBuilder) {
+        public formBuilder: FormBuilder,
+        // private socialAuthService: AuthService,
+        private authServiceConfig: AuthServiceConfig) {
     }
-
+  
     ngOnInit(): any {
         this.loginform = this.formBuilder.group({
             password: ['', [Validators.required, Validators.minLength(3)]],
@@ -74,6 +77,25 @@ export class AuthLoginComponent {
     createAccount() {
         this.changePage.emit(true);
     }
+
+    // socialSignIn(socialPlatform : string) {
+    //     // console.log('socialPlatform: ', socialPlatform);
+    //     let socialPlatformProvider:any;
+    //     if(socialPlatform == "facebook"){
+    //       socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
+    //     }else if(socialPlatform == "google"){
+    //       socialPlatformProvider = GoogleLoginProvider.PROVIDER_ID;
+    //     }
+        
+    //     this.socialAuthService.signIn(socialPlatformProvider).then(
+    //       (userData) => {
+    //         console.log(socialPlatform+" sign in data : " , userData);
+    //         // Now sign-in with userData       
+    //       }
+    //     )
+    // }
+
+    
 
 }
 

@@ -1,27 +1,45 @@
-
 import { NgModule, ModuleWithProviders, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms'; 
 import { HttpClientModule } from '@angular/common/http';
 import { IonicModule } from 'ionic-angular';
-import { ConfigService } from './config.service';
-import { AuthenticationService } from './authentication.service';
+import { ConfigService } from './services/config.service';
+import { AuthenticationService } from './services/authentication.service';
 import { CommonModule } from "@angular/common";
 
 import { AuthRegisterComponent } from './components/register/register.component';
 import { AuthLoginComponent } from './components/login/login.component';
 import { AuthChangePasswordComponent } from './components/change-password/change-password.component';
+import { SocialLoginModule, AuthServiceConfig, FacebookLoginProvider, GoogleLoginProvider } from 'angular5-social-login';
+import { SocialLoginComponent } from '../src/components/socialLogin/social-login.componet';
+export function getAuthServiceConfigs() {
+  let config = new AuthServiceConfig(
+      [
+        {
+          id: FacebookLoginProvider.PROVIDER_ID,
+          provider: new FacebookLoginProvider("")
+        },
+        // {
+        //   id: GoogleLoginProvider.PROVIDER_ID,
+	      // provider: new GoogleLoginProvider("136230663300-3g37vga90vblog24ipt9a3kfc09r5tek.apps.googleusercontent.com")
+        // },
+      ]
+  )
+  return config;
+}
 
 @NgModule({
   declarations: [
     AuthLoginComponent,
     AuthRegisterComponent,
     AuthChangePasswordComponent,
+    SocialLoginComponent
   ],
   imports: [
     IonicModule,
     HttpClientModule,
     ReactiveFormsModule,
     CommonModule,
+    SocialLoginModule
   ],
   exports: [
     HttpClientModule,
@@ -32,6 +50,10 @@ import { AuthChangePasswordComponent } from './components/change-password/change
     AuthChangePasswordComponent,
   ],
   providers: [
+    {
+      provide: AuthServiceConfig,
+      useFactory: getAuthServiceConfigs
+    },
     AuthenticationService
   ],
   schemas: [
