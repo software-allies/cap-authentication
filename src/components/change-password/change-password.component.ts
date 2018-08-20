@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from "@angular/forms";
-import { CredentialsInterface } from './../../credentials.interface';
+import { CredentialsInterface } from '../../interfaces/credentials.interface';
 
 // import { AuthenticationService } from 'authmodule-angular6-module-example';
 import { AuthenticationService } from '../../services/authentication.service';
