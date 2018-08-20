@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 
 import { AuthService, FacebookLoginProvider, GoogleLoginProvider, AuthServiceConfig } from 'angular5-social-login';
+import { ConfigService } from '../../services/config.service';
 
 @Component({
     selector: 'social-login',
@@ -10,12 +11,15 @@ import { AuthService, FacebookLoginProvider, GoogleLoginProvider, AuthServiceCon
     `
       <div *ngIf="socialMedia">
       <div *ngFor="let social of socialMedia" >
-        <button ion-button color="{{social.color}}" type="submit" block secondary (click)="socialSignIn(social.name)">
-          <ion-icon md="logo-{{ social.icon }}" name="logo-{{ social.icon }}" item-right> {{ social.name }}  </ion-icon>
+        <button ion-button color="{{social.color}}" type="submit" block secondary (click)="socialSignIn(social.name)" icon-end>
+          {{ social.name }}    
+          <ion-icon md="logo-{{ social.icon }}" name="logo-{{ social.icon }}" item-right></ion-icon> 
         </button>
       </div>
       </div>
-    `
+    `,
+    // 
+    
 })
 
 export class SocialLoginComponent implements OnInit {
