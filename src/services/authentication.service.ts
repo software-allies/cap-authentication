@@ -3,8 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, pipe } from 'rxjs';
 import { ConfigService } from './config.service';
 import { map, catchError, tap } from 'rxjs/operators';
-import { CredentialsInterface } from '../credentials.interface';
-import { LoopbackResponseInterface } from '../loopback-response.interface';
+import { CredentialsInterface } from '../interfaces/credentials.interface';
+import { LoopbackResponseInterface } from '../interfaces/loopback-response.interface';
 
  
 @Injectable()
