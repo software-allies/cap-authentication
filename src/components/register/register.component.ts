@@ -31,7 +31,6 @@ import { AuthenticationService } from '../../services/authentication.service';
                 </ion-item>
                 <button ion-button type="submit" block full primary [disabled]="!registerform.valid">Register</button>
                 <button ion-button type="submit" block secondary (click)="loginAccount()">Login to account</button>
-                <social-login></social-login>
             </form>
         </ion-list>
      </ion-col>
