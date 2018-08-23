@@ -14,6 +14,12 @@ import { AuthenticationService } from '../../services/authentication.service';
         <ion-list>
             <form [formGroup]="registerform" (ngSubmit)="onSubmit()">
                 <ion-item>
+                    <ion-label stacked primary>Username</ion-label>
+                    <ion-input [(ngModel)]="credentials.username" formControlName="username"
+                            type="text" id="username" spellcheck="false" autocapitalize="off" ngDefaultControl>
+                    </ion-input>
+                </ion-item>
+                <ion-item>
                     <ion-label stacked primary>Email</ion-label>
                     <ion-input [(ngModel)]="credentials.email" formControlName="email"
                             type="text" id="email" spellcheck="false" autocapitalize="off" ngDefaultControl>
@@ -50,6 +56,7 @@ export class AuthRegisterComponent {
     changePage: EventEmitter<boolean> = new EventEmitter();
 
     credentials: CredentialsInterface = {
+        username:'',
         email: '',
         password: '', 
         repassword: '' 
@@ -65,6 +72,7 @@ export class AuthRegisterComponent {
 
     ngOnInit(): any {
         this.registerform = this.formBuilder.group({
+            username: ['', [Validators.required, Validators.minLength(3)]],
             password: ['', [Validators.required, Validators.minLength(3)]],
             repassword: ['', [Validators.required, Validators.minLength(3)]],
             email: ['', [Validators.required, Validators.minLength(3)]]
