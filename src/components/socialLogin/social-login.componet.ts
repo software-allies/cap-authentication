@@ -52,8 +52,6 @@ export class SocialLoginComponent implements OnInit {
         (userData) => {
           this.authenticationService.isLoggedIn = true;
           this.authenticationService.saveSocialMediaData(userData);
-          // console.log(socialPlatform+" sign in data : " , userData);
-          // Now sign-in with userData  
         }
       )
   }
