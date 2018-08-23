@@ -1,11 +1,20 @@
 ## CAP AUTHENTICATION
 
 
+This module contains 3 services, such as: 
+* registration
+* login
+* change password
+
+
+## Installation Authentication module
 ```
 npm i cap-authorization
 ```
+---
 
-**Configuration**
+
+## Configuration
 Add the module into your principal module, after that write your credentials.
 
 Example:
@@ -15,7 +24,7 @@ AuthenticationModule.forRoot({
     loginEndpoint: 'your-end-point'
 })
 ```
-
+---
 
 
 ## Login Component
@@ -33,20 +42,8 @@ After that, go to the new application and product's section and add the login wi
 
 
 
-this module contains 3 services, such as: 
-*registration
-*login
-*change password
 
-
----
-##Installation of CAP STORAGE AWS
-write the following command:
-```npm i cap-authorization``` 
----
-
-
-##Implementation into a module
+## Implementation into a module
 
 For use this module go to app module and into the sections of import put the authentintication module.
 
@@ -64,7 +61,7 @@ For use this module go to app module and into the sections of import put the aut
 ---
 
 
-##import the authentication services to use in a component:
+## import the authentication services to use in a component:
 
 ``` 
 import { AuthenticationService } from './services/authentication.service';
@@ -76,25 +73,29 @@ constructor(private authenticationService: AuthenticationService) {
 ---
 
 
-##Exposed Methods
+## Exposed Methods
 
 This method returns a Boolean value with the value isLoggedIn
+
 ```isAuthenticated()```
 
 Receive a credentials interface
+
 ```login(values: CredentialsInterface)``` 
 
-if is a login success set the token and isLoggedIn in localstorage and variable isLoggedIn as true.
+If is a login success set the token and isLoggedIn in localstorage and variable isLoggedIn as true.
+
 ``` (email: string and password: string) ```
 
 Remove token and isLoggedIn from localStorage and the variable isLoggedIn set to false.
+
 ``` logout(): void ```
+
 ---
 
 
 ## Component Selectors
-
-each component refers to selectors
+Each component refers to selectors.
 
 auth-app-login
 
@@ -128,5 +129,4 @@ auth-app-change-password
 ---
 
 
-More information [HERE][1]
-[1]: https://www.npmjs.com/package/authmodule-angular6-module-example
+More information [HERE](https://www.npmjs.com/package/authmodule-angular6-module-example)
