@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, Validators } from "@angular/forms";
-import { AuthenticationService } from './../../authentication.service';
+import { AuthenticationService } from '../../services/authentication.service';
 var AuthRegisterComponent = /** @class */ (function () {
     function AuthRegisterComponent(authenticationService, formBuilder) {
         this.authenticationService = authenticationService;
