@@ -13,6 +13,7 @@ export class AuthenticationService {
     userId: string = '';
     _token: string;
     isLoggedIn: boolean = false;
+    userData: any = {};
 
     private actionUrl: string;
     private httpOptions: any;
@@ -124,6 +125,16 @@ export class AuthenticationService {
     private handleError(error: any) {
         console.log(error);
         return Observable.throw(error || 'Server error');
+    }
+
+    saveSocialMediaData(data:any){
+        this.userData = data;
+    }
+
+    getUserData():any{
+        if(this.userData.length !== 0){
+            return this.userData;
+        }
     }
 
 }

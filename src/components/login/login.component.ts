@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter, ViewEncapsulation } from '@angular/core'; 
-import { FormGroup, FormBuilder, FormControl, Validators } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { CredentialsInterface } from './../../interfaces/credentials.interface';
-import { AuthService, FacebookLoginProvider, GoogleLoginProvider, AuthServiceConfig } from 'angular5-social-login';
+import { AuthServiceConfig } from 'angular5-social-login';
 import { AuthenticationService } from '../../services/authentication.service';
 
 
@@ -11,7 +11,7 @@ import { AuthenticationService } from '../../services/authentication.service';
     template: ` 
 <ion-grid>
    <ion-row>
-     <ion-col  col-12 col-xl-8 offset-xl-2 col-lg-10 offset-lg-1>
+     <ion-col col-12 col-xl-8 offset-xl-2 col-lg-10 offset-lg-1>
         <ion-list>
             <form [formGroup]="loginform" (ngSubmit)="onSubmit()">
             <ion-item>
@@ -76,26 +76,7 @@ export class AuthLoginComponent {
 
     createAccount() {
         this.changePage.emit(true);
-    }
-
-    // socialSignIn(socialPlatform : string) {
-    //     // console.log('socialPlatform: ', socialPlatform);
-    //     let socialPlatformProvider:any;
-    //     if(socialPlatform == "facebook"){
-    //       socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
-    //     }else if(socialPlatform == "google"){
-    //       socialPlatformProvider = GoogleLoginProvider.PROVIDER_ID;
-    //     }
-        
-    //     this.socialAuthService.signIn(socialPlatformProvider).then(
-    //       (userData) => {
-    //         console.log(socialPlatform+" sign in data : " , userData);
-    //         // Now sign-in with userData       
-    //       }
-    //     )
-    // }
-
-    
+    }   
 
 }
 

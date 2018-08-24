@@ -1,9 +1,11 @@
 {
     "compilerOptions": {
+      "allowSyntheticDefaultImports": true,
       "baseUrl": ".",
-      "declaration": true,
+      "declaration": false,
       "stripInternal": true,
       "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
       "strictNullChecks": true,
       "noImplicitAny": true,
       "module": "es2015",
@@ -21,6 +23,18 @@
         "es2015", 
         "dom"
       ]
+    },
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "node_modules",
+      "src/mocks",
+      "src/unit-tests"
+    ],
+    "compileOnSave": false,
+      "atom": {
+      "rewriteTsconfig": false
     },
     "files": [
       "index.ts"

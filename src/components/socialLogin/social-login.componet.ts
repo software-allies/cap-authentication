@@ -9,14 +9,14 @@ import { ConfigService } from '../../services/config.service';
     selector: 'social-login',
     template: 
     `
-      <div *ngIf="socialMedia">
-      <div *ngFor="let social of socialMedia" >
+    <div *ngIf="socialMedia">
+      <div *ngFor="let social of socialMedia">
         <button ion-button color="{{social.color}}" type="submit" block secondary (click)="socialSignIn(social.name)" icon-end>
           {{ social.name }}    
           <ion-icon md="logo-{{ social.icon }}" name="logo-{{ social.icon }}" item-right></ion-icon> 
         </button>
       </div>
-      </div>
+    </div>
     `,
     // 
     
@@ -51,8 +51,7 @@ export class SocialLoginComponent implements OnInit {
       this.socialAuthService.signIn(socialPlatformProvider).then(
         (userData) => {
           this.authenticationService.isLoggedIn = true;
-          console.log(socialPlatform+" sign in data : " , userData);
-          // Now sign-in with userData       
+          this.authenticationService.saveSocialMediaData(userData);
         }
       )
   }

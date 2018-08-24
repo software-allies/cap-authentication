@@ -1,14 +1,16 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common/http'), require('rxjs'), require('rxjs/operators'), require('@angular/forms'), require('ionic-angular'), require('@angular/common')) :
-    typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/common/http', 'rxjs', 'rxjs/operators', '@angular/forms', 'ionic-angular', '@angular/common'], factory) :
-    (factory((global.ng = global.ng || {}, global.ng.capauthentication = {}),global.ng.core,null,null,null,null,null,null));
-}(this, (function (exports,core,http,rxjs,operators,forms,ionicAngular,common) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common/http'), require('rxjs'), require('rxjs/operators'), require('@angular/forms'), require('angular5-social-login'), require('ionic-angular'), require('@angular/common')) :
+    typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/common/http', 'rxjs', 'rxjs/operators', '@angular/forms', 'angular5-social-login', 'ionic-angular', '@angular/common'], factory) :
+    (factory((global.ng = global.ng || {}, global.ng.capauthentication = {}),global.ng.core,null,null,null,null,null,null,null));
+}(this, (function (exports,core,http,rxjs,operators,forms,angular5SocialLogin,ionicAngular,common) { 'use strict';
 
     var ConfigService = /** @class */ (function () {
         function ConfigService(config) {
             if (config) {
                 this.apiUrl = config.apiUrl;
                 this.loginEndpoint = config.loginEndpoint;
+                this.facebookId = config.facebookId;
+                this.googleId = config.googleId;
             }
         }
         ConfigService.decorators = [
@@ -26,6 +28,7 @@
             this._http = _http;
             this._config = _config;
             this.isLoggedIn = false;
+            this.userData = {};
             this.httpOptions = {
                 headers: new http.HttpHeaders({
                     'Content-Type': 'application/json'
@@ -91,6 +94,14 @@
         AuthenticationService.prototype.handleError = function (error) {
             console.log(error);
             return rxjs.Observable.throw(error || 'Server error');
+        };
+        AuthenticationService.prototype.saveSocialMediaData = function (data) {
+            this.userData = data;
+        };
+        AuthenticationService.prototype.getUserData = function () {
+            if (this.userData.length !== 0) {
+                return this.userData;
+            }
         };
         AuthenticationService.decorators = [
             { type: core.Injectable },
@@ -158,9 +169,12 @@
     }());
 
     var AuthLoginComponent = /** @class */ (function () {
-        function AuthLoginComponent(authenticationService, formBuilder) {
+        function AuthLoginComponent(authenticationService, formBuilder, 
+        // private socialAuthService: AuthService,
+        authServiceConfig) {
             this.authenticationService = authenticationService;
             this.formBuilder = formBuilder;
+            this.authServiceConfig = authServiceConfig;
             this.submit = new core.EventEmitter();
             this.changePage = new core.EventEmitter();
             this.credentials = {
@@ -188,7 +202,7 @@
         AuthLoginComponent.decorators = [
             { type: core.Component, args: [{
                         selector: "auth-app-login",
-                        template: " \n<ion-grid>\n   <ion-row>\n     <ion-col  col-12 col-xl-8 offset-xl-2 col-lg-10 offset-lg-1>\n        <ion-list>\n            <form [formGroup]=\"loginform\" (ngSubmit)=\"onSubmit()\">\n            <ion-item>\n                <ion-label stacked primary>Email</ion-label>\n                <ion-input [(ngModel)]=\"credentials.email\" formControlName=\"email\"\n                        type=\"text\" id=\"email\" spellcheck=\"false\" autocapitalize=\"off\" ngDefaultControl>\n                </ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label stacked primary>Password</ion-label>\n                <ion-input [(ngModel)]=\"credentials.password\" formControlName=\"password\" type=\"text\" id=\"password\" ngDefaultControl>\n                </ion-input>\n            </ion-item>\n            <button ion-button type=\"submit\" block primary [disabled]=\"!loginform.valid\">Login</button>\n            <button ion-button type=\"submit\" block secondary (click)=\"createAccount()\">Create an account</button>\n            </form>\n        </ion-list>\n     </ion-col>\n   </ion-row>\n </ion-grid>\n        ",
+                        template: " \n<ion-grid>\n   <ion-row>\n     <ion-col col-12 col-xl-8 offset-xl-2 col-lg-10 offset-lg-1>\n        <ion-list>\n            <form [formGroup]=\"loginform\" (ngSubmit)=\"onSubmit()\">\n            <ion-item>\n                <ion-label stacked primary>Email</ion-label>\n                <ion-input [(ngModel)]=\"credentials.email\" formControlName=\"email\"\n                        type=\"text\" id=\"email\" spellcheck=\"false\" autocapitalize=\"off\" ngDefaultControl>\n                </ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label stacked primary>Password</ion-label>\n                <ion-input [(ngModel)]=\"credentials.password\" formControlName=\"password\" type=\"text\" id=\"password\" ngDefaultControl>\n                </ion-input>\n            </ion-item>\n            <button ion-button type=\"submit\" block primary [disabled]=\"!loginform.valid\">Login</button>\n            <button ion-button type=\"submit\" block secondary (click)=\"createAccount()\">Create an account</button>\n            <social-login></social-login>\n            </form>\n        </ion-list>\n     </ion-col>\n   </ion-row>\n </ion-grid>\n        ",
                         styles: [""],
                         encapsulation: core.ViewEncapsulation.Emulated
                     },] },
@@ -197,6 +211,7 @@
         AuthLoginComponent.ctorParameters = function () { return [
             { type: AuthenticationService, },
             { type: forms.FormBuilder, },
+            { type: angular5SocialLogin.AuthServiceConfig, },
         ]; };
         AuthLoginComponent.propDecorators = {
             "submit": [{ type: core.Output },],
@@ -257,17 +272,81 @@
         return AuthChangePasswordComponent;
     }());
 
+    var SocialLoginComponent = /** @class */ (function () {
+        function SocialLoginComponent(socialAuthService, authenticationService) {
+            this.socialAuthService = socialAuthService;
+            this.authenticationService = authenticationService;
+            this.socialMedia = [
+                {
+                    name: 'Facebook',
+                    color: 'blue',
+                    icon: 'facebook'
+                },
+                {
+                    name: 'Google',
+                    color: 'danger',
+                    icon: 'googleplus'
+                }
+            ];
+        }
+        SocialLoginComponent.prototype.ngOnInit = function () { };
+        SocialLoginComponent.prototype.socialSignIn = function (socialPlatform) {
+            var _this = this;
+            // console.log('socialPlatform: ', socialPlatform);
+            var socialPlatformProvider;
+            if (socialPlatform == "Facebook") {
+                socialPlatformProvider = angular5SocialLogin.FacebookLoginProvider.PROVIDER_ID;
+            }
+            else if (socialPlatform == "Google") {
+                socialPlatformProvider = angular5SocialLogin.GoogleLoginProvider.PROVIDER_ID;
+            }
+            this.socialAuthService.signIn(socialPlatformProvider).then(function (userData) {
+                _this.authenticationService.isLoggedIn = true;
+                _this.authenticationService.saveSocialMediaData(userData);
+            });
+        };
+        SocialLoginComponent.decorators = [
+            { type: core.Component, args: [{
+                        selector: 'social-login',
+                        template: "\n    <div *ngIf=\"socialMedia\">\n      <div *ngFor=\"let social of socialMedia\">\n        <button ion-button color=\"{{social.color}}\" type=\"submit\" block secondary (click)=\"socialSignIn(social.name)\" icon-end>\n          {{ social.name }}    \n          <ion-icon md=\"logo-{{ social.icon }}\" name=\"logo-{{ social.icon }}\" item-right></ion-icon> \n        </button>\n      </div>\n    </div>\n    ",
+                    },] },
+        ];
+        /** @nocollapse */
+        SocialLoginComponent.ctorParameters = function () { return [
+            { type: angular5SocialLogin.AuthService, },
+            { type: AuthenticationService, },
+        ]; };
+        return SocialLoginComponent;
+    }());
+
     var AuthenticationModule = /** @class */ (function () {
         function AuthenticationModule() {
         }
         AuthenticationModule.forRoot = function (config) {
+            function getAuthServiceConfigs() {
+                var config_ = new angular5SocialLogin.AuthServiceConfig([
+                    {
+                        id: angular5SocialLogin.FacebookLoginProvider.PROVIDER_ID,
+                        provider: new angular5SocialLogin.FacebookLoginProvider(config.facebookId)
+                    },
+                    {
+                        id: angular5SocialLogin.GoogleLoginProvider.PROVIDER_ID,
+                        provider: new angular5SocialLogin.GoogleLoginProvider(config.googleId)
+                    },
+                ]);
+                return config_;
+            }
             return {
                 ngModule: AuthenticationModule,
                 providers: [
                     {
                         provide: ConfigService,
-                        useValue: config
-                    }
+                        useValue: config,
+                    },
+                    {
+                        provide: angular5SocialLogin.AuthServiceConfig,
+                        useFactory: getAuthServiceConfigs,
+                    },
                 ]
             };
         };
@@ -277,12 +356,14 @@
                             AuthLoginComponent,
                             AuthRegisterComponent,
                             AuthChangePasswordComponent,
+                            SocialLoginComponent
                         ],
                         imports: [
                             ionicAngular.IonicModule,
                             http.HttpClientModule,
                             forms.ReactiveFormsModule,
                             common.CommonModule,
+                            angular5SocialLogin.SocialLoginModule
                         ],
                         exports: [
                             http.HttpClientModule,
