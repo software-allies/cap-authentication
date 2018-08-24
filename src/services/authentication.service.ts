@@ -10,6 +10,7 @@ import { LoopbackResponseInterface } from '../interfaces/loopback-response.inter
 @Injectable()
 export class AuthenticationService {
     
+    userId: string = '';
     _token: string;
     isLoggedIn: boolean = false;
 
@@ -74,6 +75,22 @@ export class AuthenticationService {
 
         return this._http.post<LoopbackResponseInterface>(`${this.actionUrl}/`, toAdd, this.httpOptions)
             .pipe(
+                map(response => response),
+                catchError(this.handleError),
+                tap((response: any) => {
+                    return response;
+                })
+            );
+    }
+
+    editProfile(credentials: CredentialsInterface) {
+        const newValues = {
+            newUsername: credentials.repassword
+        }
+        const toAdd = JSON.stringify(newValues);
+
+        return this._http.post<any>(`${this.actionUrl}/${this.userId}`, toAdd, this.httpOptions)
+        .pipe(
                 map(response => response),
                 catchError(this.handleError),
                 tap((response: any) => {
