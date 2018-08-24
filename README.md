@@ -1,40 +1,29 @@
 ## CAP AUTHENTICATION
 
-CAP AUTHENTICATION it's a module that provides register, login, and password reset interface. 
 This module implements ionic complements but maybe in future releases, we could implement bootstrap.
 
-<<<<<<< HEAD
-This module contains 3 services, such as: 
+CAP AUTHENTICATION it's a module that provides: 
 * registration
 * login
 * change password
 
+This module implements ionic complements but maybe in future releases, we could implement bootstrap.
 
 ## Installation Authentication module
-=======
-Installation
->>>>>>> 2056ee7266b26ee1c2928ac9bcac0b4a443177e0
+
 ```
 npm i cap-authorization
 ```
 ---
 
-
-<<<<<<< HEAD
 ## Configuration
-Add the module into your principal module, after that write your credentials.
-=======
-**Configuration**
 Add the module into the app module or into the module that you want to implement this module after that write your credentials. 
->>>>>>> 2056ee7266b26ee1c2928ac9bcac0b4a443177e0
 
 ```
 import { AuthenticationModule } from 'cap-authorization'
 ```
-<<<<<<< HEAD
 ---
 
-=======
 
 into the import section
 ```
@@ -45,7 +34,7 @@ AuthenticationModule.forRoot({
       googleId: 'your-google-id',
     }),
 ```
->>>>>>> 2056ee7266b26ee1c2928ac9bcac0b4a443177e0
+--- 
 
 ## Login Component
 The login component implement [angular5-social-login](https://github.com/sabyasachibiswal/angular5-social-login) for login with social media (Facebook and Google +).
@@ -58,7 +47,7 @@ For use the facebook login you have to create an account in [Facebook for develo
 Like Facebook you have to create an account in [Google for developers](https://developers.google.com/identity/sign-in/web/sign-in) and add a new product or service.
 
 
-##Tags
+## Tags
 
 ### auth-app-login
 The tag or selector auth-app-login provides an interface with two inputs and four buttons. 
