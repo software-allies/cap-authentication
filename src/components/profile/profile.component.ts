@@ -39,7 +39,7 @@ export class AuthEditComponent {
 
     credentials: CredentialsInterface = {
         username:'',
-        password: ''    //este no lo ocupamos pero si no lo ponemos nos marcara error
+        password: ''    //este credencial es obligatoria 
     };
 
     editForm: FormGroup;
@@ -47,13 +47,17 @@ export class AuthEditComponent {
     constructor(
         private authenticationService: AuthenticationService,
         public formBuilder: FormBuilder) {
+            this.credentials = {
+                username: '',
+                password: ''
+            };
 
     }
 
     ngOnInit(): any {
         this.editForm = this.formBuilder.group({
             username: ['', [Validators.required, Validators.minLength(3)]],
-            //email: ['', [Validators.required, Validators.minLength(0)]]
+            
         });
     }
 
