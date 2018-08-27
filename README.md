@@ -1,40 +1,28 @@
 ## CAP AUTHENTICATION
 
-CAP AUTHENTICATION it's a module that provides register, login, and password reset interface. 
 This module implements ionic complements but maybe in future releases, we could implement bootstrap.
 
-<<<<<<< HEAD
-This module contains 3 services, such as: 
+CAP AUTHENTICATION it's a module that provides: 
 * registration
 * login
 * change password
 
-
 ## Installation Authentication module
-=======
 Installation
->>>>>>> 2056ee7266b26ee1c2928ac9bcac0b4a443177e0
 ```
 npm i cap-authorization
 ```
 ---
 
-
-<<<<<<< HEAD
 ## Configuration
-Add the module into your principal module, after that write your credentials.
-=======
-**Configuration**
+
 Add the module into the app module or into the module that you want to implement this module after that write your credentials. 
->>>>>>> 2056ee7266b26ee1c2928ac9bcac0b4a443177e0
 
 ```
 import { AuthenticationModule } from 'cap-authorization'
 ```
-<<<<<<< HEAD
 ---
 
-=======
 
 into the import section
 ```
@@ -45,7 +33,7 @@ AuthenticationModule.forRoot({
       googleId: 'your-google-id',
     }),
 ```
->>>>>>> 2056ee7266b26ee1c2928ac9bcac0b4a443177e0
+---
 
 ## Login Component
 The login component implement [angular5-social-login](https://github.com/sabyasachibiswal/angular5-social-login) for login with social media (Facebook and Google +).
@@ -96,7 +84,6 @@ Example
 ## Services
 
 If you want yo get the information of the user login with Facebook or Google you could use the getUserData method. This method is inside of the Authentication service and returns an object with the data of the social media.
-
 
 
 
