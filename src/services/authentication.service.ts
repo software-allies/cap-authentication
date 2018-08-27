@@ -47,6 +47,7 @@ export class AuthenticationService {
                         localStorage.setItem('userId', response.userId || '');
                         localStorage.setItem('created', response.created || '');
                         localStorage.setItem('token', response.id);
+                        localStorage.setItem('email', response.email || '');
                     } 
                     return response;
                 })
@@ -86,11 +87,11 @@ export class AuthenticationService {
 
     editProfile(credentials: CredentialsInterface) {
         const newValues = {
-            newUsername: credentials.repassword
+            newUsername: credentials.username
         }
         const toAdd = JSON.stringify(newValues);
 
-        return this._http.post<any>(`${this.actionUrl}/${this.userId}`, toAdd, this.httpOptions)
+        return this._http.put<any>(`${this.actionUrl}/${this.userId}`, toAdd, this.httpOptions)
         .pipe(
                 map(response => response),
                 catchError(this.handleError),
