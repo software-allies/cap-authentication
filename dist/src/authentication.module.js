@@ -7,6 +7,7 @@ import { AuthenticationService } from './services/authentication.service';
 import { CommonModule } from "@angular/common";
 import { AuthRegisterComponent } from './components/register/register.component';
 import { AuthLoginComponent } from './components/login/login.component';
+import { AuthEditComponent } from './components/profile/profile.component';
 import { AuthChangePasswordComponent } from './components/change-password/change-password.component';
 import { SocialLoginModule, AuthServiceConfig, FacebookLoginProvider, GoogleLoginProvider } from 'angular5-social-login';
 import { SocialLoginComponent } from '../src/components/socialLogin/social-login.componet';
@@ -47,6 +48,7 @@ var AuthenticationModule = /** @class */ (function () {
                         AuthLoginComponent,
                         AuthRegisterComponent,
                         AuthChangePasswordComponent,
+                        AuthEditComponent,
                         SocialLoginComponent
                     ],
                     imports: [
@@ -63,6 +65,7 @@ var AuthenticationModule = /** @class */ (function () {
                         AuthLoginComponent,
                         AuthRegisterComponent,
                         AuthChangePasswordComponent,
+                        AuthEditComponent,
                     ],
                     providers: [
                         AuthenticationService

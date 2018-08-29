@@ -27,6 +27,7 @@
         function AuthenticationService(_http, _config) {
             this._http = _http;
             this._config = _config;
+            this.userId = '';
             this.isLoggedIn = false;
             this.userData = {};
             this.httpOptions = {
@@ -49,6 +50,7 @@
                     localStorage.setItem('userId', response.userId || '');
                     localStorage.setItem('created', response.created || '');
                     localStorage.setItem('token', response.id);
+                    localStorage.setItem('email', response.email || '');
                 }
                 return response;
             }));
@@ -67,6 +69,16 @@
         AuthenticationService.prototype.register = function (credentials) {
             var toAdd = JSON.stringify(credentials);
             return this._http.post(this.actionUrl + "/", toAdd, this.httpOptions)
+                .pipe(operators.map(function (response) { return response; }), operators.catchError(this.handleError), operators.tap(function (response) {
+                return response;
+            }));
+        };
+        AuthenticationService.prototype.editProfile = function (credentials) {
+            var newValues = {
+                newUsername: credentials.username
+            };
+            var toAdd = JSON.stringify(newValues);
+            return this._http.put(this.actionUrl + "/" + this.userId, toAdd, this.httpOptions)
                 .pipe(operators.map(function (response) { return response; }), operators.catchError(this.handleError), operators.tap(function (response) {
                 return response;
             }));
@@ -121,6 +133,7 @@
             this.submit = new core.EventEmitter();
             this.changePage = new core.EventEmitter();
             this.credentials = {
+                username: '',
                 email: '',
                 password: '',
                 repassword: ''
@@ -128,6 +141,7 @@
         }
         AuthRegisterComponent.prototype.ngOnInit = function () {
             this.registerform = this.formBuilder.group({
+                username: ['', [forms.Validators.required, forms.Validators.minLength(3)]],
                 password: ['', [forms.Validators.required, forms.Validators.minLength(3)]],
                 repassword: ['', [forms.Validators.required, forms.Validators.minLength(3)]],
                 email: ['', [forms.Validators.required, forms.Validators.minLength(3)]]
@@ -151,7 +165,7 @@
         AuthRegisterComponent.decorators = [
             { type: core.Component, args: [{
                         selector: "auth-app-register",
-                        template: "\n<ion-grid>\n   <ion-row>\n     <ion-col  col-12 col-xl-8 offset-xl-2 col-lg-10 offset-lg-1>\n        <ion-list>\n            <form [formGroup]=\"registerform\" (ngSubmit)=\"onSubmit()\">\n                <ion-item>\n                    <ion-label stacked primary>Email</ion-label>\n                    <ion-input [(ngModel)]=\"credentials.email\" formControlName=\"email\"\n                            type=\"text\" id=\"email\" spellcheck=\"false\" autocapitalize=\"off\" ngDefaultControl>\n                    </ion-input>\n                </ion-item>\n                <ion-item>\n                    <ion-label stacked primary>Password</ion-label>\n                    <ion-input [(ngModel)]=\"credentials.password\" formControlName=\"password\" type=\"text\" id=\"password\">\n                    </ion-input>\n                </ion-item>\n                <ion-item>\n                    <ion-label stacked primary>Repeat Password</ion-label>\n                    <ion-input [(ngModel)]=\"credentials.repassword\" formControlName=\"repassword\" type=\"text\" id=\"repassword\">\n                    </ion-input>\n                </ion-item>\n                <button ion-button type=\"submit\" block full primary [disabled]=\"!registerform.valid\">Register</button>\n                <button ion-button type=\"submit\" block secondary (click)=\"loginAccount()\">Login to account</button>\n            </form>\n        </ion-list>\n     </ion-col>\n   </ion-row>\n </ion-grid>\n    ",
+                        template: "\n<ion-grid>\n   <ion-row>\n     <ion-col  col-12 col-xl-8 offset-xl-2 col-lg-10 offset-lg-1>\n        <ion-list>\n            <form [formGroup]=\"registerform\" (ngSubmit)=\"onSubmit()\">\n                <ion-item>\n                    <ion-label stacked primary>Username</ion-label>\n                    <ion-input [(ngModel)]=\"credentials.username\" formControlName=\"username\"\n                            type=\"text\" id=\"username\" spellcheck=\"false\" autocapitalize=\"off\" ngDefaultControl>\n                    </ion-input>\n                </ion-item>\n                <ion-item>\n                    <ion-label stacked primary>Email</ion-label>\n                    <ion-input [(ngModel)]=\"credentials.email\" formControlName=\"email\"\n                            type=\"text\" id=\"email\" spellcheck=\"false\" autocapitalize=\"off\" ngDefaultControl>\n                    </ion-input>\n                </ion-item>\n                <ion-item>\n                    <ion-label stacked primary>Password</ion-label>\n                    <ion-input [(ngModel)]=\"credentials.password\" formControlName=\"password\" type=\"text\" id=\"password\">\n                    </ion-input>\n                </ion-item>\n                <ion-item>\n                    <ion-label stacked primary>Repeat Password</ion-label>\n                    <ion-input [(ngModel)]=\"credentials.repassword\" formControlName=\"repassword\" type=\"text\" id=\"repassword\">\n                    </ion-input>\n                </ion-item>\n                <button ion-button type=\"submit\" block full primary [disabled]=\"!registerform.valid\">Register</button>\n                <button ion-button type=\"submit\" block secondary (click)=\"loginAccount()\">Login to account</button>\n                <social-login></social-login>\n            </form>\n        </ion-list>\n     </ion-col>\n   </ion-row>\n </ion-grid>\n    ",
                         styles: [""],
                         encapsulation: core.ViewEncapsulation.Emulated
                     },] },
@@ -218,6 +232,54 @@
             "changePage": [{ type: core.Output },],
         };
         return AuthLoginComponent;
+    }());
+
+    var AuthEditComponent = /** @class */ (function () {
+        function AuthEditComponent(authenticationService, formBuilder) {
+            this.authenticationService = authenticationService;
+            this.formBuilder = formBuilder;
+            this.submit = new core.EventEmitter();
+            this.changePage = new core.EventEmitter();
+            this.credentials = {
+                username: '',
+                password: '' //este credencial es obligatoria
+            };
+            this.credentials = {
+                username: '',
+                password: ''
+            };
+        }
+        AuthEditComponent.prototype.ngOnInit = function () {
+            this.editForm = this.formBuilder.group({
+                username: ['', [forms.Validators.required, forms.Validators.minLength(3)]],
+            });
+        };
+        AuthEditComponent.prototype.onSubmit = function () {
+            var _this = this;
+            this.authenticationService
+                .editProfile(this.credentials)
+                .subscribe(function (result) {
+                _this.submit.emit(result);
+            });
+        };
+        AuthEditComponent.decorators = [
+            { type: core.Component, args: [{
+                        selector: "auth-app-edit-profile",
+                        template: "\n    <ion-grid>\n        <ion-row>\n        <ion-col  col-12 col-xl-8 offset-xl-2 col-lg-10 offset-lg-1>\n            <ion-list>\n                <form [formGroup]=\"editForm\" (ngSubmit)=\"onSubmit()\">\n                    <ion-item>\n                        <ion-label stacked primary>Username</ion-label>\n                        <ion-input [(ngModel)]=\"credentials.username\" formControlName=\"username\"\n                                type=\"text\" id=\"username\" spellcheck=\"false\" autocapitalize=\"off\" ngDefaultControl>\n                        </ion-input>\n                    </ion-item>\n                    \n                    <button ion-button type=\"submit\" block full primary [disabled]=\"!editForm.valid\">Edit</button>\n                </form>\n            </ion-list>\n        </ion-col>\n        </ion-row>\n    </ion-grid> ",
+                        styles: [""],
+                        encapsulation: core.ViewEncapsulation.Emulated
+                    },] },
+        ];
+        /** @nocollapse */
+        AuthEditComponent.ctorParameters = function () { return [
+            { type: AuthenticationService, },
+            { type: forms.FormBuilder, },
+        ]; };
+        AuthEditComponent.propDecorators = {
+            "submit": [{ type: core.Output },],
+            "changePage": [{ type: core.Output },],
+        };
+        return AuthEditComponent;
     }());
 
     var AuthChangePasswordComponent = /** @class */ (function () {
@@ -356,6 +418,7 @@
                             AuthLoginComponent,
                             AuthRegisterComponent,
                             AuthChangePasswordComponent,
+                            AuthEditComponent,
                             SocialLoginComponent
                         ],
                         imports: [
@@ -372,6 +435,7 @@
                             AuthLoginComponent,
                             AuthRegisterComponent,
                             AuthChangePasswordComponent,
+                            AuthEditComponent,
                         ],
                         providers: [
                             AuthenticationService
