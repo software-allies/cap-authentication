@@ -13,6 +13,10 @@ import { AuthChangePasswordComponent } from './components/change-password/change
 import { SocialLoginModule, AuthServiceConfig, FacebookLoginProvider, GoogleLoginProvider } from 'angular5-social-login';
 import { SocialLoginComponent } from '../src/components/socialLogin/social-login.componet';
 
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { environment } from './environments/environment' 
+
 @NgModule({
   declarations: [
     AuthLoginComponent,
@@ -26,7 +30,9 @@ import { SocialLoginComponent } from '../src/components/socialLogin/social-login
     HttpClientModule,
     ReactiveFormsModule,
     CommonModule,
-    SocialLoginModule
+    SocialLoginModule,
+    AngularFireModule.initializeApp(environment.firebase), 
+    AngularFireDatabaseModule
   ],
   exports: [
     HttpClientModule,
