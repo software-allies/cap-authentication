@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "@angular/core": "5.2.11",
-    "angular5-social-login": "^1.0.9"
+    "@angular/fire": "^5.0.0",
+    "angular5-social-login": "^1.0.9",
+    "firebase": "^5.4.2"
   },
   "devDependencies": {
     "@angular/compiler": "5.2.11",
@@ -32,6 +34,6 @@
       "tsx",
       "js",
       "json"
-   ]
+    ]
   }
 }
