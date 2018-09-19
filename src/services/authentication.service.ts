@@ -6,10 +6,10 @@ import { map, catchError, tap } from 'rxjs/operators';
 import { CredentialsInterface } from '../interfaces/credentials.interface';
 import { LoopbackResponseInterface } from '../interfaces/loopback-response.interface';
 
- 
+import { AngularFireDatabase } from  '@angular/fire/database';
+
 @Injectable()
 export class AuthenticationService {
-    
     userId: string = '';
     _token: string;
     isLoggedIn: boolean = false;
@@ -20,7 +20,8 @@ export class AuthenticationService {
 
     constructor(
         private _http: HttpClient, 
-        private _config: ConfigService
+        private _config: ConfigService,
+        private angularFireDatabase: AngularFireDatabase,
     ) {
         this.httpOptions = {
             headers: new HttpHeaders({ 
@@ -31,6 +32,17 @@ export class AuthenticationService {
         this._token = localStorage.getItem('token') || '';
     }
 
+    addRegister(credentials: CredentialsInterface){ 
+        const newValues = {
+            username: credentials.username,
+            email: credentials.email
+        }
+
+        const db = this.angularFireDatabase.database.ref('Devices');
+        db.push(newValues);
+        console.log('usuario agregado ');
+    }
+    
     login(credentials: CredentialsInterface) {
         
         const toAdd = JSON.stringify(credentials);
