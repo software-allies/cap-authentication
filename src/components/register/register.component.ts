@@ -61,7 +61,7 @@ export class AuthRegisterComponent {
         password: '', 
         repassword: '' 
     };
-
+    
     registerform: FormGroup;
     
     constructor(
@@ -78,13 +78,16 @@ export class AuthRegisterComponent {
             email: ['', [Validators.required, Validators.minLength(3)]]
         });
     }
-
+  
     onSubmit() {
 
         if (this.credentials.password !== this.credentials.repassword) {
           console.log('passwords must be equal');
           return false;
         }
+        this.authenticationService
+            .addRegister(this.credentials)
+        
         this.authenticationService
             .register(this.credentials)
             .subscribe((result: any) => {
