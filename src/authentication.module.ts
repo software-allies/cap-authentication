@@ -15,7 +15,9 @@ import { SocialLoginComponent } from '../src/components/socialLogin/social-login
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
-import { environment } from './environments/environment' 
+import { FCM } from '@ionic-native/fcm';
+
+import { environment } from './environments/environment'; 
 
 @NgModule({
   declarations: [
@@ -44,7 +46,8 @@ import { environment } from './environments/environment'
     AuthEditComponent,
   ],
   providers: [
-    AuthenticationService
+    AuthenticationService,
+    FCM,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
