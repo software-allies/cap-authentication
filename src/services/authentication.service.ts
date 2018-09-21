@@ -7,6 +7,9 @@ import { CredentialsInterface } from '../interfaces/credentials.interface';
 import { LoopbackResponseInterface } from '../interfaces/loopback-response.interface';
 
 import { AngularFireDatabase } from  '@angular/fire/database';
+import { FCM } from '@ionic-native/fcm';
+import 'rxjs/Observable';
+import 'rxjs/add/observable/throw';
 
 @Injectable()
 export class AuthenticationService {
@@ -17,11 +20,12 @@ export class AuthenticationService {
 
     private actionUrl: string;
     private httpOptions: any;
-
+ 
     constructor(
         private _http: HttpClient, 
         private _config: ConfigService,
         private angularFireDatabase: AngularFireDatabase,
+        public fcm:FCM,
     ) {
         this.httpOptions = {
             headers: new HttpHeaders({ 
@@ -33,14 +37,16 @@ export class AuthenticationService {
     }
 
     addRegister(credentials: CredentialsInterface){ 
-        const newValues = {
-            username: credentials.username,
-            email: credentials.email
-        }
 
-        const db = this.angularFireDatabase.database.ref('Devices');
-        db.push(newValues);
-        console.log('usuario agregado ');
+        this.fcm.getToken().then(token=>{
+            const newValues = {
+                username: credentials.username,
+                email: credentials.email,
+                token:token
+            }
+            const db = this.angularFireDatabase.database.ref('Devices');
+            db.push(newValues);
+        })
     }
     
     login(credentials: CredentialsInterface) {
