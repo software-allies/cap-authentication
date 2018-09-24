@@ -51,7 +51,6 @@ export class AuthEditComponent {
                 username: '',
                 password: ''
             };
-
     }
 
     ngOnInit(): any {
