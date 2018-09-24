@@ -10,6 +10,7 @@
   "dependencies": {
     "@angular/core": "5.2.11",
     "@angular/fire": "^5.0.0",
+    "@ionic-native/fcm": "^4.14.0",
     "angular5-social-login": "^1.0.9",
     "firebase": "^5.4.2"
   },

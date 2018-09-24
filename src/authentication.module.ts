@@ -17,6 +17,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { environment } from './environments/environment' 
 import { IConfig } from './interfaces/config.interface';
+import { FCM } from '@ionic-native/fcm';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { IConfig } from './interfaces/config.interface';
     AuthEditComponent,
   ],
   providers: [
-    AuthenticationService
+    AuthenticationService,
+    FCM,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

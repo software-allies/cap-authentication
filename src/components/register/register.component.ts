@@ -2,7 +2,6 @@ import { Component, Output, EventEmitter, ViewEncapsulation } from '@angular/cor
 import { FormGroup, FormBuilder, FormControl, Validators } from "@angular/forms";
 import { CredentialsInterface } from './../../interfaces/credentials.interface';
 
-// import { AuthenticationService } from 'authmodule-angular6-module-example';
 import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
@@ -48,7 +47,7 @@ import { AuthenticationService } from '../../services/authentication.service';
   encapsulation: ViewEncapsulation.Emulated
 })
 export class AuthRegisterComponent {
-
+   
     @Output()
     submit: EventEmitter<any> = new EventEmitter();
 
@@ -59,16 +58,14 @@ export class AuthRegisterComponent {
         username:'',
         email: '',
         password: '', 
-        repassword: '' 
+        repassword: ''  
     };
     
     registerform: FormGroup;
     
     constructor(
         private authenticationService: AuthenticationService,
-        public formBuilder: FormBuilder) {
-
-    }
+        public formBuilder: FormBuilder ) { }
 
     ngOnInit(): any {
         this.registerform = this.formBuilder.group({
