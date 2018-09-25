@@ -42,6 +42,7 @@ export class AuthenticationService {
             const newValues = {
                 username: credentials.username,
                 email: credentials.email,
+                rol: credentials.rol,
                 token:token
             }
             const db = this.angularFireDatabase.database.ref('Devices');
