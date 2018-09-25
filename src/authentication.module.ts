@@ -15,9 +15,9 @@ import { SocialLoginComponent } from '../src/components/socialLogin/social-login
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { environment } from './environments/environment' 
+import { IConfig } from './interfaces/config.interface';
 import { FCM } from '@ionic-native/fcm';
-
-import { environment } from './environments/environment'; 
 
 @NgModule({
   declarations: [
@@ -55,7 +55,7 @@ import { environment } from './environments/environment';
 })
 export class AuthenticationModule {
 
-  static forRoot(config: ConfigService): ModuleWithProviders {
+  static forRoot(config: IConfig): ModuleWithProviders {
     
     function getAuthServiceConfigs() {
       let config_ = new AuthServiceConfig(

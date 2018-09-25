@@ -1,11 +1,11 @@
 export const environment ={
     production: false,
     firebase: {
-    apiKey: "AIzaSyAJvwLYR8nn_4nWNnWW-B06qUXtx_HNMWk",
-    authDomain: "notifications-ffb75.firebaseapp.com",
-    databaseURL: "https://notifications-ffb75.firebaseio.com",
-    projectId: "notifications-ffb75",
-    storageBucket: "notifications-ffb75.appspot.com",
-    messagingSenderId: "798294453386"
+        apiKey: "AIzaSyAmS_9rk7E2IQGEFmJ4AdKqwwo_xR1X5oU",
+        authDomain: "pushnotifications-6211c.firebaseapp.com",
+        databaseURL: "https://pushnotifications-6211c.firebaseio.com",
+        projectId: "pushnotifications-6211c",
+        storageBucket: "pushnotifications-6211c.appspot.com",
+        messagingSenderId: "688932327823"
     }
 }

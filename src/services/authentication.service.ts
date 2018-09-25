@@ -34,6 +34,7 @@ export class AuthenticationService {
         };
         this.actionUrl = `${this._config.apiUrl}${this._config.loginEndpoint}`;
         this._token = localStorage.getItem('token') || '';
+        console.log('this._token: ', this._token);
     }
 
     addRegister(credentials: CredentialsInterface){ 
@@ -152,7 +153,7 @@ export class AuthenticationService {
     }
 
     getUserData():any{
-        if(this.userData.length !== 0){
+        if(this.userData !== null){
             return this.userData;
         }
     }
