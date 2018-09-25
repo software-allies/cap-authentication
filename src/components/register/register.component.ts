@@ -25,6 +25,12 @@ import { AuthenticationService } from '../../services/authentication.service';
                     </ion-input>
                 </ion-item>
                 <ion-item>
+                    <ion-label>Rol</ion-label>
+                    <ion-select [(ngModel)]="credentials.rol" formControlName="rol" id="rol"> 
+                    <ion-option *ngFor=" let roles of rol" value="{{roles}}">{{roles}}</ion-option>
+                    </ion-select>
+                </ion-item>         
+                <ion-item>
                     <ion-label stacked primary>Password</ion-label>
                     <ion-input [(ngModel)]="credentials.password" formControlName="password" type="text" id="password">
                     </ion-input>
@@ -34,7 +40,7 @@ import { AuthenticationService } from '../../services/authentication.service';
                     <ion-input [(ngModel)]="credentials.repassword" formControlName="repassword" type="text" id="repassword">
                     </ion-input>
                 </ion-item>
-                <button ion-button type="submit" block full primary [disabled]="!registerform.valid">Register</button>
+                <button ion-button type="submit" block full primary (click)="registerAccount()"[disabled]="!registerform.valid">Register</button>
                 <button ion-button type="submit" block secondary (click)="loginAccount()">Login to account</button>
                 <social-login></social-login>
             </form>
@@ -58,9 +64,11 @@ export class AuthRegisterComponent {
         username:'',
         email: '',
         password: '', 
-        repassword: ''  
+        repassword: '',
+        rol:''
     };
-    
+
+    rol: Array<string> = ['Guest','Administrator','Other'];
     registerform: FormGroup;
     
     constructor(
@@ -72,15 +80,17 @@ export class AuthRegisterComponent {
             username: ['', [Validators.required, Validators.minLength(3)]],
             password: ['', [Validators.required, Validators.minLength(3)]],
             repassword: ['', [Validators.required, Validators.minLength(3)]],
-            email: ['', [Validators.required, Validators.minLength(3)]]
+            email: ['', [Validators.required, Validators.minLength(3)]],
+            rol: ['',[Validators.required]]
         });
     }
   
-    onSubmit() {
+    onSubmit() {}
 
-        if (this.credentials.password !== this.credentials.repassword) {
-          console.log('passwords must be equal');
-          return false;
+    registerAccount(){
+        if (this.credentials.password !== this.credentials.repassword){
+            alert('passwords must be equal');
+            return false;
         }
         this.authenticationService
             .addRegister(this.credentials)
