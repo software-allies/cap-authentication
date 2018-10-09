@@ -1,10 +1,7 @@
 import { Component, Output, EventEmitter, ViewEncapsulation } from '@angular/core'; 
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { CredentialsInterface } from './../../interfaces/credentials.interface';
-import { AuthServiceConfig } from 'angular5-social-login';
 import { AuthenticationService } from '../../services/authentication.service';
-
-
 
 @Component({
     selector: "auth-app-login",
@@ -55,8 +52,8 @@ export class AuthLoginComponent {
     constructor(
         private authenticationService: AuthenticationService,
         public formBuilder: FormBuilder,
-        // private socialAuthService: AuthService,
-        private authServiceConfig: AuthServiceConfig) {
+
+    ){
     }
   
     ngOnInit(): any {
