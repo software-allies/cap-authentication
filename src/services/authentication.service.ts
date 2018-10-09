@@ -4,6 +4,7 @@ import { Observable, pipe } from 'rxjs';
 import { ConfigService } from './config.service';
 import { map, catchError, tap } from 'rxjs/operators';
 import { CredentialsInterface } from '../interfaces/credentials.interface';
+import { SocialMediaInterface } from '../interfaces/socialMedia.interface';
 import { LoopbackResponseInterface } from '../interfaces/loopback-response.interface';
 
 import { AngularFireDatabase } from  '@angular/fire/database';
@@ -44,6 +45,18 @@ export class AuthenticationService {
                 username: credentials.username,
                 email: credentials.email,
                 rol: credentials.rol,
+                token:token
+            }
+            const db = this.angularFireDatabase.database.ref('Devices');
+            db.push(newValues);
+        })
+    }
+
+    addRegisterSocialMedia(credentials: SocialMediaInterface){
+        this.fcm.getToken().then(token=>{
+            const newValues = {
+                username: credentials.username,
+                email: credentials.email,
                 token:token
             }
             const db = this.angularFireDatabase.database.ref('Devices');
