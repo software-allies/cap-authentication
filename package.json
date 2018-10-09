@@ -10,9 +10,11 @@
   "dependencies": {
     "@angular/core": "5.2.11",
     "@angular/fire": "^5.0.0",
+    "@ionic-native/facebook": "^4.15.0",
     "@ionic-native/fcm": "^4.14.0",
     "angular5-social-login": "^1.0.9",
-    "firebase": "^5.4.2"
+    "firebase": "^5.4.2",
+    "ionic-angular": "^3.9.2"
   },
   "devDependencies": {
     "@angular/compiler": "5.2.11",
