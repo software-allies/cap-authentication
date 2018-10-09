@@ -10,14 +10,14 @@ import { AuthRegisterComponent } from './components/register/register.component'
 import { AuthLoginComponent } from './components/login/login.component';
 import { AuthEditComponent } from './components/profile/profile.component';
 import { AuthChangePasswordComponent } from './components/change-password/change-password.component';
-import { SocialLoginModule, AuthServiceConfig, FacebookLoginProvider, GoogleLoginProvider } from 'angular5-social-login';
+import { SocialLoginModule } from 'angular5-social-login';
 import { SocialLoginComponent } from '../src/components/socialLogin/social-login.componet';
 
-import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
-import { environment } from './environments/environment' 
 import { IConfig } from './interfaces/config.interface';
 import { FCM } from '@ionic-native/fcm';
+import { Facebook } from '@ionic-native/facebook';
 
 @NgModule({
   declarations: [
@@ -33,8 +33,8 @@ import { FCM } from '@ionic-native/fcm';
     ReactiveFormsModule,
     CommonModule,
     SocialLoginModule,
-    AngularFireModule.initializeApp(environment.firebase), 
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    AngularFireAuthModule
   ],
   exports: [
     HttpClientModule,
@@ -48,40 +48,22 @@ import { FCM } from '@ionic-native/fcm';
   providers: [
     AuthenticationService,
     FCM,
+    Facebook,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
   ]
-})
+})  
 export class AuthenticationModule {
 
   static forRoot(config: IConfig): ModuleWithProviders {
     
-    function getAuthServiceConfigs() {
-      let config_ = new AuthServiceConfig(
-        [
-          {
-            id: FacebookLoginProvider.PROVIDER_ID,
-            provider: new FacebookLoginProvider(config.facebookId)
-          },
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(config.googleId)
-          },
-        ]
-      )
-      return config_;
-    }
     return { 
       ngModule: AuthenticationModule, 
       providers: [
         {
           provide: ConfigService,
           useValue: config,
-        },
-        {
-          provide: AuthServiceConfig,
-          useFactory: getAuthServiceConfigs,
         },
       ]
     };
