@@ -43,11 +43,11 @@ The login component implement AngularFire2 for login with social media (Facebook
 
 ### Create a new proyect Fireabse and configuration 
 
-go to [Firebase Console] an create a new proyect. 
+Go to [Firebase Console] an create a new proyect. 
 
-Once created, we take the credentials of our project in order to use the Firebase services. We find them in our project that we just created in Firebase, in the main panel we search for _Firebase add firebase to app web_ and we copy the credentials that are marked immediately.
+Once created, we take the credentials of our project in order to use the Firebase services. We find them in our project that we just created in Firebase, in the main panel we search for **Firebase add firebase to app web** and we copy the credentials that are marked immediately.
 
-Open the `app.module.ts` file, under `src/app` and Import AngularFireModule 
+Open the `app.module.ts` file, under `src/app` and Import AngularFireModule.
 ```
 import { AngularFireModule } from '@angular/fire';
 ...
@@ -67,16 +67,18 @@ import { AngularFireModule } from '@angular/fire';
 })
 ```
 
-Then install the required packages in your project directory
+Then install the required packages in your project directory.
+
 ```
 $ npm install angularfire2 firebase promise-polyfill --save
 ```
+
 This should add **angularfire2** and **firebase** entry in your project's package.json
 
 ### Configuring Firebase/Facebook
 
-Go to [Facebook Developers] and create a new App.
-If you are not yet registered, you can register with your Facebook account.
+Go to [Facebook Developers] and create a new App.If you are not yet registered, you can register with your Facebook account.
+
 Once the App is created, get the `AppID` and `AppSecret` from the dashboard and come back to Firebase Console. 	
 
 Within the Firebase project click on the Authentication section on the left hand side of the menu and you can see the ways to authenticate, like Facebook, Google and others.
@@ -85,8 +87,9 @@ we proceed to enable authentication by facebook and will ask us for the `AppID` 
 
 Also copy the "OAuth redirect URI" from the Firebase. We have to go back and add it to the facebook application. 
 
-In Facebook Dashboard you should see `Facebook Login`, and click on the button to go to settings and there you should see "Valid OAuth redirect URIs" input field.
-Enter the URI copied from Firebase Console and click on Save Changes, This will ensure Facebook and Firebase are able to talk to each other.
+In Facebook Dashboard you should see `Facebook Login`, and click on the button to go to settings and there you should see "Valid OAuth redirect URIs" input field, enter the URI copied from Firebase Console and click on Save Changes, This will ensure Facebook and Firebase are able to talk to each other.
+
+To authenticate with Google you do not have to make extra configurations, just enable the service in Firebase.
 
 **To use our module in our application on mobile phone.**
 
@@ -96,7 +99,7 @@ Make sure you have added the platform to your project. If not, add the platform 
 $ ionic platform add android
 ```
 
-now we need to have access to Native Mobile API's, which are provided by Cordova Plugins.
+Now we need to have access to Native Mobile API's, which are provided by Cordova Plugins.
 We can access these cordova plugins, using Ionic Native, which are nothing but wrappers for cordova plugins.
 
 For the following we need again the `AppID` of our App of Facebook, next go to command prompt in your project directory and execute the following command by replacing the `APP_ID` with your App Id and `APP_NAME` with your App Name.
@@ -107,7 +110,7 @@ $ionic cordova plugin add cordova-plugin-facebook4 --variable APP_ID="123456789"
 
 ```
 
-we must make sure that the Plugin with the correct ID was added in your `config.xml`, it will look like this.
+We must make sure that the Plugin with the correct ID was added in your `config.xml`, it will look like this.
 
 ```
 <plugin name="cordova-plugin-facebook4" spec="~1.7.4">
@@ -118,14 +121,14 @@ we must make sure that the Plugin with the correct ID was added in your `config.
 ```
 
 This will install the cordova plugin for facebook and you should also see a sub-folder named cordova-plugin-facebook4 under your plugins folder.
-You can see the configuration and installation of Facebook plugin [here]
+You can see the configuration and installation of Facebook plugin [here].
 
 Add the native dependencies by executing the following command:
 ```
 npm install --save @ionic-native/facebook
 ```
 
-You'll also need to add the **Facebook** object in the provider section in `app.module.ts.`
+You'll also need to add the **Facebook** object in the provider section in `app.module.ts.` .
 
 ```
 import { Facebook } from '@ionic-native/facebook';...
