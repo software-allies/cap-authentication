@@ -38,30 +38,42 @@ export class AuthenticationService {
         console.log('this._token: ', this._token);
     }
 
-    addRegister(credentials: CredentialsInterface){ 
-
+    RegisterMobile(credentials: CredentialsInterface){ 
+        const newValues = {
+            username: credentials.username,
+            email: credentials.email,
+            rol: credentials.rol,
+        }
         this.fcm.getToken().then(token=>{
-            const newValues = {
-                username: credentials.username,
-                email: credentials.email,
-                rol: credentials.rol,
-                token:token
-            }
+            let _token_ = {token:token};
+            const Values = Object.assign(newValues,_token_);
+            const db = this.angularFireDatabase.database.ref('Devices');
+            db.push(Values);
+        })
+    }
+
+    RegisterBrowser(credentials: CredentialsInterface){
+        const newValues = {
+            username: credentials.username,
+            email: credentials.email,
+            rol: credentials.rol,
+        }
+        const db = this.angularFireDatabase.database.ref('Browser');
+            db.push(newValues);
+    }
+
+    RegisterSocialMediaMobile(credentials: SocialMediaInterface){
+        this.fcm.getToken().then(token=>{
+            let _token_ = {token:token};  
+            const newValues = Object.assign(credentials,_token_);
             const db = this.angularFireDatabase.database.ref('Devices');
             db.push(newValues);
         })
     }
 
-    addRegisterSocialMedia(credentials: SocialMediaInterface){
-        this.fcm.getToken().then(token=>{
-            const newValues = {
-                username: credentials.username,
-                email: credentials.email,
-                token:token
-            }
-            const db = this.angularFireDatabase.database.ref('Devices');
-            db.push(newValues);
-        })
+    RegisterSocialMediaBrowser(credentials: SocialMediaInterface){
+        const db = this.angularFireDatabase.database.ref('Browser');
+        db.push(credentials);
     }
     
     login(credentials: CredentialsInterface) {
