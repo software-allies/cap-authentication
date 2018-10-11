@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, FormControl, Validators } from "@angular/forms"
 import { CredentialsInterface } from './../../interfaces/credentials.interface';
 
 import { AuthenticationService } from '../../services/authentication.service';
+import { Platform } from 'ionic-angular';
+
 
 @Component({
   selector: "auth-app-register",
@@ -73,7 +75,9 @@ export class AuthRegisterComponent {
     
     constructor(
         private authenticationService: AuthenticationService,
-        public formBuilder: FormBuilder ) { }
+        public formBuilder: FormBuilder,
+        private platform: Platform, ) { 
+        }
 
     ngOnInit(): any {
         this.registerform = this.formBuilder.group({
@@ -92,14 +96,20 @@ export class AuthRegisterComponent {
             alert('passwords must be equal');
             return false;
         }
-        this.authenticationService
-            .addRegister(this.credentials)
+        if (this.platform.is('cordova')){
+            this.authenticationService
+            .RegisterMobile(this.credentials)
+        }else{
+            this.authenticationService
+            .RegisterBrowser(this.credentials)
+        }
         
         this.authenticationService
             .register(this.credentials)
             .subscribe((result: any) => {
                 this.submit.emit(result);
             });
+        this.registerform.reset()
     }
 
     loginAccount() {
