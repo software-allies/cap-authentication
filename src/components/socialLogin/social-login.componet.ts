@@ -2,7 +2,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFireDatabase } from  '@angular/fire/database';
 import firebase from 'firebase/app';
 
 import { Platform } from 'ionic-angular';
@@ -28,6 +27,7 @@ export class SocialLoginComponent implements OnInit {
   credentials : SocialMediaInterface = {
     username:'',
     email: '',
+    rol:''
   }
   displayName:string; 
 
@@ -35,7 +35,6 @@ export class SocialLoginComponent implements OnInit {
               private angularFireauth: AngularFireAuth,
               private facebook: Facebook,
               private platform: Platform,
-              private angularFireDatabase:AngularFireDatabase,
               ){}
 
   ngOnInit() {}
@@ -63,8 +62,9 @@ export class SocialLoginComponent implements OnInit {
         this.credentials={
           username:user.displayName,
           email: user.email,
+          rol:'Guest'
         }
-        this.authenticationService.addRegisterSocialMedia(this.credentials);
+        this.authenticationService.RegisterSocialMediaMobile(this.credentials);
       }
     })
   }
@@ -75,9 +75,9 @@ export class SocialLoginComponent implements OnInit {
         this.credentials = {
         email:user.email,
         username:user.displayName,
+        rol:'Guest'
       }
-      const db = this.angularFireDatabase.database.ref('Browser');
-      db.push(this.credentials);
+      this.authenticationService.RegisterSocialMediaBrowser(this.credentials);
       }
     })
   }
