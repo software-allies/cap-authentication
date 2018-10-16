@@ -7,6 +7,7 @@ var AuthenticationService = /** @class */ (function () {
     function AuthenticationService(_http, _config) {
         this._http = _http;
         this._config = _config;
+        this.userId = '';
         this.isLoggedIn = false;
         this.userData = {};
         this.httpOptions = {
@@ -29,6 +30,7 @@ var AuthenticationService = /** @class */ (function () {
                 localStorage.setItem('userId', response.userId || '');
                 localStorage.setItem('created', response.created || '');
                 localStorage.setItem('token', response.id);
+                localStorage.setItem('email', response.email || '');
             }
             return response;
         }));
@@ -47,6 +49,16 @@ var AuthenticationService = /** @class */ (function () {
     AuthenticationService.prototype.register = function (credentials) {
         var toAdd = JSON.stringify(credentials);
         return this._http.post(this.actionUrl + "/", toAdd, this.httpOptions)
+            .pipe(map(function (response) { return response; }), catchError(this.handleError), tap(function (response) {
+            return response;
+        }));
+    };
+    AuthenticationService.prototype.editProfile = function (credentials) {
+        var newValues = {
+            newUsername: credentials.username
+        };
+        var toAdd = JSON.stringify(newValues);
+        return this._http.put(this.actionUrl + "/" + this.userId, toAdd, this.httpOptions)
             .pipe(map(function (response) { return response; }), catchError(this.handleError), tap(function (response) {
             return response;
         }));

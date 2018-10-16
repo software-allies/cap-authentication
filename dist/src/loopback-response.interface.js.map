@@ -1,1 +1,0 @@
-{"version":3,"file":"loopback-response.interface.js","sourceRoot":"","sources":["../../src/loopback-response.interface.ts"],"names":[],"mappings":"","sourcesContent":["export interface LoopbackResponseInterface {\r\n    id?: string;\r\n    ttl?: number;\r\n    created?: string;\r\n    userId?: string;\r\n    error?: any;\r\n    email?: string;\r\n    repassword?: string;\r\n}"]}
