@@ -1,8 +1,8 @@
 // import { SocialMediaService } from '../../services/social-media.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID} from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
-
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'auth-app-log-out',
@@ -21,13 +21,23 @@ export class logOutComponent implements OnInit {
 
   constructor(
     private authenticationService: AuthenticationService,
-    private router: Router
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId
   ) {
     this.authenticationService.signOut();
+    this.logOutUser();
   }
 
   ngOnInit() {
     this.router.navigate(['/']);
+  }
+
+  logOutUser() {
+    if (isPlatformBrowser(this.platformId)) {
+      if (localStorage.getItem('User')) {
+        localStorage.removeItem('User');
+      }
+    }
   }
 
 }
