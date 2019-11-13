@@ -33,14 +33,14 @@ import { AngularFireModule } from '@angular/fire';
 @NgModule({
   imports: [
     AngularFireModule.initializeApp({
-      apiKey: ''
-      authDomain: ''
-      databaseURL: ''
-      projectId: ''
-      storageBucket: ''
-      messagingSenderId: ''
-      appId: ''
-      measurementId: ''
+      apiKey: '<your-apiKey>'
+      authDomain: '<your-authDomain>'
+      databaseURL: '<your-databaseURL>'
+      projectId: '<your-projectId>'
+      storageBucket: '<your-storageBucket>'
+      messagingSenderId: '<your-messagingSenderId>'
+      appId: '<your-appId>'
+      measurementId: '<your-measurementId>'
     }),
   ],
 })
