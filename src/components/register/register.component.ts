@@ -9,7 +9,7 @@ import { isPlatformBrowser } from '@angular/common';
   <div class="container register-form">
     <div class="form">
       <div class="header">
-          <p>Application Name</p>
+          <p>Create your account</p>
       </div>
       <div class="form-content">
         <form [formGroup]="createUserForm" (ngSubmit)="createUser()">

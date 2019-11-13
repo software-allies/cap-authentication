@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   <div class="container register-form">
     <div class="form">
       <div class="header">
-          <p>Application Name</p>
+          <p>Sign in</p>
       </div>
       <div class="form-content">
         <form [formGroup]="loginUserForm" (ngSubmit)="loginUser()">
