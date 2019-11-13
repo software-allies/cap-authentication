@@ -1,119 +1,208 @@
-import { Component, Output, EventEmitter, ViewEncapsulation } from '@angular/core'; 
-import { FormGroup, FormBuilder, FormControl, Validators } from "@angular/forms";
-import { CredentialsInterface } from './../../interfaces/credentials.interface';
-
+import { Component, ViewEncapsulation, Inject, PLATFORM_ID  } from '@angular/core';
+import { FormGroup, FormControl, Validators, } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication.service';
-import { Platform } from 'ionic-angular';
-
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: "auth-app-register",
   template: `
-<ion-grid>
-   <ion-row>
-     <ion-col  col-12 col-xl-8 offset-xl-2 col-lg-10 offset-lg-1>
-        <ion-list>
-            <form [formGroup]="registerform" (ngSubmit)="onSubmit()">
-                <ion-item>
-                    <ion-label stacked primary>Username</ion-label>
-                    <ion-input [(ngModel)]="credentials.username" formControlName="username"
-                            type="text" id="username" spellcheck="false" autocapitalize="off" ngDefaultControl>
-                    </ion-input>
-                </ion-item>
-                <ion-item>
-                    <ion-label stacked primary>Email</ion-label>
-                    <ion-input [(ngModel)]="credentials.email" formControlName="email"
-                            type="text" id="email" spellcheck="false" autocapitalize="off" ngDefaultControl>
-                    </ion-input>
-                </ion-item>
-                <ion-item>
-                    <ion-label>Rol</ion-label>
-                    <ion-select [(ngModel)]="credentials.rol" formControlName="rol" id="rol"> 
-                    <ion-option *ngFor=" let roles of rol" value="{{roles}}">{{roles}}</ion-option>
-                    </ion-select>
-                </ion-item>         
-                <ion-item>
-                    <ion-label stacked primary>Password</ion-label>
-                    <ion-input [(ngModel)]="credentials.password" formControlName="password" type="text" id="password">
-                    </ion-input>
-                </ion-item>
-                <ion-item>
-                    <ion-label stacked primary>Repeat Password</ion-label>
-                    <ion-input [(ngModel)]="credentials.repassword" formControlName="repassword" type="text" id="repassword">
-                    </ion-input>
-                </ion-item>
-                <button ion-button type="submit" block full primary (click)="registerAccount()"[disabled]="!registerform.valid">Register</button>
-                <button ion-button type="submit" block secondary (click)="loginAccount()">Login to account</button>
-                <social-login></social-login>
-            </form>
-        </ion-list>
-     </ion-col>
-   </ion-row>
- </ion-grid>
-    `,
-  styles: [``],
+  <div class="container register-form">
+    <div class="form">
+      <div class="header">
+          <p>Application Name</p>
+      </div>
+      <div class="form-content">
+        <form [formGroup]="createUserForm" (ngSubmit)="createUser()">
+          <div class="row">
+            <div class="col-md-6">
+                <div class="form-group" >
+                    <input  type="text"
+                            class="form-control"
+                            placeholder="Email address *"
+                            [ngClass]="{'is-invalid':!createUserForm.get('email').valid && createUserForm.get('email').touched}"
+                            formControlName="email"/>
+                </div>
+                <div class="form-group">
+                    <input  type="password"
+                            class="form-control"
+                            placeholder="Password *"
+                            [ngClass]="{'is-invalid':!createUserForm.get('password').valid && createUserForm.get('password').touched}"
+                            formControlName="password"/>
+                    <small *ngIf="!createUserForm.get('password').valid && createUserForm.get('password').touched" class="form-text text-center text-muted">
+                      Your password must be 8-20 characters long, contain letters and numbers and the first letter has to be uppercase.
+                    </small>
+                </div>
+                <div class="form-group">
+                  <input  type="text"
+                          class="form-control"
+                          placeholder="First Name * "
+                          [ngClass]="{'is-invalid':!createUserForm.get('firstName').valid && createUserForm.get('firstName').touched}"
+                          formControlName="firstName"/>
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <div class="form-group">
+                    <input  type="text"
+                            class="form-control"
+                            placeholder="Last Name *"
+                            [ngClass]="{'is-invalid':!createUserForm.get('lastName').valid && createUserForm.get('lastName').touched}"
+                            formControlName="lastName"/>
+                </div>
+
+                <div class="form-group">
+                    <input  type="text"
+                            class="form-control"
+                            placeholder="Company *"
+                            [ngClass]="{'is-invalid':!createUserForm.get('company').valid && createUserForm.get('company').touched}"
+                            formControlName="company"/>
+                </div>
+
+                <div class="form-group">
+                  <button type="submit"
+                          class="btnSubmit"
+                          [disabled]="!createUserForm.valid">Email</button>
+                  <button (click)="signUpSocialMedia(true)" type="button" class="btnFacebook ">Facebook</button>
+                  <button (click)="signUpSocialMedia(false)" type="button" class="btnGoogle ">Google</button>
+                </div>
+            </div>
+
+            <div *ngIf="existingUser"  class="form-control-feeback text-danger text-center">
+              This user already exists, try other alternate data
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  `,
+  styles: [`
+.header
+{
+  text-align: center;
+  height: 80px;
+  background: black;
+  color: #fff;
+  font-weight: bold;
+  line-height: 80px;
+}
+.form-content
+{
+  padding: 5%;
+  border: 1px solid #ced4da;
+  margin-bottom: 2%;
+}
+.form-control{
+  border-radius:1.5rem;
+}
+.btnSubmit
+{
+  border:none;
+  border-radius:1.5rem;
+  padding: 1%;
+  width: 33%;
+  cursor: pointer;
+  background: black;
+  color: #fff;
+}
+.btnFacebook
+{
+  border:none;
+  border-radius:1.5rem;
+  padding: 1%;
+  width: 33%;
+  cursor: pointer;
+  background: #0000FF;
+  color: #fff;
+}
+.btnGoogle
+{
+  border:none;
+  border-radius:1.5rem;
+  padding: 1%;
+  width: 33%;
+  cursor: pointer;
+  background: #FF0000;
+  color: #fff;
+}
+  `],
   encapsulation: ViewEncapsulation.Emulated
 })
 export class AuthRegisterComponent {
-   
-    @Output()
-    submit: EventEmitter<any> = new EventEmitter();
 
-    @Output()
-    changePage: EventEmitter<boolean> = new EventEmitter();
+  createUserForm: FormGroup;
+  existingUser: boolean;
 
-    credentials: CredentialsInterface = {
-        username:'',
-        email: '',
-        password: '', 
-        repassword: '',
-        rol:''
-    };
+  constructor(
+    private authenticationService: AuthenticationService,
+    @Inject(PLATFORM_ID) private platformId
+  ) {
+    this.createUserForm = new FormGroup({
+      'email': new FormControl('', [Validators.required, Validators.minLength(3), Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]),
+      'password': new FormControl('', [Validators.required, Validators.minLength(8), this.capitalLetter]),
+      'firstName': new FormControl('', [Validators.required, Validators.minLength(2)]),
+      'lastName': new FormControl('', [Validators.required, Validators.minLength(2)]),
+      'company': new FormControl('', [Validators.required, Validators.minLength(2)]),
+    });
+  }
 
-    rol: Array<string> = ['Guest','Administrator','Other'];
-    registerform: FormGroup;
-    
-    constructor(
-        private authenticationService: AuthenticationService,
-        public formBuilder: FormBuilder,
-        private platform: Platform, ) { 
+
+  capitalLetter(control: FormControl): { [s: string]: boolean } {
+    const letter = control.value.charAt(0);
+    if (control.value && !(letter === control.value.charAt(0).toUpperCase())) {
+      return {
+        capitalLetter: true
+      };
+    }
+    return null;
+  }
+
+  createUser() {
+    this.authenticationService.createUser(this.createUserForm.value)
+    .then((response) => {
+      response.user.getIdTokenResult().then((res)  => {
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('User', JSON.stringify({
+            user: response.user.email.split('@', 1)[0],
+            email: response.user.email,
+            refresh_token: response.user.refreshToken,
+            token: res.token
+          }));
         }
+      });
+    }).catch(error => this.existingUser = true);
+  }
 
-    ngOnInit(): any {
-        this.registerform = this.formBuilder.group({
-            username: ['', [Validators.required, Validators.minLength(3)]],
-            password: ['', [Validators.required, Validators.minLength(3)]],
-            repassword: ['', [Validators.required, Validators.minLength(3)]],
-            email: ['', [Validators.required, Validators.minLength(3)]],
-            rol: ['',[Validators.required]]
+  signUpSocialMedia(socialMedia: boolean) {
+    if (socialMedia) {
+      this.authenticationService.authWithFacebook().then((response) => {
+        response.user.getIdTokenResult().then((res) => {
+          if (isPlatformBrowser(this.platformId)) {
+            localStorage.setItem('User', JSON.stringify({
+              user: response.user.email.split('@', 1)[0],
+              email: response.user.email,
+              refresh_token: response.user.refreshToken,
+              token: res.token
+            }));
+          }
         });
+      }).catch(error => this.existingUser = true);
+    } else {
+      this.authenticationService.authWithGoogle().then((response) => {
+        response.user.getIdTokenResult().then((res) => {
+          if (isPlatformBrowser(this.platformId)) {
+            localStorage.setItem('User', JSON.stringify({
+              user: response.user.email.split('@', 1)[0],
+              email: response.user.email,
+              refresh_token: response.user.refreshToken,
+              token: res.token
+            }));
+          }
+        });
+      }).catch(error => this.existingUser = true);
     }
-  
-    onSubmit() {}
-
-    registerAccount(){
-        if (this.credentials.password !== this.credentials.repassword){
-            alert('passwords must be equal');
-            return false;
-        }
-        if (this.platform.is('cordova')){
-            this.authenticationService
-            .RegisterMobile(this.credentials)
-        }else{
-            this.authenticationService
-            .RegisterBrowser(this.credentials)
-        }
-        
-        this.authenticationService
-            .register(this.credentials)
-            .subscribe((result: any) => {
-                this.submit.emit(result);
-            });
-        this.registerform.reset()
-    }
-
-    loginAccount() {
-        this.changePage.emit(true);
-    }
-
+  }
 }
