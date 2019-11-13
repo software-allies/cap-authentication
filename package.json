@@ -8,20 +8,17 @@
     "build": "npm run transpile && npm run package && npm run minify"
   },
   "dependencies": {
-    "@angular/core": "5.2.11",
-    "@angular/fire": "^5.0.0",
-    "@ionic-native/facebook": "^4.15.0",
-    "@ionic-native/fcm": "^4.14.0",
-    "angular5-social-login": "^1.0.9",
-    "firebase": "^5.4.2",
-    "ionic-angular": "^3.9.2"
+    "@angular/compiler": "^8.2.13",
+    "@angular/compiler-cli": "^8.2.13",
+    "rollup": "^0.62.0",
+    "typescript": "^3.5.1",
+    "uglify-js": "^3.4.2"
   },
   "devDependencies": {
-    "@angular/compiler": "5.2.11",
-    "@angular/compiler-cli": "5.2.11",
+    "@angular/compiler": "^8.2.13",
+    "@angular/compiler-cli": "^8.2.13",
     "@types/jest": "^23.3.1",
     "jest": "^23.5.0",
-    "reflect-metadata": "^0.1.12",
     "rollup": "^0.62.0",
     "ts-jest": "^23.1.4",
     "typescript": "~2.7.2",
