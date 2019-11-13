@@ -92,7 +92,7 @@ AuthenticationModule.forRoot({}),
 <auth-app-change-password></auth-app-change-password>
 ```
 ---
-* ### **Authentication Forgot Password**
+* ### **Authentication Log Out**
 ```
 <auth-app-log-out></auth-app-log-out>
 ```
