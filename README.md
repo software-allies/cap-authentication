@@ -63,7 +63,12 @@ import { AuthenticationModule } from 'cap-authorization'
 ---
 into the import section
 ```
-AuthenticationModule.forRoot({}),
+@NgModule({
+  imports: [
+    AuthenticationModule.forRoot({}),
+  ],
+})
+export class AppModule { }
 ```
 ---
 
