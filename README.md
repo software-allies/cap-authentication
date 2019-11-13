@@ -2,13 +2,10 @@
 
 **CAP AUTHENTICATION** is a module for **Angular**, with this module you can authenticate users **Firebase**.
 
-CAP AUTHENTICATION it's a module that provides: 
 * registration
 * login
 * profile
 * change password
-
-
 
 ## **Previous requirements**
 **CAP AUTHENTICATION** use bootstrap's classes. To be able to display the component in the right way, bootstrap should have been installed in the project. In case you don't have bootstrap installed, you can run the following command or read their [Bootstrap](https://getbootstrap.com/docs/4.3/getting-started/download/):
