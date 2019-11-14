@@ -46,16 +46,6 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
   ]
 })
 export class AuthenticationModule {
-  static forRoot(config: any): ModuleWithProviders {
-    return {
-      ngModule: AuthenticationModule,
-      providers: [
-        {
-          provide: ConfigService,
-          useValue: config,
-        },
-      ]
-    };
-  }
+
 }
 
