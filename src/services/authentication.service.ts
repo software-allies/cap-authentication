@@ -45,8 +45,8 @@ export class AuthenticationService {
     return this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
   }
 
-  updateProfile(user: any): Promise<void> {
-    return this.afAuth.auth.updateCurrentUser(user);
+  updateProfile(name: string): Promise<void> {
+    return this.afAuth.auth.currentUser.updateProfile({displayName: name});
   }
 
   resetPassword(email: string): Promise<void> {
