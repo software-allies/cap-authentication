@@ -28,10 +28,15 @@ import { Router } from '@angular/router';
                         placeholder="Phone number *"
                         formControlName="phoneNumber"/>
               </div>
-
-              <button type="submit"
-                class="btnSubmit"
-                [disabled]="!(profileUserForm.get('displayName').touched || profileUserForm.get('phoneNumber').touched)">Edit Profile</button>
+              <div *ngIf="userUpdated" class="form-control-feeback mb-2 text-success text-center">
+                user updated successfully
+              </div>
+              <button
+                type="submit"
+                [disabled]="!(profileUserForm.get('displayName').dirty)"
+                class="btnSubmit">
+                Edit Profile
+              </button>
             </div>
             <div class="col-md-6">
               <div class="ml-5">
@@ -44,7 +49,6 @@ import { Router } from '@angular/router';
                 <p> Last SignIn : {{user.metadata.lastSignInTime | date:'medium'}}
               </div>
             </div>
-
           </div>
         </form>
       </div>
@@ -86,16 +90,21 @@ import { Router } from '@angular/router';
 export class AuthEditComponent {
 
   profileUserForm: FormGroup;
+  userUpdated: boolean;
 
   private user: any;
   constructor(
     private authenticationService: AuthenticationService,
     private router: Router,
   ) {
-
+    this.userUpdated = false;
   }
 
   ngOnInit() {
+    this.getProfile();
+  }
+
+  getProfile() {
     this.authenticationService.currentUser.subscribe((user) => {
       if (user) {
         this.user = user;
@@ -112,10 +121,11 @@ export class AuthEditComponent {
   editProfile() {
     this.authenticationService.currentUser.subscribe((user) => {
       if ( user ) {
-        this.user.phoneNumber = this.profileUserForm.get('phoneNumber').value;
-        this.user.displayName = this.profileUserForm.get('displayName').value;
-        this.authenticationService.updateProfile(user).then((response) => {
-          console.log(response);
+        this.authenticationService.updateProfile(this.profileUserForm.get('displayName').value).then((response) => {
+          this.userUpdated = true;
+          setTimeout(() => {
+            this.userUpdated = false;
+       }, 3000);
         });
       } else {
         this.router.navigate(['/']);
