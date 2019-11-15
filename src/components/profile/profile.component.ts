@@ -91,8 +91,8 @@ export class AuthEditComponent {
 
   profileUserForm: FormGroup;
   userUpdated: boolean;
+  user: any;
 
-  private user: any;
   constructor(
     private authenticationService: AuthenticationService,
     private router: Router,
