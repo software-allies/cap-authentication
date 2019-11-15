@@ -1,4 +1,3 @@
-// import { SocialMediaService } from '../../services/social-media.service';
 import { Component, OnInit, Inject, PLATFORM_ID} from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
@@ -28,9 +27,7 @@ export class logOutComponent implements OnInit {
     this.logOutUser();
   }
 
-  ngOnInit() {
-    this.router.navigate(['/']);
-  }
+  ngOnInit() { }
 
   logOutUser() {
     if (isPlatformBrowser(this.platformId)) {
@@ -38,6 +35,7 @@ export class logOutComponent implements OnInit {
         localStorage.removeItem('User');
       }
     }
+    this.router.navigate(['/']);
   }
 
 }
