@@ -118,7 +118,7 @@ npm i cap-authorization
 
 To use this module go-to the app module and into the sections' import and put the Authentication Module.
 ```
-import { AuthenticationModule } from 'cap-authorization'
+import { AuthenticationAuth0Module } from 'cap-authorization'
 ```
 ---
 into the import section
