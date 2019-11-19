@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 
 
 @Component({
-  selector: "auth-app-profile-auth0",
+  selector: "cap-profile-auth0",
   template: `
   <div class="container register-form">
     <div class="form">

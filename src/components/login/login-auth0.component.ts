@@ -1,11 +1,11 @@
-import { Component, ViewEncapsulation, Inject, PLATFORM_ID, OnInit  } from '@angular/core';
+import { Component, ViewEncapsulation, Inject, PLATFORM_ID, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, } from '@angular/forms';
 import { AuthenticationAuth0Service } from '../../services/authentication-auth0.service';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: "auth-app-login-auth0",
+  selector: "cap-log-in-auth0",
   template: `
   <div class="container register-form">
     <div class="form">
@@ -35,6 +35,9 @@ import { Router } from '@angular/router';
 
                   <div *ngIf="userNotValid"  class="form-control-feeback text-danger text-center">
                     invalid email or password
+                  </div>
+                  <div *ngIf="socialMedia"  class="form-control-feeback text-danger text-center">
+                    At the moment authentication with Social networks is under development, try by Email
                   </div>
               </div>
             </div>
@@ -115,6 +118,7 @@ export class AuthLoginAuth0Component implements OnInit {
 
   loginUserForm: FormGroup;
   userNotValid: boolean;
+  socialMedia: boolean;
 
   constructor(
     private authenticationAuth0Service: AuthenticationAuth0Service,
@@ -122,6 +126,7 @@ export class AuthLoginAuth0Component implements OnInit {
     private router: Router
   ) {
     this.userNotValid = false;
+    this.socialMedia = false;
   }
 
   ngOnInit() {
@@ -132,7 +137,7 @@ export class AuthLoginAuth0Component implements OnInit {
   }
 
   loginUser() {
-    this.authenticationAuth0Service.loginUser(this.loginUserForm.value).subscribe((token: any) => {
+    this.authenticationAuth0Service.loginUser(this.loginUserForm.value).subscribe((token: any) => {
       this.authenticationAuth0Service.getUserInfo(token.access_token).subscribe((user: any) => {
         if (isPlatformBrowser(this.platformId)) {
           localStorage.setItem('User', JSON.stringify({
@@ -153,6 +158,11 @@ export class AuthLoginAuth0Component implements OnInit {
     }));
   }
 
-  signInSocialMedia(socialMedia: boolean) { }
+  signInSocialMedia(socialMedia: boolean) {
+    this.socialMedia = true;
+    setTimeout(() => {
+      this.socialMedia = false;
+    }, 3000);
+  }
 }
 

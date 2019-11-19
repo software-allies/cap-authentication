@@ -4,7 +4,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: "auth-app-profile",
+  selector: "cap-profile-firebase",
   template: `
   <div class="container register-form">
     <div class="form">

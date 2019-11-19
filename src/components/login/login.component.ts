@@ -5,7 +5,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: "auth-app-login",
+  selector: "cap-log-in-firebase",
   template: `
   <div class="container register-form">
     <div class="form">

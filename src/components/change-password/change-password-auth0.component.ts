@@ -5,7 +5,7 @@ import { AuthenticationAuth0Service } from '../../services/authentication-auth0.
 import { Router } from '@angular/router';
 
 @Component({
-  selector: "auth-app-change-password-auth0",
+  selector: "cap-change-password-auth0",
   template: `
   <div class="container register-form">
     <div class="form">

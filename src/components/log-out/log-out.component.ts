@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
-  selector: 'auth-app-log-out',
+  selector: 'cap-log-out-firebase',
   template:
     `
     <div class="d-flex justify-content-center">

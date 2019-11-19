@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
-  selector: 'auth-app-log-out-auth0',
+  selector: 'cap-log-out-auth0',
   template:
     `
     <div class="d-flex justify-content-center">

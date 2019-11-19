@@ -4,7 +4,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
-  selector: "auth-app-register",
+  selector: "cap-register-firebase",
   template: `
   <div class="container register-form">
     <div class="form">

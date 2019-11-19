@@ -4,7 +4,7 @@ import { AuthenticationAuth0Service } from '../../services/authentication-auth0.
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
-  selector: "auth-app-register-auth0",
+  selector: "cap-register-auth0",
   template: `
   <div class="container register-form">
     <div class="form">
@@ -73,6 +73,9 @@ import { isPlatformBrowser } from '@angular/common';
             <div *ngIf="existingUser"  class="form-control-feeback text-danger text-center">
               This user already exists, try other alternate data
             </div>
+            <div *ngIf="socialMedia"  class="form-control-feeback text-danger text-center">
+              At the moment authentication with Social networks is under development, try by Email
+            </div>
           </div>
         </form>
       </div>
@@ -135,6 +138,7 @@ export class AuthRegisterAuth0Component {
 
   createUserForm: FormGroup;
   existingUser: boolean;
+  socialMedia: boolean;
 
   constructor(
     private authenticationAuth0Service: AuthenticationAuth0Service,
@@ -147,6 +151,7 @@ export class AuthRegisterAuth0Component {
       'lastName': new FormControl('', [Validators.required, Validators.minLength(2)]),
       'company': new FormControl('', [Validators.required, Validators.minLength(2)]),
     });
+    this.socialMedia = false;
   }
 
 
@@ -185,5 +190,10 @@ export class AuthRegisterAuth0Component {
     });
   }
 
-  signUpSocialMedia(socialMedia: boolean) {}
+  signUpSocialMedia(socialMedia: boolean) {
+    this.socialMedia = true;
+    setTimeout(() => {
+      this.socialMedia = false;
+    }, 3000);
+  }
 }
