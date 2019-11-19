@@ -5,7 +5,7 @@
     "transpile": "ngc",
     "package": "rollup -c",
     "minify": "uglifyjs dist/bundles/capauthentication.umd.js --screw-ie8 --compress --mangle --comments --output dist/bundles/capauthentication.umd.min.js",
-    "build": "npm run transpile && npm run package && npm run minify"
+    "build": "npm run transpile && npm run package && npm run minify && cp README.md dist/README.md && cp package.json dist/package.json"
   },
   "dependencies": {
     "@angular/compiler": "^8.2.13",
