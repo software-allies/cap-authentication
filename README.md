@@ -163,4 +163,4 @@ export class AppModule { }
 <cap-log-out-auth0></cap-log-out-auth0>
 ```
 ---
-
+**Note**: An object is stored in the localStorage to know the status of the user
