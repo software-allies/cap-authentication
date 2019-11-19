@@ -1,11 +1,13 @@
 # CAP AUTHENTICATION [![Generic badge](https://img.shields.io/badge/CAP-Active-<COLOR>.svg)](https://shields.io/)
 
-**CAP AUTHENTICATION** is a module for **Angular**, with this module you can authenticate users **Firebase**.
+**CAP AUTHENTICATION** is a module for **Angular**
 
 * registration
 * login
 * profile
 * change password
+
+you can use one of the two largest authentication services on the market **Auth0** or **Firebase**
 
 ## **Previous requirements**
 **CAP AUTHENTICATION** use bootstrap's classes. To be able to display the component in the right way, bootstrap should have been installed in the project. In case you don't have bootstrap installed, you can run the following command or read their [Bootstrap](https://getbootstrap.com/docs/4.3/getting-started/download/):
@@ -19,6 +21,8 @@ One's that you installed bootstrap you have to configure the `angular.json` and 
   "styles.scss"
 ]
 ```
+---
+## Authentication module configuration with Firebase
 
 We will also need **@angular/fire** to use the Firebase services, for this we must have previously created a project on this platform and enabled authentication methods such as **Email/passord**, **Facebook** and **Google**.
 ```
@@ -47,18 +51,17 @@ import { AngularFireModule } from '@angular/fire';
 export class AppModule { }
 ```
 
-## Installation Authentication module
+### Installation
 ```
 npm i cap-authorization
 ```
 ---
 
-## **Implementation into a module**
+### **Implementation into a module**
 
 To use this module go-to the app module and into the sections' import and put the Authentication Module.
 ```
 import { AuthenticationModule } from 'cap-authorization'
-
 ```
 ---
 into the import section
@@ -72,35 +75,30 @@ export class AppModule { }
 ```
 ---
 
-## **HTML tags**
+### **HTML tags**
 
-* ### **Authentication LogIn**
+* #### **Authentication LogIn**
 ```
-<auth-app-login></auth-app-login>
-```
----
-* ### **Authentication Register**
-```
-<auth-app-register></auth-app-register>
+<cap-log-in-firebase></cap-log-in-firebase>
 ```
 ---
-* ### **Authentication Profile**
+* #### **Authentication Register**
 ```
-<auth-app-profile></auth-app-profile>
-```
----
-* ### **Authentication Forgot Password**
-```
-<auth-app-change-password></auth-app-change-password>
+<cap-register-firebase></cap-register-firebase>
 ```
 ---
-* ### **Authentication Log Out**
+* #### **Authentication Profile**
 ```
-<auth-app-log-out></auth-app-log-out>
+<cap-profile-firebase></cap-profile-firebase>
 ```
 ---
-
-
-[Facebook Developers]: https://developers.facebook.com/apps/
-[Firebase Console]: https://console.firebase.google.com/u/0/
-[here]: https://ionicframework.com/docs/native/facebook/	
+* #### **Authentication Forgot Password**
+```
+<cap-change-password-firebase></cap-change-password-firebase>
+```
+---
+* #### **Authentication Log Out**
+```
+<cap-log-out-firebase></cap-log-out-firebase>
+```
+---
