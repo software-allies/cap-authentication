@@ -22,7 +22,7 @@ One's that you installed bootstrap you have to configure the `angular.json` and 
 ]
 ```
 ---
-## Authentication module configuration with Firebase
+## Firebase Authentication Module
 
 We will also need **@angular/fire** to use the Firebase services, for this we must have previously created a project on this platform and enabled authentication methods such as **Email/passord**, **Facebook** and **Google**.
 ```
@@ -102,3 +102,65 @@ export class AppModule { }
 <cap-log-out-firebase></cap-log-out-firebase>
 ```
 ---
+
+
+## Auth0 Authentication Module
+In order to use this module we will not need any external dependency just import the module in our `app.module.ts`. Previously we must have configured our auth0 service and have the credentials that we will indicate next.
+
+
+### Installation
+```
+npm i cap-authorization
+```
+---
+
+### **Implementation into a module**
+
+To use this module go-to the app module and into the sections' import and put the Authentication Module.
+```
+import { AuthenticationModule } from 'cap-authorization'
+```
+---
+into the import section
+```
+@NgModule({
+  imports: [
+    AuthenticationAuth0Module.forRoot({
+      domain: '<your-domain>',
+      clientId: '<your clientId>',
+      clientSecret: '<your clientSecret>'
+    })
+  ],
+})
+export class AppModule { }
+```
+---
+
+### **HTML tags**
+
+* #### **Authentication LogIn**
+```
+<cap-log-in-auth0></cap-log-in-auth0>
+```
+---
+* #### **Authentication Register**
+```
+<cap-register-auth0></cap-register-auth0>
+```
+---
+* #### **Authentication Profile**
+```
+<cap-profile-auth0></cap-profile-auth0>
+```
+---
+* #### **Authentication Forgot Password**
+```
+<cap-change-password-auth0></cap-change-password-auth0>
+```
+---
+* #### **Authentication Log Out**
+```
+<cap-log-out-auth0></cap-log-out-auth0>
+```
+---
+
