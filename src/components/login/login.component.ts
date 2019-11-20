@@ -132,8 +132,8 @@ export class AuthLoginComponent {
 
   loginUser() {
     this.authenticationService.authWithEmail(this.loginUserForm.value)
-    .then((response) => {
-      response.user.getIdTokenResult().then((res) => {
+    .then((response: any) => {
+      response.user.getIdTokenResult().then((res: any) => {
         if (isPlatformBrowser(this.platformId)) {
           localStorage.setItem('User', JSON.stringify({
             uid: response.user.uid,
@@ -149,8 +149,8 @@ export class AuthLoginComponent {
 
   signInSocialMedia(socialMedia: boolean) {
     if (socialMedia) {
-      this.authenticationService.authWithFacebook().then((response) => {
-        response.user.getIdTokenResult().then((res) => {
+      this.authenticationService.authWithFacebook().then((response: any) => {
+        response.user.getIdTokenResult().then((res: any) => {
           if (isPlatformBrowser(this.platformId)) {
             localStorage.setItem('User', JSON.stringify({
               user: response.user.email.split('@', 1)[0],
@@ -160,16 +160,14 @@ export class AuthLoginComponent {
             }));
           }
         }).then(() => {
-          this.authenticationService.currentUser.subscribe((user) => {
+          this.authenticationService.currentUser.subscribe((user: any) => {
           })
           // this.router.navigate(['/']);
         });
       }).catch(error => this.userNotValid = true);
-
-
     } else {
-      this.authenticationService.authWithGoogle().then((response) =>  {
-        response.user.getIdTokenResult().then((res) => {
+      this.authenticationService.authWithGoogle().then((response: any) =>  {
+        response.user.getIdTokenResult().then((res: any) => {
           if (isPlatformBrowser(this.platformId)) {
             localStorage.setItem('User', JSON.stringify({
               user: response.user.email.split('@', 1)[0],

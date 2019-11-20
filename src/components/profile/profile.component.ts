@@ -22,12 +22,7 @@ import { Router } from '@angular/router';
                         formControlName="displayName"/>
               </div>
 
-              <div class="form-group" >
-                <input  type="text"
-                        class="form-control"
-                        placeholder="Phone number *"
-                        formControlName="phoneNumber"/>
-              </div>
+
               <div *ngIf="userUpdated" class="form-control-feeback mb-2 text-success text-center">
                 user updated successfully
               </div>
@@ -41,6 +36,7 @@ import { Router } from '@angular/router';
             <div class="col-md-6">
               <div class="ml-5">
                 <p> Email : {{user.email}}
+                <p> Full name: {{user.displayName}}
                 <p> Authentication Method: {{user.providerData[0].providerId}} </p>
                 <p> UID User: {{user.providerData[0].uid}} </p>
                 <p *ngIf="user.emailVerified"> Verified Email : Yes
@@ -105,12 +101,11 @@ export class AuthEditComponent {
   }
 
   getProfile() {
-    this.authenticationService.currentUser.subscribe((user) => {
+    this.authenticationService.currentUser.subscribe((user: any) => {
       if (user) {
         this.user = user;
         this.profileUserForm = new FormGroup({
-          'displayName': new FormControl(user.displayName, []),
-          'phoneNumber': new FormControl(user.phoneNumber, [])
+          'displayName': new FormControl(user.displayName, [Validators.required])
         });
       } else {
         this.router.navigate(['/']);
@@ -119,9 +114,9 @@ export class AuthEditComponent {
   }
 
   editProfile() {
-    this.authenticationService.currentUser.subscribe((user) => {
+    this.authenticationService.currentUser.subscribe((user: any) => {
       if ( user ) {
-        this.authenticationService.updateProfile(this.profileUserForm.get('displayName').value).then((response) => {
+        this.authenticationService.updateProfile(this.profileUserForm.value).then((response: any) => {
           this.userUpdated = true;
           setTimeout(() => {
             this.userUpdated = false;

@@ -163,7 +163,7 @@ export class AuthRegisterComponent {
   createUser() {
     this.authenticationService.createUser(this.createUserForm.value)
     .then((response) => {
-      response.user.getIdTokenResult().then((res)  => {
+      response.user.getIdTokenResult().then((res: any)  => {
         if (isPlatformBrowser(this.platformId)) {
           localStorage.setItem('User', JSON.stringify({
             user: response.user.email.split('@', 1)[0],
@@ -178,8 +178,8 @@ export class AuthRegisterComponent {
 
   signUpSocialMedia(socialMedia: boolean) {
     if (socialMedia) {
-      this.authenticationService.authWithFacebook().then((response) => {
-        response.user.getIdTokenResult().then((res) => {
+      this.authenticationService.authWithFacebook().then((response: any) => {
+        response.user.getIdTokenResult().then((res: any) => {
           if (isPlatformBrowser(this.platformId)) {
             localStorage.setItem('User', JSON.stringify({
               user: response.user.email.split('@', 1)[0],
@@ -191,8 +191,8 @@ export class AuthRegisterComponent {
         });
       }).catch(error => this.existingUser = true);
     } else {
-      this.authenticationService.authWithGoogle().then((response) => {
-        response.user.getIdTokenResult().then((res) => {
+      this.authenticationService.authWithGoogle().then((response: any) => {
+        response.user.getIdTokenResult().then((res: any) => {
           if (isPlatformBrowser(this.platformId)) {
             localStorage.setItem('User', JSON.stringify({
               user: response.user.email.split('@', 1)[0],

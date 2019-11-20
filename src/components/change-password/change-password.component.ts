@@ -91,7 +91,7 @@ export class AuthChangePasswordComponent {
 
   forgorPassword() {
     if (this.changeform.valid) {
-      this.authenticationService.resetPassword(this.changeform.get('email').value).then((user) => {
+      this.authenticationService.resetPassword(this.changeform.value).then((user: any) => {
         this.emailSend = true;
       }).catch(error => this.errorEmailSend = true);
     }

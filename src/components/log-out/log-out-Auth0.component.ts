@@ -28,7 +28,6 @@ export class logOutAuth0Component implements OnInit {
 
   logOutUser() {
     if (isPlatformBrowser(this.platformId) && localStorage.getItem('User')) {
-      console.log('dentro');
       localStorage.removeItem('User');
     }
     this.router.navigate(['/']);

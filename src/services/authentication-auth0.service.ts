@@ -105,9 +105,9 @@ export class AuthenticationAuth0Service {
     return this.http.patch(`${this.configService.domain}/api/v2/users/${id}`, httpParams, httpOptions);
   }
 
-  changePassword(email: string) {
+  changePassword(user: any) {
     const User = {
-      email: `${email}`,
+      email: `${user.email}`,
       connection: 'Username-Password-Authentication',
     };
     const httpOptions = {
