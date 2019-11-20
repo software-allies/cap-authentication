@@ -54,14 +54,14 @@ import { Router } from '@angular/router';
             </div>
             <div class="col-md-6">
               <div class="ml-5">
-                <p> Email : {{user.email}}
-                <p> First name : {{user.name}}
-                <p> Last name : {{user.family_name}}
+                <p> Email : {{user.email}}</p>
+                <p> First name : {{user.name}}</p>
+                <p> Last name : {{user.family_name}}</p>
                 <p> Nickname : {{user.nickname}} </p>
-                <p *ngIf="user.emailVerified"> Verified Email : Yes
-                <p *ngIf="!user.emailVerified"> Verified Email : No
-                <p> Creation Date: {{user.created_at | date:'medium'}}
-                <p> Last SignIn : {{user.last_login | date:'medium'}}
+                <p *ngIf="user.emailVerified"> Verified Email : Yes</p>
+                <p *ngIf="!user.emailVerified"> Verified Email : No</p>
+                <p> Creation Date: {{user.created_at | date:'medium'}}</p>
+                <p> Last SignIn : {{user.last_login | date:'medium'}}</p>
               </div>
             </div>
           </div>
