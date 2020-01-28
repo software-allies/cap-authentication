@@ -1,13 +1,72 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { Observable } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ConfigService } from './config.service';
+import * as jwt_decode from 'jwt-decode';
 import { map } from 'rxjs/operators';
 
 @Injectable()
 export class AuthenticationAuth0Service {
 
-  constructor(private configService: ConfigService, private http: HttpClient) { }
+  constructor(
+    private configService: ConfigService,
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId,
+  ) { }
+
+  saveCurrentUSer(user: {}) {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('User', JSON.stringify(user));
+    }
+  }
+
+  isUserLoggedIn(): boolean {
+    if (isPlatformBrowser(this.platformId) && localStorage.getItem('User')) {
+      const decoded = jwt_decode(JSON.parse(localStorage.getItem('User')).token);
+      if (decoded.exp < Date.now() ) {
+        return true;
+      } else {
+        this.refreshToken(JSON.parse(localStorage.getItem('User')).refresh_token).subscribe((token: any) => {
+          if (token) {
+            this.saveCurrentUSer({
+              user: JSON.parse(localStorage.getItem('User')).user,
+              email: JSON.parse(localStorage.getItem('User')).email,
+              refresh_token: JSON.parse(localStorage.getItem('User')).refresh_token,
+              token: token.access_token,
+              token_id: token.id_token,
+              id: JSON.parse(localStorage.getItem('User')).id
+            });
+            return true;
+          }
+        }, (error) => {
+          console.log(error);
+          return false;
+        });
+      }
+    } else {
+      return false;
+    }
+  }
+
+  getToken(): string {
+    if (isPlatformBrowser(this.platformId) && localStorage.getItem('User')) {
+      return JSON.parse(localStorage.getItem('User')).token;
+    }
+  }
+
+  refreshToken(refreshToken: string) {
+    const httpOptions = {
+      headers : new HttpHeaders({
+        'content-type': 'application/x-www-form-urlencoded'
+      })
+    };
+    const httpParams = new HttpParams().append('grant_type', 'refresh_token')
+                                  .append('client_id', `${this.configService.clientId}`)
+                                  .append('client_secret', `${this.configService.clientSecret}`)
+                                  .append('refresh_token', `${refreshToken}`);
+    return this.http.post(`${this.configService.domain}/oauth/token`, httpParams, httpOptions);
+  }
 
   getCredentials() {
     return {
@@ -18,9 +77,9 @@ export class AuthenticationAuth0Service {
     };
   }
 
-  getToken(): Observable<string> {
+  getAuth0Token(): Observable<string> {
     const httpOptions = {
-      headers: new HttpHeaders({
+      headers : new HttpHeaders({
         'content-type': 'application/json'
       })
     };
@@ -33,8 +92,18 @@ export class AuthenticationAuth0Service {
       );
   }
 
-  createUser(user: any, accessToken: string) {
-    const User = {
+  getAuth0UserInfo(token: string) {
+    const httpOptions = {
+      headers : new HttpHeaders({
+        'content-type': 'application/x-www-form-urlencoded',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    return this.http.get(`${this.configService.domain}/userinfo`, httpOptions);
+  }
+
+  createUser(user: any, access_token?: string)  {
+    let User = {
       email: `${user.email}`,
       password: `${user.password}`,
       email_verified: false,
@@ -47,7 +116,7 @@ export class AuthenticationAuth0Service {
     const httpOptions = {
       headers: new HttpHeaders({
         'content-type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
+        'Authorization': `Bearer ${access_token}`
       })
     };
     return this.http.post(`${this.configService.domain}/api/v2/users`, User, httpOptions);
@@ -70,6 +139,38 @@ export class AuthenticationAuth0Service {
     return this.http.post(`${this.configService.domain}/oauth/token`, httpParams, httpOptions);
   }
 
+  signOut() {
+    if (isPlatformBrowser(this.platformId)) {
+      if (localStorage.getItem('User')) {
+          const token = JSON.parse(localStorage.getItem('User')).token;
+          const httpParams = new HttpParams().append('client_id', `${this.configService.clientId}`)
+          .append('returnTo', `http://localhost:4200`);
+
+          this.http.get(`${this.configService.domain}/v2/logout`, {
+            headers: {
+              'content-type': 'application/x-www-form-urlencoded',
+              'Authorization': `Bearer ${token}`
+            },
+            params: httpParams
+          })
+          .subscribe((user: any) => {
+            console.log(user, 'LogOut');
+          });
+
+        localStorage.removeItem('User');
+      }
+    }
+  }
+
+  getUser(id: string, token: string) {
+    const httpOptions = {
+      headers : new HttpHeaders({
+        'content-type': 'application/x-www-form-urlencoded',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    return this.http.get(`${this.configService.domain}/api/v2/users/${id}`, httpOptions);
+  }
 
   getUserInfo(token: string): Observable<any> {
     const httpOptions = {
@@ -81,29 +182,6 @@ export class AuthenticationAuth0Service {
     return this.http.get(`${this.configService.domain}/userinfo`, httpOptions);
   }
 
-  getUser(id: string, token: string) {
-    const httpOptions = {
-      headers : new HttpHeaders({
-        'content-type': 'application/x-www-form-urlencoded',
-        'Authorization': `Bearer ${token}`
-      })
-    };
-
-    return this.http.get(`${this.configService.domain}/api/v2/users/${id}`, httpOptions);
-  }
-
-  editProfile(user: any, id: string, token: string) {
-    const httpParams = new HttpParams() .append('name', `${user.name}`)
-                                        .append('family_name', `${user.family_name}`)
-                                        .append('nickname', `${user.nickname}`);
-    const httpOptions = {
-      headers : new HttpHeaders({
-        'content-type': 'application/x-www-form-urlencoded',
-        'Authorization': `Bearer ${token}`
-      })
-    };
-    return this.http.patch(`${this.configService.domain}/api/v2/users/${id}`, httpParams, httpOptions);
-  }
 
   changePassword(user: any) {
     const User = {
@@ -116,6 +194,33 @@ export class AuthenticationAuth0Service {
       })
     };
     return this.http.post(`${this.configService.domain}/dbconnections/change_password`, User, httpOptions);
+  }
+
+
+  updateProfile(user: any, id: string, token: string) {
+    const httpParams = new HttpParams() .append('name', `${user.name}`)
+                                        .append('family_name', `${user.family_name}`)
+                                        .append('nickname', `${user.nickname}`);
+    const httpOptions = {
+      headers : new HttpHeaders({
+        'content-type': 'application/x-www-form-urlencoded',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    return this.http.patch(`${this.configService.domain}/api/v2/users/${id}`, httpParams, httpOptions);
+  }
+
+  verifyEmail(userId: string, token: string) {
+    const httpOptions = {
+      headers : new HttpHeaders({
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    const User = {
+      user_id: `${userId}`,
+    };
+    return this.http.post(`${this.configService.domain}/api/v2/jobs/verification-email`, User, httpOptions);
   }
 
 }
