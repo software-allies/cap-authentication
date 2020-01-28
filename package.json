@@ -10,6 +10,7 @@
   "dependencies": {
     "@angular/compiler": "^8.2.13",
     "@angular/compiler-cli": "^8.2.13",
+    "jwt-decode": "^2.2.0",
     "rollup": "^0.62.0",
     "typescript": "^3.5.1",
     "uglify-js": "^3.4.2"
@@ -22,7 +23,8 @@
     "rollup": "^0.62.0",
     "ts-jest": "^23.1.4",
     "typescript": "~2.7.2",
-    "uglify-js": "^3.4.2"
+    "uglify-js": "^3.4.2",
+    "@angular/common": "^8.2.14"
   },
   "jest": {
     "transform": {
