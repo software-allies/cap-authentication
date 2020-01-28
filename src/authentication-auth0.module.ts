@@ -27,10 +27,6 @@ import { AuthChangePasswordComponent } from './components/change-password/change
     FormsModule,
   ],
   exports: [
-    HttpClientModule,
-    ReactiveFormsModule,
-    FormsModule,
-    CommonModule,
     AuthChangePasswordComponent,
     AuthRegisterAuth0Component,
     AuthProfileAuth0Component,
