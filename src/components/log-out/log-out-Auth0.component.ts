@@ -1,6 +1,6 @@
-import { Component, OnInit, Inject, PLATFORM_ID} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { isPlatformBrowser } from '@angular/common';
+import { AuthenticationAuth0Service } from '../../services/authentication-auth0.service';
 
 @Component({
   selector: 'cap-log-out-auth0',
@@ -19,7 +19,7 @@ export class logOutAuth0Component implements OnInit {
 
   constructor(
     private router: Router,
-    @Inject(PLATFORM_ID) private platformId
+    private authenticationAuth0Service: AuthenticationAuth0Service
   ) {
     this.logOutUser();
   }
@@ -27,9 +27,7 @@ export class logOutAuth0Component implements OnInit {
   ngOnInit() { }
 
   logOutUser() {
-    if (isPlatformBrowser(this.platformId) && localStorage.getItem('User')) {
-      localStorage.removeItem('User');
-    }
+    this.authenticationAuth0Service.signOut();
     this.router.navigate(['/']);
   }
 
