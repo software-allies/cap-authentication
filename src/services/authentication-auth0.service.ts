@@ -3,17 +3,16 @@ import { Observable } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ConfigService } from './config.service';
-import * as jwt_decode from 'jwt-decode';
+import { JwtHelperService } from "@auth0/angular-jwt";
 import { map } from 'rxjs/operators';
 
 @Injectable()
 export class AuthenticationAuth0Service {
-
   constructor(
     private configService: ConfigService,
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId,
-  ) { }
+  ) {}
 
   saveCurrentUSer(user: {}) {
     if (isPlatformBrowser(this.platformId)) {
@@ -23,19 +22,20 @@ export class AuthenticationAuth0Service {
 
   isUserLoggedIn(): boolean {
     if (isPlatformBrowser(this.platformId) && localStorage.getItem('User')) {
-      const decoded = jwt_decode(JSON.parse(localStorage.getItem('User')).token);
-      if (decoded.exp < Date.now() ) {
+      let userStorage = JSON.parse(localStorage.getItem('User'));
+      const helper = new JwtHelperService();
+      if (!helper.isTokenExpired(userStorage.token)) {
         return true;
       } else {
-        this.refreshToken(JSON.parse(localStorage.getItem('User')).refresh_token).subscribe((token: any) => {
+        this.refreshToken(userStorage.refresh_token).subscribe((token: any) => {
           if (token) {
             this.saveCurrentUSer({
-              user: JSON.parse(localStorage.getItem('User')).user,
-              email: JSON.parse(localStorage.getItem('User')).email,
-              refresh_token: JSON.parse(localStorage.getItem('User')).refresh_token,
+              user: userStorage.user,
+              email: userStorage.email,
+              refresh_token: userStorage.refresh_token,
               token: token.access_token,
               token_id: token.id_token,
-              id: JSON.parse(localStorage.getItem('User')).id
+              id: userStorage.id
             });
             return true;
           }
