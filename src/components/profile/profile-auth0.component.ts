@@ -174,6 +174,20 @@ export class AuthProfileAuth0Component implements OnInit {
     this.getProfile();
   }
 
+  emailToVerifySent() {
+    this.authenticationAuth0Service.getAuth0Token().subscribe((token: string) => {
+      this.authenticationAuth0Service.verifyEmail(this.userId, token).subscribe((status: any) => {
+        if (status) {
+          this.emailSend = true;
+        }
+      }, (error => this.errorEmailSend = true));
+    });
+  }
+
+  goToHome() {
+    this.router.navigate(['/']);
+  }
+
   getProfile() {
     this.authenticationAuth0Service.getAuth0Token().subscribe((token: string) => {
       this.authenticationAuth0Service.getUser(this.userId, token).subscribe((user: any) => {
