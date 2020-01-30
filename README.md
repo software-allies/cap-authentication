@@ -21,97 +21,23 @@ One's that you installed bootstrap you have to configure the `angular.json` and 
   "styles.scss"
 ]
 ```
+
+you also have to install the dependency [@auth0/angular-jwt](https://www.npmjs.com/package/@auth0/angular-jwt) to obtain user token information.
+```
+npm i --save @auth0/angular-jwt
+```
+
 ---
-## Firebase Authentication Module
 
-We will also need **@angular/fire** to use the Firebase services, for this we must have previously created a project on this platform and enabled authentication methods such as **Email/passord**, **Facebook** and **Google**.
-```
-npm install firebase @angular/fire --save
-```
-We position ourselves in the **app.module.ts** of our project and configure **AngularFireModule** with the credentials we obtain from the Firebase platform. It will look as follows.
-
-
-```
-import { AngularFireModule } from '@angular/fire';
-
-@NgModule({
-  imports: [
-    AngularFireModule.initializeApp({
-      apiKey: '<your-apiKey>'
-      authDomain: '<your-authDomain>'
-      databaseURL: '<your-databaseURL>'
-      projectId: '<your-projectId>'
-      storageBucket: '<your-storageBucket>'
-      messagingSenderId: '<your-messagingSenderId>'
-      appId: '<your-appId>'
-      measurementId: '<your-measurementId>'
-    }),
-  ],
-})
-export class AppModule { }
-```
-
-### Installation
+## Installation
 ```
 npm i cap-authorization
 ```
 ---
-
-### **Implementation into a module**
-
-To use this module go-to the app module and into the sections' import and put the Authentication Module.
-```
-import { AuthenticationModule } from 'cap-authorization'
-```
----
-into the import section
-```
-@NgModule({
-  imports: [
-    AuthenticationModule,
-  ],
-})
-export class AppModule { }
-```
----
-
-### **HTML tags**
-
-* #### **Authentication LogIn**
-```
-<cap-log-in-firebase></cap-log-in-firebase>
-```
----
-* #### **Authentication Register**
-```
-<cap-register-firebase></cap-register-firebase>
-```
----
-* #### **Authentication Profile**
-```
-<cap-profile-firebase></cap-profile-firebase>
-```
----
-* #### **Authentication Forgot Password**
-```
-<cap-change-password-firebase></cap-change-password-firebase>
-```
----
-* #### **Authentication Log Out**
-```
-<cap-log-out-firebase></cap-log-out-firebase>
-```
----
-
 
 ## Auth0 Authentication Module
 In order to use this module we will not need any external dependency just import the module in our `app.module.ts`. Previously we must have configured our auth0 service and have the credentials that we will indicate next.
 
-
-### Installation
-```
-npm i cap-authorization
-```
 ---
 
 ### **Implementation into a module**
@@ -163,4 +89,4 @@ export class AppModule { }
 <cap-log-out-auth0></cap-log-out-auth0>
 ```
 ---
-**Note**: An object is stored in the localStorage to know the status of the user
+**Note**: An object is stored in the localStorage to know the status of the User.
