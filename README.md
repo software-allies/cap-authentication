@@ -31,7 +31,7 @@ npm i --save @auth0/angular-jwt
 
 ## Installation
 ```
-npm i cap-authorization
+npm i cap-authentication
 ```
 ---
 
