@@ -3,38 +3,8 @@
   "version": "1.0.2",
   "peerDependencies": {
     "@angular/common": "^8.2.14",
-    "@angular/core": "^8.2.14"
-  },
-  "scripts": {
-    "test": "jest",
-    "otherbuild": "rm -rf dist && tsc",
-    "transpile": "ngc",
-    "package": "rollup -c",
-    "minify": "uglifyjs dist/bundles/capauthentication.umd.js --screw-ie8 --compress --mangle --comments --output dist/bundles/capauthentication.umd.min.js",
-    "build": "npm run transpile && npm run package && npm run minify && cp README.md dist/README.md && cp package.json dist/package.json"
-  },
-  "dependencies": {
-    "@angular/compiler": "^8.2.13",
-    "@angular/compiler-cli": "^8.2.13",
-    "@angular/common": "^8.2.14",
-    "@angular/core": "^8.2.14"
-  },
-  "devDependencies": {
-    "@angular/compiler": "^8.2.13",
-    "@angular/compiler-cli": "^8.2.13",
-    "@angular/common": "^8.2.14",
-    "@angular/core": "^8.2.14"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json"
-    ]
+    "@angular/core": "^8.2.14",
+    "@auth0/angular-jwt": "^3.0.1",
+    "bootstrap": "^4.4.1"
   }
 }
