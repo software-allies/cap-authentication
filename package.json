@@ -1,6 +1,6 @@
 {
   "name": "cap-authentication",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Angular module to authenticate users in your application; CAP extension",
   "author": {
     "email": "lenin_emmanuel@hotmail.com",
@@ -11,10 +11,15 @@
     "angular",
     "angular 2",
     "authentication",
-    "cap",
+    "cap-generator",
+    "cap-authentication",
     "auth0"
   ],
-  "peerDependencies": {
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/software-allies/cap-authentication"
+  },
+  "dependencies": {
     "@angular/common": "^8.2.14",
     "@angular/core": "^8.2.14",
     "@auth0/angular-jwt": "^3.0.1",

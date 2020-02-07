@@ -2,10 +2,11 @@
 
 **CAP AUTHENTICATION** is a module for **Angular**
 
-* registration
-* login
-* profile
-* change password
+* Log In
+* Log Out
+* Profile
+* Registration
+* Change Password
 
 you can use one of the two largest authentication services on the market **Auth0** or **Firebase**
 
@@ -26,7 +27,6 @@ you also have to install the dependency [@auth0/angular-jwt](https://www.npmjs.c
 ```
 npm i --save @auth0/angular-jwt
 ```
-
 ---
 
 ## Installation
@@ -35,16 +35,11 @@ npm i cap-authentication
 ```
 ---
 
-## Auth0 Authentication Module
-In order to use this module we will not need any external dependency just import the module in our `app.module.ts`. Previously we must have configured our auth0 service and have the credentials that we will indicate next.
+## Implementation into a module
 
----
-
-### **Implementation into a module**
-
-To use this module go-to the app module and into the sections' import and put the Authentication Module.
+To use this module go to the app module and into the section's import and put the Authentication Module.
 ```
-import { AuthenticationAuth0Module } from 'cap-authorization'
+import { AuthenticationAuth0Module } from 'cap-authentication'
 ```
 ---
 into the import section
@@ -62,29 +57,29 @@ export class AppModule { }
 ```
 ---
 
-### **HTML tags**
+## HTML tags
 
-* #### **Authentication LogIn**
+*  **Authentication LogIn**
 ```
 <cap-log-in-auth0></cap-log-in-auth0>
 ```
 ---
-* #### **Authentication Register**
+*  **Authentication Register**
 ```
 <cap-register-auth0></cap-register-auth0>
 ```
 ---
-* #### **Authentication Profile**
+*  **Authentication Profile**
 ```
 <cap-profile-auth0></cap-profile-auth0>
 ```
 ---
-* #### **Authentication Forgot Password**
+*  **Authentication Forgot Password**
 ```
 <cap-change-password-auth0></cap-change-password-auth0>
 ```
 ---
-* #### **Authentication Log Out**
+*  **Authentication Log Out**
 ```
 <cap-log-out-auth0></cap-log-out-auth0>
 ```
