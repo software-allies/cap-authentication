@@ -91,7 +91,8 @@ import { Router } from '@angular/router';
             <div class="form-group">
               <input  type="text"
                       class="form-control"
-                      placeholder="Company"/>
+                      placeholder="Company"
+                      formControlName="company"/>
             </div>
 
             <div class="form-group">
@@ -186,6 +187,7 @@ export class AuthRegisterAuth0Component {
       'password': new FormControl('', [Validators.required, Validators.minLength(8), this.capitalLetter]),
       'firstName': new FormControl('', [Validators.required, Validators.minLength(2)]),
       'lastName': new FormControl('', [Validators.required, Validators.minLength(2)]),
+      'company': new FormControl(''),
     });
     this.socialMedia = false;
     this.validatedForm = false;
@@ -207,6 +209,7 @@ export class AuthRegisterAuth0Component {
         this.authenticationAuth0Service.createUser(this.createUserForm.value, token).subscribe((user: any) => {
           if (user) {
             this.authenticationAuth0Service.loginUser(this.createUserForm.value).subscribe((AccessToken: any) => {
+              this.authenticationAuth0Service.createUserDB(this.createUserForm.value, token, user.user_id);
               this.authenticationAuth0Service.saveCurrentUSer({
                 user: user.name,
                 email: user.email,
