@@ -2,9 +2,10 @@ import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { Observable } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { ConfigService } from './config.service';
-import { JwtHelperService } from "@auth0/angular-jwt";
 import { map } from 'rxjs/operators';
+import Uuidv4 from 'uuid/v4';
 
 @Injectable()
 export class AuthenticationAuth0Service {
@@ -221,6 +222,31 @@ export class AuthenticationAuth0Service {
       user_id: `${userId}`,
     };
     return this.http.post(`${this.configService.domain}/api/v2/jobs/verification-email`, User, httpOptions);
+  }
+
+  createUserDB(user: any, token: string, authId: string) {
+    if (this.configService.endPoint) {
+      let userData = {
+        UUID__c: Uuidv4(),
+        FirstName: user.firstName,
+        LastName: user.lastName,
+        Email: user.email,
+        Company: user.company,
+        Type:'Auth0',
+        ExternalId: authId
+      };
+      const httpOptions = {
+        headers : new HttpHeaders({
+          'content-type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        })
+      };
+      this.http.post(`${this.configService.endPoint}`, userData, httpOptions).subscribe((User: any) => {
+        console.log('user created successfully.');
+      }, (error) => {
+        console.log(error);
+      });
+    }
   }
 
 }
