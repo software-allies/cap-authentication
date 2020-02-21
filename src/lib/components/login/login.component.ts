@@ -1,10 +1,10 @@
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, } from '@angular/forms';
-import { AuthenticationAuth0Service } from '../../services/authentication-auth0.service';
+import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: "cap-log-in-auth0",
+  selector: "cap-login",
   template: `
   <div class="container register-form">
   <div class="form">
@@ -117,7 +117,7 @@ import { Router } from '@angular/router';
   `],
   encapsulation: ViewEncapsulation.Emulated
 })
-export class AuthLoginAuth0Component implements OnInit {
+export class AuthLoginComponent implements OnInit {
 
   loginUserForm: FormGroup;
   userNotValid: boolean;
@@ -125,7 +125,7 @@ export class AuthLoginAuth0Component implements OnInit {
   validatedForm: boolean;
 
   constructor(
-    private authenticationAuth0Service: AuthenticationAuth0Service,
+    private authenticationService: AuthenticationService,
     private router: Router
   ) {
     this.loginUserForm = new FormGroup({
@@ -141,9 +141,9 @@ export class AuthLoginAuth0Component implements OnInit {
 
   loginUser() {
     if (this.loginUserForm.valid) {
-      this.authenticationAuth0Service.loginUser(this.loginUserForm.value).subscribe((token: any) => {
-        this.authenticationAuth0Service.getAuth0UserInfo(token.access_token).subscribe((user: any) => {
-          this.authenticationAuth0Service.saveCurrentUSer({
+      this.authenticationService.loginUser(this.loginUserForm.value).subscribe((token: any) => {
+        this.authenticationService.getUserInfo(token.access_token).subscribe((user: any) => {
+          this.authenticationService.saveCurrentUser({
             user: user.name,
             email: user.email,
             refresh_token: token.refresh_token,

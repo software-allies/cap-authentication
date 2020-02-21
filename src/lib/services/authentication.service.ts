@@ -1,3 +1,4 @@
+import { StateService } from './state.service';
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { Observable } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
@@ -7,21 +8,33 @@ import { ConfigService } from './config.service';
 import { map } from 'rxjs/operators';
 import Uuidv4 from 'uuid/v4';
 
-@Injectable()
-export class AuthenticationAuth0Service {
+
+@Injectable(
+  {
+    providedIn: 'root'
+  }
+)
+export class AuthenticationService {
   constructor(
     private configService: ConfigService,
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId,
-  ) {}
-
-  saveCurrentUSer(user: {}) {
+    private stateService: StateService
+  ) {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('User', JSON.stringify(user));
+       this.isUserLoggedIn();
     }
   }
 
-  isUserLoggedIn(): boolean {
+  saveCurrentUser(user: {}) {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('User', JSON.stringify(user));
+      // Set isLogged State to true
+      this.stateService.setState('isLogged', true);
+    }
+  }
+
+  isUserLoggedIn(): boolean | void {
     if (isPlatformBrowser(this.platformId) && localStorage.getItem('User')) {
       let userStorage = JSON.parse(localStorage.getItem('User'));
       const helper = new JwtHelperService();
@@ -30,7 +43,7 @@ export class AuthenticationAuth0Service {
       } else {
         this.refreshToken(userStorage.refresh_token).subscribe((token: any) => {
           if (token) {
-            this.saveCurrentUSer({
+            this.saveCurrentUser({
               user: userStorage.user,
               email: userStorage.email,
               refresh_token: userStorage.refresh_token,
@@ -103,6 +116,16 @@ export class AuthenticationAuth0Service {
     return this.http.get(`${this.configService.domain}/userinfo`, httpOptions);
   }
 
+  getUserInfo(token: string): Observable<any> {
+    const httpOptions = {
+      headers : new HttpHeaders({
+        'content-type': 'application/x-www-form-urlencoded',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    return this.http.get(`${this.configService.domain}/userinfo`, httpOptions);
+  }
+
   createUser(user: any, access_token?: string)  {
     let User = {
       email: `${user.email}`,
@@ -159,6 +182,9 @@ export class AuthenticationAuth0Service {
           });
 
         localStorage.removeItem('User');
+        
+        // Set isLogged State to false
+         this.stateService.setState('isLogged', false);
       }
     }
   }
@@ -173,17 +199,6 @@ export class AuthenticationAuth0Service {
     return this.http.get(`${this.configService.domain}/api/v2/users/${id}`, httpOptions);
   }
 
-  getUserInfo(token: string): Observable<any> {
-    const httpOptions = {
-      headers : new HttpHeaders({
-        'content-type': 'application/x-www-form-urlencoded',
-        'Authorization': `Bearer ${token}`
-      })
-    };
-    return this.http.get(`${this.configService.domain}/userinfo`, httpOptions);
-  }
-
-
   changePassword(user: any) {
     const User = {
       email: `${user.email}`,
@@ -196,7 +211,6 @@ export class AuthenticationAuth0Service {
     };
     return this.http.post(`${this.configService.domain}/dbconnections/change_password`, User, httpOptions);
   }
-
 
   updateProfile(user: any, id: string, token: string) {
     const httpParams = new HttpParams() .append('name', `${user.name}`)

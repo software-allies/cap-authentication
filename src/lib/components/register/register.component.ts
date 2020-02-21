@@ -1,11 +1,11 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormControl, Validators, } from '@angular/forms';
-import { AuthenticationAuth0Service } from '../../services/authentication-auth0.service';
+import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 
 
 @Component({
-  selector: "cap-register-auth0",
+  selector: "cap-register",
   template: `
   <div class="container register-form">
   <div class="form">
@@ -170,7 +170,7 @@ import { Router } from '@angular/router';
   `],
   encapsulation: ViewEncapsulation.Emulated
 })
-export class AuthRegisterAuth0Component {
+export class AuthRegisterComponent {
 
   createUserForm: FormGroup;
   existingUser: boolean;
@@ -178,7 +178,7 @@ export class AuthRegisterAuth0Component {
   validatedForm: boolean;
 
   constructor(
-    private authenticationAuth0Service: AuthenticationAuth0Service,
+    private authenticationService: AuthenticationService,
     private router: Router,
   ) {
     this.existingUser = false;
@@ -205,12 +205,12 @@ export class AuthRegisterAuth0Component {
 
   createUser() {
     if (this.createUserForm.valid) {
-      this.authenticationAuth0Service.getAuth0Token().subscribe((token: any) => {
-        this.authenticationAuth0Service.createUser(this.createUserForm.value, token).subscribe((user: any) => {
+      this.authenticationService.getAuth0Token().subscribe((token: any) => {
+        this.authenticationService.createUser(this.createUserForm.value, token).subscribe((user: any) => {
           if (user) {
-            this.authenticationAuth0Service.loginUser(this.createUserForm.value).subscribe((AccessToken: any) => {
-              this.authenticationAuth0Service.createUserDB(this.createUserForm.value, token, user.user_id);
-              this.authenticationAuth0Service.saveCurrentUSer({
+            this.authenticationService.loginUser(this.createUserForm.value).subscribe((AccessToken: any) => {
+              this.authenticationService.createUserDB(this.createUserForm.value, token, user.user_id);
+              this.authenticationService.saveCurrentUser({
                 user: user.name,
                 email: user.email,
                 refresh_token: AccessToken.refresh_token,

@@ -1,11 +1,11 @@
 import { Component, ViewEncapsulation, OnInit} from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from "@angular/forms";
-import { AuthenticationAuth0Service } from '../../services/authentication-auth0.service';
+import { AuthenticationService } from '../../services/authentication.service';
 
 import { Router } from '@angular/router';
 
 @Component({
-  selector: "cap-change-password-auth0",
+  selector: "cap-change-password",
   template: `
   <div class="container register-form">
   <div class="form">
@@ -91,7 +91,7 @@ export class AuthChangePasswordComponent implements OnInit {
   validatedForm: boolean;
 
   constructor(
-    private authenticationAuth0Service: AuthenticationAuth0Service,
+    private authenticationService: AuthenticationService,
     private router: Router,
   ) {
     this.emailSend = false;
@@ -107,7 +107,7 @@ export class AuthChangePasswordComponent implements OnInit {
 
   forgorPassword() {
     if (this.changeform.valid) {
-      this.authenticationAuth0Service.changePassword(this.changeform.value).subscribe((response: any) => {}, (error) => {
+      this.authenticationService.changePassword(this.changeform.value).subscribe((response: any) => {}, (error) => {
         if (error.status === 200) {
           this.emailSend = true;
         } else if (error.status > 400) {

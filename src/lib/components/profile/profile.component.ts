@@ -1,12 +1,12 @@
 import { Component, Inject, PLATFORM_ID, ViewEncapsulation, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, } from '@angular/forms';
-import { AuthenticationAuth0Service } from '../../services/authentication-auth0.service';
+import { AuthenticationService } from '../../services/authentication.service';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 
 
 @Component({
-  selector: "cap-profile-auth0",
+  selector: "cap-profile",
   template: `
   <div class="container register-form">
     <div class="form">
@@ -141,7 +141,7 @@ import { Router } from '@angular/router';
 `],
   encapsulation: ViewEncapsulation.Emulated
 })
-export class AuthProfileAuth0Component implements OnInit {
+export class AuthProfileComponent implements OnInit {
 
   profileUserForm: FormGroup;
   userUpdated: boolean;
@@ -154,7 +154,7 @@ export class AuthProfileAuth0Component implements OnInit {
   userId: string;
 
   constructor(
-    private authenticationAuth0Service: AuthenticationAuth0Service,
+    private authenticationService: AuthenticationService,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId
   ) {
@@ -175,8 +175,8 @@ export class AuthProfileAuth0Component implements OnInit {
   }
 
   emailToVerifySent() {
-    this.authenticationAuth0Service.getAuth0Token().subscribe((token: string) => {
-      this.authenticationAuth0Service.verifyEmail(this.userId, token).subscribe((status: any) => {
+    this.authenticationService.getAuth0Token().subscribe((token: string) => {
+      this.authenticationService.verifyEmail(this.userId, token).subscribe((status: any) => {
         if (status) {
           this.emailSend = true;
         }
@@ -189,8 +189,8 @@ export class AuthProfileAuth0Component implements OnInit {
   }
 
   getProfile() {
-    this.authenticationAuth0Service.getAuth0Token().subscribe((token: string) => {
-      this.authenticationAuth0Service.getUser(this.userId, token).subscribe((user: any) => {
+    this.authenticationService.getAuth0Token().subscribe((token: string) => {
+      this.authenticationService.getUser(this.userId, token).subscribe((user: any) => {
         if (user && user.email_verified) {
           this.user = user;
           this.profileUserForm = new FormGroup({
@@ -207,8 +207,8 @@ export class AuthProfileAuth0Component implements OnInit {
 
   editProfile() {
     if (this.profileUserForm.valid) {
-      this.authenticationAuth0Service.getAuth0Token().subscribe((token: string) => {
-        this.authenticationAuth0Service.updateProfile(this.profileUserForm.value, this.userId, token).subscribe((userUpdated: any) => {
+      this.authenticationService.getAuth0Token().subscribe((token: string) => {
+        this.authenticationService.updateProfile(this.profileUserForm.value, this.userId, token).subscribe((userUpdated: any) => {
           if (userUpdated) {
             this.user = userUpdated;
             this.userUpdated = true;
