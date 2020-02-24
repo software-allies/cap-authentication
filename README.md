@@ -3,7 +3,6 @@
 **CAP AUTHENTICATION** is a module for **Angular**
 
 * Log In
-* Log Out
 * Profile
 * Registration
 * Change Password
@@ -77,11 +76,6 @@ export class AppModule { }
 *  **Authentication Forgot Password**
 ```
 <cap-change-password-auth0></cap-change-password-auth0>
-```
----
-*  **Authentication Log Out**
-```
-<cap-log-out-auth0></cap-log-out-auth0>
 ```
 ---
 **Note**: An object is stored in the localStorage to know the status of the User.
