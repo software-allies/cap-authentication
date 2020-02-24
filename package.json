@@ -1,6 +1,6 @@
 {
-  "name": "cap-authentication-integration",
-  "version": "1.0.4",
+  "name": "cap-authentication",
+  "version": "1.1.0",
   "description": "Angular module to authenticate users in your application; CAP extension",
   "scripts": {
     "packagr": "ng-packagr -p ng-package.json"
@@ -8,8 +8,20 @@
   "private": false,
   "author": {
     "name": "Software Allies",
-    "url": "https://github.com/software-allies"
+    "url": "https://softwareallies.com"
   },
+  "contributors": [
+    { 
+      "email": "lenin_emmanuel@hotmail.com",
+      "name": "Lenin Emmanuel",
+      "url": "https://github.com/leninEmmanuel"
+    },
+    { 
+      "email": "cesar_alonso_m_g@hotmail.com",
+      "name": "César Alonso Magaña Gavilanes",
+      "url": "https://github.com/cesar-alonso-magana"
+    }
+  ],
   "keywords": [
     "angular",
     "authentication",
@@ -19,7 +31,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/cesar-alonso-magana/cap-authentication"
+    "url": "https://github.com/software-allies/cap-authentication"
   },
   "peerDependencies": {
     "@angular/common": "^8.2.14",
