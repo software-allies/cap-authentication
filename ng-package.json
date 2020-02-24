@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../dist/cap-authentication-integration",
+  "dest": "../dist/cap-authentication",
   "lib": {
     "entryFile": "src/public-api.ts"
   }
