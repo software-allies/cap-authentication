@@ -84,6 +84,24 @@ import { Router } from '@angular/router';
             </div>
           </div>
         </form>
+
+        <div class="row">
+          <div class="col-md-6 mb-4">
+          <button
+            (click)="changePassword(user.email)"
+            type="submit"
+            class="btnSubmit">
+            Change Password
+          </button>
+          <label *ngIf="passwordUpdated" class="col-12  text-center col-form-label">
+            An e-mail was sent to your email address that you provided, there you can change your password.
+          </label>
+            <label *ngIf="passwordUpdatedError" class="col-12 text-danger text-center col-form-label">
+              an error occurred with the server when checking your email, try again later
+          </label>
+          </div>
+        </div>
+
       </div>
       <div *ngIf="verifiedUser">
         <div class="form-content">
@@ -152,6 +170,8 @@ export class AuthProfileComponent implements OnInit {
   errorEmailSend: boolean;
   validatedForm: boolean;
   userId: string;
+  passwordUpdated: boolean;
+  passwordUpdatedError: boolean;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -168,6 +188,8 @@ export class AuthProfileComponent implements OnInit {
     this.errorEmailSend = false;
     this.validatedForm = false;
     this.user = null;
+    this.passwordUpdated = false;
+    this.passwordUpdatedError = false;
   }
 
   ngOnInit() {
@@ -229,4 +251,13 @@ export class AuthProfileComponent implements OnInit {
     }
   }
 
+  changePassword(email: string) {
+    this.authenticationService.changePassword(email).subscribe((response: any) => {}, (res) => {
+      if (res.status === 200) {
+        this.passwordUpdated = true;
+      } else if (res.status >= 400) {
+        this.passwordUpdatedError = true;
+      }
+    });
+  }
 }
