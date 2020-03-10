@@ -107,7 +107,7 @@ export class AuthChangePasswordComponent implements OnInit {
 
   forgorPassword() {
     if (this.changeform.valid) {
-      this.authenticationService.changePassword(this.changeform.value).subscribe((response: any) => {}, (error) => {
+      this.authenticationService.changePassword(this.changeform.get(['email']).value).subscribe((response: any) => {}, (error) => {
         if (error.status === 200) {
           this.emailSend = true;
         } else if (error.status > 400) {
