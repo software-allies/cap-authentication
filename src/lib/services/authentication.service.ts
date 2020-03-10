@@ -8,7 +8,6 @@ import { ConfigService } from './config.service';
 import { map } from 'rxjs/operators';
 import Uuidv4 from 'uuid/v4';
 
-
 @Injectable(
   {
     providedIn: 'root'
@@ -126,7 +125,7 @@ export class AuthenticationService {
     return this.http.get(`${this.configService.domain}/userinfo`, httpOptions);
   }
 
-  createUser(user: any, access_token?: string)  {
+  createUser(user: any, accessToken?: string)  {
     let User = {
       email: `${user.email}`,
       password: `${user.password}`,
@@ -140,7 +139,7 @@ export class AuthenticationService {
     const httpOptions = {
       headers: new HttpHeaders({
         'content-type': 'application/json',
-        'Authorization': `Bearer ${access_token}`
+        'Authorization': `Bearer ${accessToken}`
       })
     };
     return this.http.post(`${this.configService.domain}/api/v2/users`, User, httpOptions);
@@ -180,11 +179,9 @@ export class AuthenticationService {
           .subscribe((user: any) => {
             console.log(user, 'LogOut');
           });
-
-        localStorage.removeItem('User');
-        
-        // Set isLogged State to false
-         this.stateService.setState('isLogged', false);
+          localStorage.removeItem('User');
+          // Set isLogged State to false
+          this.stateService.setState('isLogged', false);
       }
     }
   }
@@ -199,9 +196,9 @@ export class AuthenticationService {
     return this.http.get(`${this.configService.domain}/api/v2/users/${id}`, httpOptions);
   }
 
-  changePassword(user: any) {
+  changePassword(email: any) {
     const User = {
-      email: `${user.email}`,
+      email: `${email}`,
       connection: 'Username-Password-Authentication',
     };
     const httpOptions = {
@@ -262,5 +259,4 @@ export class AuthenticationService {
       });
     }
   }
-
 }

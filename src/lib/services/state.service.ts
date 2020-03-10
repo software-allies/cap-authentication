@@ -2,16 +2,16 @@ import { Injectable, ApplicationRef } from '@angular/core';
 
 @Injectable()
 export class StateService {
-    state = {
-        isLogged: false
-    };
 
-    constructor(private app: ApplicationRef) {}
+  state = {
+    isLogged: false
+  };
 
-    setState(key, value) {
-        this.state = { ...this.state, [key]: value };
+  constructor(private app: ApplicationRef) {}
 
-        // Run change detection on state change
-        this.app.tick();
-    }
+  setState(key, value) {
+    this.state = { ...this.state, [key]: value };
+    // Run change detection on state change
+    this.app.tick();
+  }
 }
