@@ -1,6 +1,6 @@
 {
   "name": "cap-authentication",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Angular module to authenticate users in your application; CAP extension",
   "scripts": {
     "packagr": "ng-packagr -p ng-package.json"
@@ -11,12 +11,12 @@
     "url": "https://softwareallies.com"
   },
   "contributors": [
-    { 
+    {
       "email": "lenin_emmanuel@hotmail.com",
       "name": "Lenin Emmanuel",
       "url": "https://github.com/leninEmmanuel"
     },
-    { 
+    {
       "email": "cesar_alonso_m_g@hotmail.com",
       "name": "César Alonso Magaña Gavilanes",
       "url": "https://github.com/cesar-alonso-magana"
