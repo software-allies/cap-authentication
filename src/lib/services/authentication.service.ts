@@ -6,7 +6,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ConfigService } from './config.service';
 import { map } from 'rxjs/operators';
-import Uuidv4 from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable(
   {
@@ -20,9 +20,7 @@ export class AuthenticationService {
     @Inject(PLATFORM_ID) private platformId,
     private stateService: StateService
   ) {
-    if (isPlatformBrowser(this.platformId)) {
-       this.isUserLoggedIn();
-    }
+    this.stateService.setState('isLogged', this.isUserLoggedIn());
   }
 
   saveCurrentUser(user: {}) {
@@ -238,7 +236,7 @@ export class AuthenticationService {
   createUserDB(user: any, token: string, authId: string) {
     if (this.configService.endPoint) {
       let userData = {
-        UUID__c: Uuidv4(),
+        SACAP__UUID__c: uuidv4(),
         FirstName: user.firstName,
         LastName: user.lastName,
         Email: user.email,
