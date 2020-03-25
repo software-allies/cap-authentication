@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
+
               <small class="form-text">
                 Email
               </small>
@@ -25,22 +26,26 @@ import { Router } from '@angular/router';
                         formControlName="email"/>
             </div>
 
-            <div class="form-group row">
-              <div class="col-6">
-                <small class="form-text">
-                  Password
-                </small>
-              </div>
+            <div class="form-group">
 
-              <div class="col-6">
-                <small class="form-text text-right">
-                  <a href="/auth/forgot-password"> Forgot password? </a>
-                </small>
+              <div class="row">
+                <div class="col-6">
+                  <small class="form-text">
+                    Password
+                  </small>
+                </div>
+
+                <div class="col-6">
+                  <small class="form-text text-right">
+                    <a href="/auth/forgot-password"> Forgot password? </a>
+                  </small>
+                </div>
               </div>
 
               <input  type="password"
                       class="form-control"
-                      [ngClass]="{'invalidField':(!loginUserForm.get('password').valid && loginUserForm.get('password').touched) || (validatedForm && !loginUserForm.get('password').valid)}"
+                      [ngClass]="{
+                        'invalidField':(!loginUserForm.get('password').valid && loginUserForm.get('password').touched) || (validatedForm && !loginUserForm.get('password').valid)}"
                       formControlName="password"/>
               <small *ngIf="!loginUserForm.get('password').valid && loginUserForm.get('password').touched" class="form-text text-center text-muted">
                 Your password must be 8-20 characters long, contain letters and numbers and the first letter has to be uppercase.
