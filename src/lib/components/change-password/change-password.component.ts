@@ -22,8 +22,11 @@ import { Router } from '@angular/router';
             An e-mail was sent to your email address that you provided, there you can change your password.
           </label>
           <label *ngIf="errorEmailSend" class="col-12 text-danger text-center col-form-label">
-            an error occurred with the server when checking your email, try again later
-        </label>
+            an error occurred with the server when checking your email, try again later.
+          </label>
+          <label *ngIf="userNotFound" class="col-12 text-danger text-center col-form-label">
+            There is none account using this email address.
+          </label>
           <div class="col-4">
             <input  *ngIf="!emailSend"
                     [ngClass]="{
@@ -89,6 +92,7 @@ export class AuthChangePasswordComponent implements OnInit {
   emailSend: boolean;
   errorEmailSend: boolean;
   validatedForm: boolean;
+  userNotFound: boolean;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -97,6 +101,7 @@ export class AuthChangePasswordComponent implements OnInit {
     this.emailSend = false;
     this.errorEmailSend = false;
     this.validatedForm = false;
+    this.userNotFound = false;
   }
 
   ngOnInit() {
@@ -107,13 +112,29 @@ export class AuthChangePasswordComponent implements OnInit {
 
   forgorPassword() {
     if (this.changeform.valid) {
-      this.authenticationService.changePassword(this.changeform.get(['email']).value).subscribe((response: any) => {}, (error) => {
-        if (error.status === 200) {
-          this.emailSend = true;
-        } else if (error.status > 400) {
-          this.errorEmailSend = true;
-        }
+      this.authenticationService.getAuth0Token().subscribe((token: any) => {
+        this.authenticationService.searchUserByEmail(this.changeform.get(['email']).value, token)
+            .subscribe((user: any) => {
+              if (user.length) {
+                this.authenticationService.changePassword(this.changeform.get(['email']).value).subscribe((response: any) => {},
+                  (error) => {
+                    if (error.status === 200) {
+                      this.emailSend = true;
+                    } else if (error.status > 400) {
+                      this.errorEmailSend = true;
+                    }
+                });
+                this.userNotFound = false;
+              } else {
+                this.userNotFound = true;
+              }
+            },
+            (error) => {
+              this.userNotFound = true;
+              this.errorEmailSend = true;
+            });
       });
+
     } else {
       this.validatedForm = true;
     }

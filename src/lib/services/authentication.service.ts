@@ -257,4 +257,15 @@ export class AuthenticationService {
       });
     }
   }
+
+  searchUserByEmail(email: string, token: string) {
+    const httpParams = new HttpParams() .append('email', `${email}`);
+    return this.http.get(`${this.configService.domain}/api/v2/users-by-email`, {
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+        'Authorization': `Bearer ${token}`
+      },
+      params: httpParams
+    });
+  }
 }
