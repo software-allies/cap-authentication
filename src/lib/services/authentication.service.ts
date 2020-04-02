@@ -1,12 +1,13 @@
-import { StateService } from './state.service';
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { Observable } from 'rxjs';
-import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { isPlatformBrowser } from '@angular/common';
 import { ConfigService } from './config.service';
+import { StateService } from './state.service';
+import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
+import { Observable } from 'rxjs';
 
 @Injectable(
   {
@@ -16,9 +17,10 @@ import { v4 as uuidv4 } from 'uuid';
 export class AuthenticationService {
   constructor(
     private configService: ConfigService,
+    private stateService: StateService,
     private http: HttpClient,
+    private router: Router,
     @Inject(PLATFORM_ID) private platformId,
-    private stateService: StateService
   ) {
     this.stateService.setState('isLogged', this.isUserLoggedIn());
   }
@@ -163,24 +165,25 @@ export class AuthenticationService {
   signOut() {
     if (isPlatformBrowser(this.platformId)) {
       if (localStorage.getItem('User')) {
-          const token = JSON.parse(localStorage.getItem('User')).token;
-          const httpParams = new HttpParams().append('client_id', `${this.configService.clientId}`)
-          .append('returnTo', `http://localhost:4200`);
+        const token = JSON.parse(localStorage.getItem('User')).token;
+        const httpParams = new HttpParams().append('client_id', `${this.configService.clientId}`)
+        .append('returnTo', `http://localhost:4200`);
 
-          this.http.get(`${this.configService.domain}/v2/logout`, {
-            headers: {
-              'content-type': 'application/x-www-form-urlencoded',
-              'Authorization': `Bearer ${token}`
-            },
-            params: httpParams
-          })
-          .subscribe((user: any) => {
-            console.log(user, 'LogOut');
-          });
-          localStorage.removeItem('User');
-          // Set isLogged State to false
-          this.stateService.setState('isLogged', false);
+        this.http.get(`${this.configService.domain}/v2/logout`, {
+          headers: {
+            'content-type': 'application/x-www-form-urlencoded',
+            'Authorization': `Bearer ${token}`
+          },
+          params: httpParams
+        })
+        .subscribe(() => {
+          console.log('LogOut');
+        });
+        localStorage.removeItem('User');
       }
+      // Set isLogged State to false
+      this.stateService.setState('isLogged', false);
+      this.router.navigate(['/']);
     }
   }
 

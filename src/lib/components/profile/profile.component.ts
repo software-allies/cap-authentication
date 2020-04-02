@@ -156,6 +156,10 @@ import { Router } from '@angular/router';
   background: black;
   color: #fff;
 }
+
+button {
+  outline: none;
+}
 `],
   encapsulation: ViewEncapsulation.Emulated
 })

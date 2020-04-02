@@ -38,14 +38,14 @@ npm i cap-authentication
 
 To use this module go to the app module and into the section's import and put the Authentication Module.
 ```
-import { AuthenticationAuth0Module } from 'cap-authentication'
+import { AuthenticationModule } from 'cap-authentication'
 ```
 ---
 into the import section
 ```
 @NgModule({
   imports: [
-    AuthenticationAuth0Module.forRoot({
+    AuthenticationModule.forRoot({
       domain: '<your-domain>',
       clientId: '<your clientId>',
       clientSecret: '<your clientSecret>'
@@ -60,22 +60,22 @@ export class AppModule { }
 
 *  **Authentication LogIn**
 ```
-<cap-log-in-auth0></cap-log-in-auth0>
+<cap-login></cap-login>
 ```
 ---
 *  **Authentication Register**
 ```
-<cap-register-auth0></cap-register-auth0>
+<cap-register></cap-register>
 ```
 ---
 *  **Authentication Profile**
 ```
-<cap-profile-auth0></cap-profile-auth0>
+<cap-profile></cap-profile>
 ```
 ---
 *  **Authentication Forgot Password**
 ```
-<cap-change-password-auth0></cap-change-password-auth0>
+<cap-change-password></cap-change-password>
 ```
 ---
 **Note**: An object is stored in the localStorage to know the status of the User.
