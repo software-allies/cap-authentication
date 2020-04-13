@@ -161,16 +161,19 @@ export class AuthLoginComponent implements OnInit {
   loginUser() {
     if (this.loginUserForm.valid) {
       this.authenticationService.loginUser(this.loginUserForm.value).subscribe((token: any) => {
-        this.authenticationService.getUserInfo(token.access_token).subscribe((user: any) => {
-          this.authenticationService.saveCurrentUser({
-            user: user.name,
-            email: user.email,
-            refresh_token: token.refresh_token,
-            token: token.access_token,
-            token_id: token.id_token,
-            id: user.sub
+        this.authenticationService.getUserInfo(token.access_token).subscribe((userinfo: any) => {
+          this.authenticationService.getUser(userinfo.sub, token.access_token).subscribe((user: any) => {
+            this.authenticationService.saveCurrentUser({
+              user: userinfo.name,
+              email: userinfo.email,
+              refresh_token: token.refresh_token,
+              token: token.access_token,
+              token_id: token.id_token,
+              id: userinfo.sub,
+              cap_uuid: user.user_metadata.CAP_UUID
+            });
+            this.router.navigate(['/']);
           });
-          this.router.navigate(['/']);
         });
       }, (error) => {
         console.log(error);

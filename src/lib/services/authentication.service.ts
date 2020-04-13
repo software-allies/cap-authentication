@@ -68,20 +68,13 @@ export class AuthenticationService {
     }
   }
 
-  refreshToken(refreshToken: string) {
-    const httpOptions = {
-      headers : new HttpHeaders({
-        'content-type': 'application/x-www-form-urlencoded'
-      })
-    };
-    const httpParams = new HttpParams().append('grant_type', 'refresh_token')
-                                  .append('client_id', `${this.configService.clientId}`)
-                                  .append('client_secret', `${this.configService.clientSecret}`)
-                                  .append('refresh_token', `${refreshToken}`);
-    return this.http.post(`${this.configService.domain}/oauth/token`, httpParams, httpOptions);
+  getExternalID() {
+    if (isPlatformBrowser(this.platformId) && localStorage.getItem('User')) {
+      return JSON.parse(localStorage.getItem('User')).cap_uuid;
+    }
   }
 
-  getCredentials() {
+  private getCredentials() {
     return {
       'client_id': `${this.configService.clientId}`,
       'client_secret': `${this.configService.clientSecret}`,
@@ -125,6 +118,29 @@ export class AuthenticationService {
     return this.http.get(`${this.configService.domain}/userinfo`, httpOptions);
   }
 
+  getUser(id: string, token: string) {
+    const httpOptions = {
+      headers : new HttpHeaders({
+        'content-type': 'application/x-www-form-urlencoded',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    return this.http.get(`${this.configService.domain}/api/v2/users/${id}`, httpOptions);
+  }
+
+  refreshToken(refreshToken: string) {
+    const httpOptions = {
+      headers : new HttpHeaders({
+        'content-type': 'application/x-www-form-urlencoded'
+      })
+    };
+    const httpParams = new HttpParams().append('grant_type', 'refresh_token')
+                                  .append('client_id', `${this.configService.clientId}`)
+                                  .append('client_secret', `${this.configService.clientSecret}`)
+                                  .append('refresh_token', `${refreshToken}`);
+    return this.http.post(`${this.configService.domain}/oauth/token`, httpParams, httpOptions);
+  }
+
   createUser(user: any, accessToken?: string)  {
     let User = {
       email: `${user.email}`,
@@ -134,7 +150,10 @@ export class AuthenticationService {
       family_name: `${user.lastName}`,
       nickname: `${user.lastName}`,
       connection: 'Username-Password-Authentication',
-      verify_email: true
+      verify_email: true,
+      user_metadata: {
+        CAP_UUID: uuidv4()
+      },
     };
     const httpOptions = {
       headers: new HttpHeaders({
@@ -187,16 +206,6 @@ export class AuthenticationService {
     }
   }
 
-  getUser(id: string, token: string) {
-    const httpOptions = {
-      headers : new HttpHeaders({
-        'content-type': 'application/x-www-form-urlencoded',
-        'Authorization': `Bearer ${token}`
-      })
-    };
-    return this.http.get(`${this.configService.domain}/api/v2/users/${id}`, httpOptions);
-  }
-
   changePassword(email: any) {
     const User = {
       email: `${email}`,
@@ -236,15 +245,15 @@ export class AuthenticationService {
     return this.http.post(`${this.configService.domain}/api/v2/jobs/verification-email`, User, httpOptions);
   }
 
-  createUserDB(user: any, token: string, authId: string) {
+  createUserDB(user: any, token: string, authId: string, uuid: string) {
     if (this.configService.endPoint) {
-      let userData = {
-        SACAP__UUID__c: uuidv4(),
+      const userData = {
+        SACAP__UUID__c: uuid,
         FirstName: user.firstName,
         LastName: user.lastName,
         Email: user.email,
         Company: user.company,
-        Type:'Auth0',
+        Type: 'Auth0',
         ExternalId: authId
       };
       const httpOptions = {

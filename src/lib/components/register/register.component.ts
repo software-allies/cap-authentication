@@ -3,7 +3,6 @@ import { FormGroup, FormControl, Validators, } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 
-
 @Component({
   selector: "cap-register",
   template: `
@@ -209,14 +208,15 @@ export class AuthRegisterComponent {
         this.authenticationService.createUser(this.createUserForm.value, token).subscribe((user: any) => {
           if (user) {
             this.authenticationService.loginUser(this.createUserForm.value).subscribe((AccessToken: any) => {
-              this.authenticationService.createUserDB(this.createUserForm.value, token, user.user_id);
+              this.authenticationService.createUserDB(this.createUserForm.value, token, user.user_id, user.user_metadata.CAP_UUID);
               this.authenticationService.saveCurrentUser({
                 user: user.name,
                 email: user.email,
                 refresh_token: AccessToken.refresh_token,
                 token: AccessToken.access_token,
                 token_id: AccessToken.id_token,
-                id: user.user_id
+                id: user.user_id,
+                cap_uuid: user.user_metadata.CAP_UUID
               });
               this.router.navigate(['/']);
             });
