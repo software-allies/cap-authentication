@@ -42,7 +42,7 @@ import { Router } from '@angular/router';
       </div>
 
       <div class="form-group">
-        <label for="text">Nombre(s)</label>
+        <label for="text">First Name</label>
         <input  type="text"
                 class="form-control"
                 placeholder="First Name * "
@@ -62,7 +62,7 @@ import { Router } from '@angular/router';
       </div>
 
       <div class="form-group">
-        <label for="text">Apellido(s)</label>
+        <label for="text">Last Name</label>
         <input  type="text"
                 class="form-control"
                 placeholder="Last Name *"
@@ -120,7 +120,11 @@ import { Router } from '@angular/router';
   margin: 40px;
 }
 
-.btnFacebook {
+.invalidField {
+  border-color:#dc3545;
+}
+
+/*.btnFacebook {
   border:none;
   border-radius:1.5rem;
   padding: 1%;
@@ -138,11 +142,7 @@ import { Router } from '@angular/router';
   cursor: pointer;
   background: #FF0000;
   color: #fff;
-}
-
-.invalidField {
-  border-color:#dc3545;
-}
+}*/
 
   `],
   encapsulation: ViewEncapsulation.Emulated
