@@ -6,108 +6,89 @@ import { Router } from '@angular/router';
 @Component({
   selector: "cap-login",
   template: `
-  <div class="container register-form">
-  <div class="form">
-    <div class="header">
-        <p>Sign in</p>
-    </div>
-    <div class="form-content">
-      <form [formGroup]="loginUserForm" (ngSubmit)="loginUser()">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
 
-              <small class="form-text">
-                Email
-              </small>
-                <input  type="text"
-                        class="form-control"
-                        [ngClass]="{'invalidField':(!loginUserForm.get('email').valid && loginUserForm.get('email').touched) || (validatedForm && !loginUserForm.get('email').valid)}"
-                        formControlName="email"/>
-            </div>
 
-            <div class="form-group">
+  
+<div class="box">
+  <div>
+  
+    <form [formGroup]="loginUserForm" (ngSubmit)="loginUser()">
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input 
+          type="text"
+          id="email"
+          email
+          class="form-control"
+          [ngClass]="{'invalidField':(!loginUserForm.get('email').valid && loginUserForm.get('email').touched) || (validatedForm && !loginUserForm.get('email').valid)}"
+          formControlName="email"
+          aria-describedby="emailHelp"/>
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input  
+          type="password"
+          id="password"
+          class="form-control"
+          [ngClass]="{
+            'invalidField':(!loginUserForm.get('password').valid && loginUserForm.get('password').touched) || (validatedForm && !loginUserForm.get('password').valid)}"
+          formControlName="password"/>
 
-              <div class="row">
-                <div class="col-6">
-                  <small class="form-text">
-                    Password
-                  </small>
-                </div>
-
-                <div class="col-6">
-                  <small class="form-text text-right">
-                    <a href="/auth/forgot-password"> Forgot password? </a>
-                  </small>
-                </div>
-              </div>
-
-              <input  type="password"
-                      class="form-control"
-                      [ngClass]="{
-                        'invalidField':(!loginUserForm.get('password').valid && loginUserForm.get('password').touched) || (validatedForm && !loginUserForm.get('password').valid)}"
-                      formControlName="password"/>
-              <small *ngIf="!loginUserForm.get('password').valid && loginUserForm.get('password').touched" class="form-text text-center text-muted">
-                Your password must be 8-20 characters long, contain letters and numbers and the first letter has to be uppercase.
-              </small>
-
-              <div *ngIf="userNotValid"  class="form-control-feeback text-danger text-center">
-                invalid email or password
-              </div>
-              <div *ngIf="socialMedia"  class="form-control-feeback text-danger text-center">
-                At the moment authentication with Social networks is under development, try by Email
-              </div>
-            </div>
+          <div *ngIf="userNotValid"  class="form-control-feeback text-danger text-center">
+            invalid email or password
           </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <button type="submit"class="btnSubmit">Login</button>
-              </div>
-              <div class="form-group">
-                <button (click)="signInSocialMedia(true)" type="button" class="btnFacebook ">Facebook</button>
-              </div>
 
-              <div class="form-group">
-              <button (click)="signInSocialMedia(false)" type="button" class="btnGoogle ">Google</button>
-            </div>
+          <!--
+          <div *ngIf="socialMedia"  class="form-control-feeback text-danger text-center">
+            At the moment authentication with Social networks is under development, try by Email
           </div>
-        </div>
-      </form>
-    </div>
+          -->
+
+      </div>
+
+
+      <div class="form-group form-check">
+        <small class="form-text text-right">
+          <a routerLink="/auth/forgot-password"> Forgot password? </a>
+        </small>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Login</button>
+
+      <!--
+      <div class="form-group">
+        <button (click)="signInSocialMedia(true)" type="button" class="btnFacebook ">Facebook</button>
+      </div>
+
+      <div class="form-group">
+        <button (click)="signInSocialMedia(false)" type="button" class="btnGoogle ">Google</button>
+      </div>
+      -->
+
+    </form>
+      
   </div>
 </div>
 
   `,
   styles: [`
-  .header
-  {
-    text-align: center;
-    height: 80px;
-    background: black;
-    color: #fff;
-    font-weight: bold;
-    line-height: 80px;
+  .box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  .form-content
-  {
-    padding: 5%;
-    border: 1px solid #ced4da;
-    margin-bottom: 2%;
+
+  .box>div {
+    height: max-content;
+    border-radius: 10px;
+    border: 1px solid #f2f2f2;
+    padding: 35px;
+    width: 450px;
+    margin: 40px;
   }
-  .form-control{
-    border-radius:1.5rem;
-  }
-  .btnSubmit
-  {
-    border:none;
-    border-radius:1.5rem;
-    padding: 1%;
-    width: 100%;
-    cursor: pointer;
-    background: black;
-    color: #fff;
-  }
-  .btnFacebook
+
+  /*.btnFacebook
   {
     border:none;
     border-radius:1.5rem;
@@ -117,6 +98,7 @@ import { Router } from '@angular/router';
     background: #0000FF;
     color: #fff;
   }
+
   .btnGoogle
   {
     border:none;
@@ -126,13 +108,7 @@ import { Router } from '@angular/router';
     cursor: pointer;
     background: #FF0000;
     color: #fff;
-  }
-  button {
-    outline: none;
-  }
-  .invalidField{
-    border-color:#dc3545;
-  }
+  }*/
   `],
   encapsulation: ViewEncapsulation.Emulated
 })
