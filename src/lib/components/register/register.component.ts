@@ -6,166 +6,144 @@ import { Router } from '@angular/router';
 @Component({
   selector: "cap-register",
   template: `
-  <div class="container register-form">
-  <div class="form">
-    <div class="header">
-        <p>Create your account</p>
-    </div>
-    <div class="form-content">
 
-      <form [formGroup]="createUserForm" (ngSubmit)="createUser()">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group" >
-                <input  type="text"
-                        class="form-control"
-                        placeholder="Email address *"
-                        [ngClass]="{
-                          'invalidField':
-                            (!createUserForm.get('email').valid && createUserForm.get('email').touched)
-                            || (validatedForm && !createUserForm.get('email').valid),
-                          'is-valid':createUserForm.get('email').valid
-                        }"
-                        formControlName="email"/>
-              <small *ngIf="!createUserForm.get('email').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
-                Required field
-              </small>
-            </div>
-            <div class="form-group">
-              <input  type="password"
-                      class="form-control"
-                      placeholder="Password *"
-                      [ngClass]="{
-                        'invalidField':
-                          (!createUserForm.get('password').valid && createUserForm.get('password').touched)
-                          || (validatedForm && !createUserForm.get('password').valid),
-                        'is-valid':!createUserForm.get('password').errors?.capitalLetter && createUserForm.get('password').valid
-                      }"
-                      formControlName="password"/>
-              <small *ngIf="!createUserForm.get('password').pristine && !createUserForm.get('password').valid" class="form-text text-center text-muted">
-                Your password must contain the following: 8-20 characters long, the first character must be capital (uppercase) letter, a numbers and a lowercase letter.
-              </small>
-              <small *ngIf="!createUserForm.get('password').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
-                Required field
-              </small>
-            </div>
-            <div class="form-group">
-              <input  type="text"
-                      class="form-control"
-                      placeholder="First Name * "
-                      [ngClass]="{
-                        'invalidField':
-                          (!createUserForm.get('firstName').valid && createUserForm.get('firstName').touched)
-                          || (validatedForm && !createUserForm.get('firstName').valid),
-                        'is-valid':createUserForm.get('firstName').valid
-                      }"
-                      formControlName="firstName"/>
-              <small *ngIf="!createUserForm.get('firstName').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
-                Required field
-              </small>
-              <div *ngIf="existingUser"  class="form-control-feeback text-danger text-center">
-                An Account with this username already exist.
-              </div>
-            </div>
-          </div>
+<div class="box">
+  <div>
+  
+    <form [formGroup]="createUserForm" (ngSubmit)="createUser()">
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input 
+          type="text"
+          id="email"
+          email
+          class="form-control"
+          [ngClass]="{'invalidField':(!createUserForm.get('email').valid && createUserForm.get('email').touched) || (validatedForm && !createUserForm.get('email').valid)}"
+          formControlName="email"
+          aria-describedby="emailHelp"/>
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input  
+          type="password"
+          id="password"
+          class="form-control"
+          [ngClass]="{
+            'invalidField':(!createUserForm.get('password').valid && createUserForm.get('password').touched) || (validatedForm && !createUserForm.get('password').valid)}"
+          formControlName="password"/>
 
-          <div class="col-md-6">
-            <div class="form-group">
-              <input  type="text"
-                      class="form-control"
-                      placeholder="Last Name *"
-                      [ngClass]="{
-                        'invalidField':
-                          (!createUserForm.get('lastName').valid
-                          && createUserForm.get('lastName').touched)
-                          || (validatedForm && !createUserForm.get('lastName').valid),
-                        'is-valid':createUserForm.get('lastName').valid
-                      }"
-                      formControlName="lastName"/>
-              <small *ngIf="!createUserForm.get('lastName').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
-                Required field
-              </small>
-            </div>
+          <small *ngIf="!createUserForm.get('password').pristine && !createUserForm.get('password').valid" class="form-text text-center text-muted">
+            Your password must contain the following: 8-20 characters long, the first character must be capital (uppercase) letter, a numbers and a lowercase letter.
+          </small>
+          <small *ngIf="!createUserForm.get('password').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
+            Required field
+          </small>
+      </div>
 
-            <div class="form-group">
-              <input  type="text"
-                      class="form-control"
-                      placeholder="Company"
-                      formControlName="company"/>
-            </div>
-
-            <div class="form-group">
-              <button type="submit"
-                      class="btnSubmit"
-                      >Sign Up</button>
-              <button (click)="signUpSocialMedia(true)" type="button" class="btnFacebook ">Facebook</button>
-              <button (click)="signUpSocialMedia(false)" type="button" class="btnGoogle ">Google</button>
-            </div>
-            <div *ngIf="socialMedia"  class="form-control-feeback text-danger text-center">
-              At the moment authentication with Social networks is under development, try by Email
-            </div>
-          </div>
+      <div class="form-group">
+        <label for="text">Nombre(s)</label>
+        <input  type="text"
+                class="form-control"
+                placeholder="First Name * "
+                [ngClass]="{
+                  'invalidField':
+                    (!createUserForm.get('firstName').valid && createUserForm.get('firstName').touched)
+                    || (validatedForm && !createUserForm.get('firstName').valid),
+                  'is-valid':createUserForm.get('firstName').valid
+                }"
+                formControlName="firstName"/>
+        <small *ngIf="!createUserForm.get('firstName').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
+          Required field
+        </small>
+        <div *ngIf="existingUser"  class="form-control-feeback text-danger text-center">
+          An Account with this username already exist.
         </div>
-      </form>
-    </div>
+      </div>
+
+      <div class="form-group">
+        <label for="text">Apellido(s)</label>
+        <input  type="text"
+                class="form-control"
+                placeholder="Last Name *"
+                [ngClass]="{
+                  'invalidField':
+                    (!createUserForm.get('lastName').valid
+                    && createUserForm.get('lastName').touched)
+                    || (validatedForm && !createUserForm.get('lastName').valid),
+                  'is-valid':createUserForm.get('lastName').valid
+                }"
+                formControlName="lastName"/>
+        <small *ngIf="!createUserForm.get('lastName').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
+          Required field
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="text">Company</label>
+        <input  type="text"
+                class="form-control"
+                placeholder="Company"
+                formControlName="company"/>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+
+      <!--
+      <button (click)="signUpSocialMedia(true)" type="button" class="btnFacebook ">Facebook</button>
+      <button (click)="signUpSocialMedia(false)" type="button" class="btnGoogle ">Google</button>
+
+      <div *ngIf="socialMedia"  class="form-control-feeback text-danger text-center">
+        At the moment authentication with Social networks is under development, try by Email
+      </div>
+      -->
+
+    </form>
+      
   </div>
 </div>
+
   `,
   styles: [`
-  .header
-  {
-    text-align: center;
-    height: 80px;
-    background: black;
-    color: #fff;
-    font-weight: bold;
-    line-height: 80px;
-  }
-  .form-content
-  {
-    padding: 5%;
-    border: 1px solid #ced4da;
-    margin-bottom: 2%;
-  }
-  .form-control{
-    border-radius:1.5rem;
-  }
-  .btnSubmit
-  {
-    border:none;
-    border-radius:1.5rem;
-    padding: 1%;
-    width: 33%;
-    cursor: pointer;
-    background: black;
-    color: #fff;
-  }
-  .btnFacebook
-  {
-    border:none;
-    border-radius:1.5rem;
-    padding: 1%;
-    width: 33%;
-    cursor: pointer;
-    background: #0000FF;
-    color: #fff;
-  }
-  .btnGoogle
-  {
-    border:none;
-    border-radius:1.5rem;
-    padding: 1%;
-    width: 33%;
-    cursor: pointer;
-    background: #FF0000;
-    color: #fff;
-  }
-  .invalidField{
-    border-color:#dc3545;
-  }
-  button {
-    outline: none;
-  }
+.box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.box>div {
+  height: max-content;
+  border-radius: 10px;
+  border: 1px solid #f2f2f2;
+  padding: 35px;
+  width: 450px;
+  margin: 40px;
+}
+
+.btnFacebook {
+  border:none;
+  border-radius:1.5rem;
+  padding: 1%;
+  width: 33%;
+  cursor: pointer;
+  background: #0000FF;
+  color: #fff;
+}
+
+.btnGoogle {
+  border:none;
+  border-radius:1.5rem;
+  padding: 1%;
+  width: 33%;
+  cursor: pointer;
+  background: #FF0000;
+  color: #fff;
+}
+
+.invalidField {
+  border-color:#dc3545;
+}
+
   `],
   encapsulation: ViewEncapsulation.Emulated
 })
@@ -231,7 +209,6 @@ export class AuthRegisterComponent {
       this.validatedForm = true;
     }
   }
-
 
   signUpSocialMedia(socialMedia?: boolean) {
     this.socialMedia = true;
