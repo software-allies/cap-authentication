@@ -36,8 +36,8 @@ import { Router } from '@angular/router';
         <small id="passwordHelpBlock" class="form-text text-center text-muted">
         </small>
       </div>
-      <button *ngIf="!emailSend" type="submit" class="btn btn-primary">Send Email</button>
-      <button *ngIf="emailSend" type="button" (click)="goToHome()" class="btn btn-secondary">Go to Home</button>
+      <button *ngIf="!emailSend" type="submit" class="btn btn-primary btn-block">Send Email</button>
+      <button *ngIf="emailSend" type="button" (click)="goToHome()" class="btn btn-secondary btn-block">Go to Home</button>
     </form>
   </div>
 </div>

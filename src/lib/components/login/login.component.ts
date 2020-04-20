@@ -54,7 +54,7 @@ import { Router } from '@angular/router';
         </small>
       </div>
 
-      <button type="submit" class="btn btn-primary">Login</button>
+      <button type="submit" class="btn btn-primary btn-block">Login</button>
 
       <!--
       <div class="form-group">

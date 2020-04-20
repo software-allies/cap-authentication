@@ -51,7 +51,7 @@ import { Router } from '@angular/router';
                         <div *ngIf="errorUpdate" class="form-control-feeback mb-2 text-danger text-center">
                             Error updating information, try again later
                         </div>
-                        <button type="submit" class="btn btn-info btnSubmit">
+                        <button type="submit" class="btn btn-info btn-block btnSubmit">
                                 Edit Profile
                         </button>
                     </div>
@@ -72,7 +72,7 @@ import { Router } from '@angular/router';
             </form>
             <div class="row">
                 <div class="col-12">
-                    <button (click)="changePassword(user.email)" type="submit" class="btn btn-success btnSubmit">
+                    <button (click)="changePassword(user.email)" type="submit" class="btn btn-success btn-block btnSubmit">
                         Change Password
                     </button>
                     <label *ngIf="passwordUpdated" class="col-12 text-center col-form-label">
@@ -97,8 +97,8 @@ import { Router } from '@angular/router';
                         An error occurred with the server when checking your email, try again later
                     </label>
                     <div class="col-12 text-center">
-                        <button *ngIf="!emailSend" type="submit" (click)="emailToVerifySent()" class="btn btn-success btnSubmit">Send verification email</button>
-                        <button *ngIf="emailSend" type="button" (click)="goToHome()" class="btn btn-default btnSubmit">Go to Home</button>
+                        <button *ngIf="!emailSend" type="submit" (click)="emailToVerifySent()" class="btn btn-success btn-block btnSubmit">Send verification email</button>
+                        <button *ngIf="emailSend" type="button" (click)="goToHome()" class="btn btn-default btn-block btnSubmit">Go to Home</button>
                     </div>
                 </div>
             </div>
