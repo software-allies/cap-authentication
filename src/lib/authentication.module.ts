@@ -7,6 +7,7 @@ import { ConfigService } from './services/config.service';
 import { IConfig } from './interfaces/config.interface';
 import { AuthenticationService } from './services/authentication.service';
 import { CommonModule } from "@angular/common";
+import { RouterModule } from "@angular/router";
 
 import { AuthRegisterComponent } from './components/register/register.component';
 import { AuthProfileComponent } from './components/profile/profile.component';
@@ -25,6 +26,7 @@ import { AuthChangePasswordComponent } from './components/change-password/change
     ReactiveFormsModule,
     CommonModule,
     FormsModule,
+    RouterModule
   ],
   exports: [
     AuthChangePasswordComponent,
@@ -48,7 +50,7 @@ export class AuthenticationModule {
       providers: [
         {
           provide: ConfigService,
-          useValue: config,
+          useValue: config
         },
       ]
     };

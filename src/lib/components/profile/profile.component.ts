@@ -9,113 +9,101 @@ import { Router } from '@angular/router';
   selector: "cap-profile",
   template: `
 
-  
 <div class="box">
-  <div>
-    <form [formGroup]="profileUserForm" (ngSubmit)="editProfile()">
-      <div class="form-group">
-        <label for="name">First Name</label>
-        <input id="name" type="text" class="form-control" placeholder="First name *" formControlName="name"
-                [ngClass]="{
-                  'invalidField':(!profileUserForm.get('name').valid) || (validatedForm && !profileUserForm.get('name').valid)
-                }"
-        />
-        <small *ngIf="!profileUserForm.get('name').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
-          Required field
-        </small>
-      </div>
-
-      <div class="form-group">
-        <label for="family_name">Last Name</label>
-        <input id="family_name" type="text" class="form-control" placeholder="Last name *" formControlName="family_name"
-                [ngClass]="{
-                  'invalidField':(!profileUserForm.get('family_name').valid) || (validatedForm && !profileUserForm.get('family_name').valid)
-                }"
-        />
-        <small *ngIf="!profileUserForm.get('family_name').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
-          Required field
-        </small>
-      </div>
-
-      <div class="form-group">
-        <label for="nickname">Nickname</label>
-        <input id="nickname" type="text" class="form-control" placeholder="Nickname *" formControlName="nickname"
-                [ngClass]="{
-                  'invalidField':(!profileUserForm.get('nickname').valid) || (validatedForm && !profileUserForm.get('nickname').valid)
-                }"
-        />
-        <small *ngIf="!profileUserForm.get('nickname').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
-          Required field
-        </small>
-      </div>
-
-
-      <div *ngIf="userUpdated" class="form-control-feeback mb-2 text-success text-center">
-          user updated successfully
-      </div>
-      <div *ngIf="errorUpdate" class="form-control-feeback mb-2 text-danger text-center">
-          Error updating information, try again later
-      </div>
-      <button *ngIf="!emailSend" type="submit" class="btn btn-primary btn-block">Editar perfil</button>
-
-      <div class="row mt-3 mb-3" *ngIf="user">
-        <div class="col">
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item"> Email : {{user.email}}</li>
-              <li class="list-group-item"> First name: {{user.name}}</li>
-              <li class="list-group-item"> Last name: {{user.family_name}}</li>
-              <li class="list-group-item"> Nickname: {{user.nickname}} </li>
-              <li class="list-group-item"> Verified Email: {{user.email_verified ? 'Si' : 'No'}}</li>
-              <li class="list-group-item"> Creation Date: {{user.created_at | date:'medium'}}</li>
-              <li class="list-group-item"> Last SignIn: {{user.last_login | date:'medium'}}</li>
-            </ul>
-        </div>
-      </div>
-
-    </form>
-
-    <div class="row" *ngIf="user">
-      <div class="col">
-        <button
-          (click)="changePassword(user.email)"
-          type="submit"
-          class="btn btn-info btn-block">
-          Change Password
-        </button>
-        <label *ngIf="passwordUpdated" class="col-12  text-center col-form-label">
-          An e-mail was sent to your email address that you provided, there you can change your password.
-        </label>
-        <label *ngIf="passwordUpdatedError" class="col-12 text-danger text-center col-form-label">
-            an error occurred with the server when checking your email, try again later
-        </label>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col">
-
-        <div *ngIf="verifiedUser">
-          <div class="form-content">
-            <div class="form-group d-flex justify-content-center row">
-              <label *ngIf="!emailSend" class="col-12  text-center col-form-label">
-                Please verify your Account
-              </label>
-              <label *ngIf="emailSend" class="col-12  text-center col-form-label">
-                An e-mail was sent to your email address that you provided, there you can verify your email.
-              </label>
-              <label *ngIf="errorEmailSend" class="col-12 text-danger text-center col-form-label">
-                  an error occurred with the server when checking your email, try again later
-              </label>
-              
-              <button *ngIf="!emailSend" type="submit" (click)="emailToVerifySent()" class="btn btn-info btn-block">Enviar email de verificación</button>
+    <div>
+        <div class="form-content" *ngIf="user">
+            <form [formGroup]="profileUserForm" (ngSubmit)="editProfile()">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <small class="form-text">
+                                First name
+                            </small>
+                            <input type="text" class="form-control" placeholder="First name *" formControlName="name" [ngClass]="{
+                          'invalidField':(!profileUserForm.get('name').valid) || (validatedForm && !profileUserForm.get('name').valid)}" />
+                            <small *ngIf="!profileUserForm.get('name').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
+                                Required field
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <small class="form-text">
+                                Last name
+                            </small>
+                            <input type="text" class="form-control" placeholder="Last name *" formControlName="family_name" [ngClass]="{
+                          'invalidField':(!profileUserForm.get('family_name').valid) || (validatedForm && !profileUserForm.get('family_name').valid)}" />
+                            <small *ngIf="!profileUserForm.get('family_name').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
+                            Required field
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <small class="form-text">
+                                Nickname
+                            </small>
+                            <input type="text" class="form-control" placeholder="Nickname *" formControlName="nickname" [ngClass]="{
+                          'invalidField':(!profileUserForm.get('nickname').valid) || (validatedForm && !profileUserForm.get('nickname').valid)}" />
+                            <small *ngIf="!profileUserForm.get('nickname').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
+                                Required field
+                            </small>
+                        </div>
+                        <div *ngIf="userUpdated" class="form-control-feeback mb-2 text-success text-center">
+                            User updated successfully
+                        </div>
+                        <div *ngIf="errorUpdate" class="form-control-feeback mb-2 text-danger text-center">
+                            Error updating information, try again later
+                        </div>
+                        <button type="submit" class="btnSubmit">
+                                Edit Profile
+                        </button>
+                    </div>
+                </div>
+                <div class="row mt-3 mb-3">
+                    <div class="col">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"> Email : {{user.email}}</li>
+                            <li class="list-group-item"> First name: {{user.name}}</li>
+                            <li class="list-group-item"> Last name: {{user.family_name}}</li>
+                            <li class="list-group-item"> Nickname: {{user.nickname}} </li>
+                            <li class="list-group-item"> Verified Email: {{user.email_verified ? 'Si' : 'No'}}</li>
+                            <li class="list-group-item"> Creation Date: {{user.created_at | date:'medium'}}</li>
+                            <li class="list-group-item"> Last SignIn: {{user.last_login | date:'medium'}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+            <div class="row">
+                <div class="col">
+                    <button (click)="changePassword(user.email)" type="submit" class="btnSubmit">
+                        Change Password
+                    </button>
+                    <label *ngIf="passwordUpdated" class="col text-center col-form-label">
+                        An e-mail was sent to your email address that you provided, there you can change your password.
+                    </label>
+                    <label *ngIf="passwordUpdatedError" class="col text-danger text-center col-form-label">
+                        An error occurred with the server when checking your email, try again later
+                    </label>
+                </div>
             </div>
-          </div>
         </div>
-
-      </div>
+        <div *ngIf="verifiedUser">
+            <div class="form-content">
+                <div class="form-group d-flex justify-content-center row">
+                    <label *ngIf="!emailSend" class="col text-center col-form-label">
+                        Please verify your Account
+                    </label>
+                    <label *ngIf="emailSend" class="col text-center col-form-label">
+                        An e-mail was sent to your email address that you provided, there you can verify your email.
+                    </label>
+                    <label *ngIf="errorEmailSend" class="col text-danger text-center col-form-label">
+                        An error occurred with the server when checking your email, try again later
+                    </label>
+                    <div class="col">
+                        <button *ngIf="!emailSend" type="submit" (click)="emailToVerifySent()" class="btnSubmit">Send verification email</button>
+                        <button *ngIf="emailSend" type="button" (click)="goToHome()" class="btnSubmit">Go to Home</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-  </div>
 </div>
 
   `,
