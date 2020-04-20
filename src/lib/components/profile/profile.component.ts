@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
         <div class="form-content" *ngIf="user">
             <form [formGroup]="profileUserForm" (ngSubmit)="editProfile()">
                 <div class="row">
-                    <div class="col">
+                    <div class="col-12">
                         <div class="form-group">
                             <small class="form-text">
                                 First name
@@ -51,13 +51,13 @@ import { Router } from '@angular/router';
                         <div *ngIf="errorUpdate" class="form-control-feeback mb-2 text-danger text-center">
                             Error updating information, try again later
                         </div>
-                        <button type="submit" class="btnSubmit">
+                        <button type="submit" class="btn btn-info btnSubmit">
                                 Edit Profile
                         </button>
                     </div>
                 </div>
                 <div class="row mt-3 mb-3">
-                    <div class="col">
+                    <div class="col-12">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item"> Email : {{user.email}}</li>
                             <li class="list-group-item"> First name: {{user.name}}</li>
@@ -71,14 +71,14 @@ import { Router } from '@angular/router';
                 </div>
             </form>
             <div class="row">
-                <div class="col">
-                    <button (click)="changePassword(user.email)" type="submit" class="btnSubmit">
+                <div class="col-12">
+                    <button (click)="changePassword(user.email)" type="submit" class="btn btn-success btnSubmit">
                         Change Password
                     </button>
-                    <label *ngIf="passwordUpdated" class="col text-center col-form-label">
+                    <label *ngIf="passwordUpdated" class="col-12 text-center col-form-label">
                         An e-mail was sent to your email address that you provided, there you can change your password.
                     </label>
-                    <label *ngIf="passwordUpdatedError" class="col text-danger text-center col-form-label">
+                    <label *ngIf="passwordUpdatedError" class="col-12 text-danger text-center col-form-label">
                         An error occurred with the server when checking your email, try again later
                     </label>
                 </div>
@@ -86,19 +86,19 @@ import { Router } from '@angular/router';
         </div>
         <div *ngIf="verifiedUser">
             <div class="form-content">
-                <div class="form-group d-flex justify-content-center row">
-                    <label *ngIf="!emailSend" class="col text-center col-form-label">
+                <div class="form-group d-flex justify-content-center row text-center">
+                    <label *ngIf="!emailSend" class="col-12 text-center col-form-label">
                         Please verify your Account
                     </label>
-                    <label *ngIf="emailSend" class="col text-center col-form-label">
+                    <label *ngIf="emailSend" class="col-12 text-center col-form-label">
                         An e-mail was sent to your email address that you provided, there you can verify your email.
                     </label>
-                    <label *ngIf="errorEmailSend" class="col text-danger text-center col-form-label">
+                    <label *ngIf="errorEmailSend" class="col-12 text-danger text-center col-form-label">
                         An error occurred with the server when checking your email, try again later
                     </label>
-                    <div class="col">
-                        <button *ngIf="!emailSend" type="submit" (click)="emailToVerifySent()" class="btnSubmit">Send verification email</button>
-                        <button *ngIf="emailSend" type="button" (click)="goToHome()" class="btnSubmit">Go to Home</button>
+                    <div class="col-12 text-center">
+                        <button *ngIf="!emailSend" type="submit" (click)="emailToVerifySent()" class="btn btn-success btnSubmit">Send verification email</button>
+                        <button *ngIf="emailSend" type="button" (click)="goToHome()" class="btn btn-default btnSubmit">Go to Home</button>
                     </div>
                 </div>
             </div>
