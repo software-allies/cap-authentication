@@ -9,23 +9,23 @@ import { Router } from '@angular/router';
 
 <div class="box">
   <div>
-  
+
     <form [formGroup]="createUserForm" (ngSubmit)="createUser()">
       <div class="form-group">
         <label for="email">Email address</label>
-        <input 
+        <input
           type="text"
           id="email"
           email
           class="form-control"
-          [ngClass]="{'invalidField':(!createUserForm.get('email').valid && createUserForm.get('email').touched) || (validatedForm && !createUserForm.get('email').valid)}"
+          [ngClass]="{'invalidField':(!createUserForm.get('email').valid && createUserForm.get('email').touched) || (validatedForm && !createUserForm.get('email').valid || existingUser)}"
           formControlName="email"
           aria-describedby="emailHelp"/>
         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input  
+        <input
           type="password"
           id="password"
           class="form-control"
@@ -56,9 +56,6 @@ import { Router } from '@angular/router';
         <small *ngIf="!createUserForm.get('firstName').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
           Required field
         </small>
-        <div *ngIf="existingUser"  class="form-control-feeback text-danger text-center">
-          An Account with this username already exist.
-        </div>
       </div>
 
       <div class="form-group">
@@ -87,6 +84,10 @@ import { Router } from '@angular/router';
                 formControlName="company"/>
       </div>
 
+      <div *ngIf="existingUser"  class="form-control-feeback text-danger text-center">
+        An Account with this username already exists.
+      </div>
+
       <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
 
       <!--
@@ -99,7 +100,7 @@ import { Router } from '@angular/router';
       -->
 
     </form>
-      
+
   </div>
 </div>
 
