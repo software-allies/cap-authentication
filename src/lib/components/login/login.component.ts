@@ -6,16 +6,12 @@ import { Router } from '@angular/router';
 @Component({
   selector: "cap-login",
   template: `
-
-
-  
 <div class="box">
   <div>
-  
     <form [formGroup]="loginUserForm" (ngSubmit)="loginUser()">
       <div class="form-group">
         <label for="email">Email address</label>
-        <input 
+        <input
           type="text"
           id="email"
           email
@@ -27,7 +23,7 @@ import { Router } from '@angular/router';
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input  
+        <input
           type="password"
           id="password"
           class="form-control"
@@ -44,9 +40,7 @@ import { Router } from '@angular/router';
             At the moment authentication with Social networks is under development, try by Email
           </div>
           -->
-
       </div>
-
 
       <div class="form-group form-check">
         <small class="form-text text-right">
@@ -65,9 +59,7 @@ import { Router } from '@angular/router';
         <button (click)="signInSocialMedia(false)" type="button" class="btnGoogle ">Google</button>
       </div>
       -->
-
     </form>
-      
   </div>
 </div>
 
