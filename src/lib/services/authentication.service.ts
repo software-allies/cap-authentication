@@ -220,8 +220,8 @@ export class AuthenticationService {
   }
 
   updateProfile(user: any, id: string, token: string) {
-    const httpParams = new HttpParams() .append('name', `${user.name}`)
-                                        .append('family_name', `${user.family_name}`)
+    const httpParams = new HttpParams() .append('name', `${user.firstname}`)
+                                        .append('family_name', `${user.lastname}`)
                                         .append('nickname', `${user.nickname}`);
     const httpOptions = {
       headers : new HttpHeaders({
@@ -275,9 +275,45 @@ export class AuthenticationService {
     return this.http.get(`${this.configService.domain}/api/v2/users-by-email`, {
       headers: {
         'content-type': 'application/x-www-form-urlencoded',
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       },
       params: httpParams
     });
+  }
+
+  getUserFromAPI(id: string) {
+    if (this.ApiToConsult()) {
+      const url = `${this.configService.endPoint}/findOne?filter={"where":{"ExternalId":"${id}"}}`;
+      const httpOptions = {
+        headers : new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.getToken()}`
+        })
+      };
+      return this.http.get(url, httpOptions);
+    }
+  }
+
+  updateProfileFromAPI(id: string, data: any) {
+    if (this.ApiToConsult()) {
+      const httpOptions = {
+        headers : new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.getToken()}`
+        })
+      };
+      return this.http.patch(
+        `${this.configService.endPoint}/${id}`,
+        {
+          FirstName: data.firstname,
+          LastName: data.lastname,
+          Company: data.company
+        },
+        httpOptions);
+    }
+  }
+
+  ApiToConsult(): boolean {
+    return this.configService.endPoint ? true : false;
   }
 }
