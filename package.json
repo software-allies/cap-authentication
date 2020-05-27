@@ -1,6 +1,6 @@
 {
   "name": "cap-authentication",
-  "version": "1.1.11",
+  "version": "1.1.12",
   "description": "Angular module to authenticate users in your application",
   "scripts": {
     "packagr": "ng-packagr -p ng-package.json"

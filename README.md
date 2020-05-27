@@ -7,20 +7,16 @@
 * Registration
 * Change Password
 
-you can use one of the two largest authentication services on the market **Auth0** or **Firebase**
+you can use one of the most popular google platforms on the market **Auth0**
 
 ## **Previous requirements**
-**CAP AUTHENTICATION** use bootstrap's classes. To be able to display the component in the right way, bootstrap should have been installed in the project. In case you don't have bootstrap installed, you can run the following command or read their [Bootstrap](https://getbootstrap.com/docs/4.3/getting-started/download/):
+**CAP AUTHENTICATION** use bootstrap's classes, You can use a CAP product ([cap-angular-schematic-bootstrap](https://www.npmjs.com/package/cap-angular-schematic-bootstrap)) to configure and install bootstrap to your project the installation is as follows.
+
 ```
-npm install bootstrap
+ng add cap-angular-schematic-bootstrap@latest 4.0.0 true
 ```
-One's that you installed bootstrap you have to configure the `angular.json` and write into `styles`
-```
-"styles": [
-  "node_modules/bootstrap/dist/css/bootstrap.min.css",
-  "styles.scss"
-]
-```
+
+![Alt text](https://raw.githubusercontent.com/software-allies/cap-angular-schematic-auth-auth0/development/assets/images/cap-angular-schematic-bootstrap.png "cap-angular-schematic-bootstrap")
 
 you also have to install the dependency [@auth0/angular-jwt](https://www.npmjs.com/package/@auth0/angular-jwt) to obtain user token information.
 ```
@@ -48,7 +44,9 @@ into the import section
     AuthenticationModule.forRoot({
       domain: '<your-domain>',
       clientId: '<your clientId>',
-      clientSecret: '<your clientSecret>'
+      clientSecret: '<your clientSecret>',
+      endPoint: 'https://your-api-domain.com/api/<users>' // can be empty
+
     })
   ],
 })
