@@ -1,6 +1,6 @@
 {
   "name": "cap-authentication",
-  "version": "1.1.13",
+  "version": "1.1.14",
   "description": "Angular module to authenticate users in your application",
   "scripts": {
     "packagr": "ng-packagr -p ng-package.json"
@@ -23,11 +23,12 @@
     }
   ],
   "keywords": [
-    "angular",
+    "cap-authentication",
     "authentication",
     "cap-generator",
-    "cap-authentication",
-    "auth0"
+    "angular",
+    "auth0",
+    "CAP"
   ],
   "repository": {
     "type": "git",

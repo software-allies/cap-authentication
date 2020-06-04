@@ -17,11 +17,27 @@ import { Router } from '@angular/router';
           id="email"
           email
           class="form-control"
-          [ngClass]="{'invalidField':(!createUserForm.get('email').valid && createUserForm.get('email').touched) || (validatedForm && !createUserForm.get('email').valid || existingUser)}"
+          [ngClass]="{
+            'invalidField':(!createUserForm.get('email').valid && createUserForm.get('email').touched) || (validatedForm && !createUserForm.get('email').valid || existingUser)
+          }"
           formControlName="email"
           aria-describedby="emailHelp"/>
-        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        <small
+          id="emailHelp"
+          class="form-text text-muted"
+          *ngIf="!(!createUserForm.get('email').pristine && !createUserForm.get('email').valid)"
+        >
+          We'll never share your email with anyone else.
+        </small>
+        <small
+          id="emailHelp"
+          class="form-text text-muted"
+          *ngIf="(!createUserForm.get('email').pristine && !createUserForm.get('email').valid)"
+        >
+          Please enter a valid email address.
+        </small>
       </div>
+
       <div class="form-group">
         <label for="password">Password</label>
         <input
@@ -29,7 +45,8 @@ import { Router } from '@angular/router';
           id="password"
           class="form-control"
           [ngClass]="{
-            'invalidField':(!createUserForm.get('password').valid && createUserForm.get('password').touched) || (validatedForm && !createUserForm.get('password').valid)}"
+            'invalidField':(!createUserForm.get('password').valid && createUserForm.get('password').touched) || (validatedForm && !createUserForm.get('password').valid)
+          }"
           formControlName="password"/>
 
           <small *ngIf="!createUserForm.get('password').pristine && !createUserForm.get('password').valid" class="form-text text-center text-muted">
