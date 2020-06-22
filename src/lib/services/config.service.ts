@@ -1,6 +1,6 @@
 import { Injectable, Optional } from '@angular/core';
 import { IConfig } from '../interfaces/config.interface';
-@Injectable()
+
 export class ConfigService {
 
   domain: string;

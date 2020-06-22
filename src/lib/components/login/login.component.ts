@@ -16,7 +16,10 @@ import { Router } from '@angular/router';
           id="email"
           email
           class="form-control"
-          [ngClass]="{'invalidField':(!loginUserForm.get('email').valid && loginUserForm.get('email').touched) || (validatedForm && !loginUserForm.get('email').valid)}"
+          [ngClass]= "{
+            'invalidField':
+              (!loginUserForm.get('email').valid && loginUserForm.get('email').touched)
+              || (validatedForm && !loginUserForm.get('email').valid)}"
           formControlName="email"
           aria-describedby="emailHelp"/>
         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
@@ -28,7 +31,9 @@ import { Router } from '@angular/router';
           id="password"
           class="form-control"
           [ngClass]="{
-            'invalidField':(!loginUserForm.get('password').valid && loginUserForm.get('password').touched) || (validatedForm && !loginUserForm.get('password').valid)}"
+            'invalidField':
+              (!loginUserForm.get('password').valid && loginUserForm.get('password').touched)
+              || (validatedForm && !loginUserForm.get('password').valid)}"
           formControlName="password"/>
 
           <div *ngIf="userNotValid"  class="form-control-feeback text-danger text-center">
@@ -116,8 +121,8 @@ export class AuthLoginComponent implements OnInit {
     private router: Router
   ) {
     this.loginUserForm = new FormGroup({
-      'email': new FormControl('', [Validators.required]),
-      'password': new FormControl('', [Validators.required])
+      email: new FormControl('', [Validators.required]),
+      password: new FormControl('', [Validators.required])
     });
     this.userNotValid = false;
     this.socialMedia = false;

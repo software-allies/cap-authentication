@@ -35,7 +35,7 @@ export class AuthenticationService {
 
   isUserLoggedIn(): boolean | void {
     if (isPlatformBrowser(this.platformId) && localStorage.getItem('User')) {
-      let userStorage = JSON.parse(localStorage.getItem('User'));
+      const userStorage = JSON.parse(localStorage.getItem('User'));
       const helper = new JwtHelperService();
       if (!helper.isTokenExpired(userStorage.token)) {
         return true;
@@ -76,10 +76,10 @@ export class AuthenticationService {
 
   private getCredentials() {
     return {
-      'client_id': `${this.configService.clientId}`,
-      'client_secret': `${this.configService.clientSecret}`,
-      'audience': `${this.configService.domain}/api/v2/`,
-      'grant_type': 'client_credentials'
+      client_id: `${this.configService.clientId}`,
+      client_secret: `${this.configService.clientSecret}`,
+      audience: `${this.configService.domain}/api/v2/`,
+      grant_type: 'client_credentials'
     };
   }
 
@@ -102,7 +102,7 @@ export class AuthenticationService {
     const httpOptions = {
       headers : new HttpHeaders({
         'content-type': 'application/x-www-form-urlencoded',
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       })
     };
     return this.http.get(`${this.configService.domain}/userinfo`, httpOptions);
@@ -112,7 +112,7 @@ export class AuthenticationService {
     const httpOptions = {
       headers : new HttpHeaders({
         'content-type': 'application/x-www-form-urlencoded',
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       })
     };
     return this.http.get(`${this.configService.domain}/userinfo`, httpOptions);
@@ -122,7 +122,7 @@ export class AuthenticationService {
     const httpOptions = {
       headers : new HttpHeaders({
         'content-type': 'application/x-www-form-urlencoded',
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       })
     };
     return this.http.get(`${this.configService.domain}/api/v2/users/${id}`, httpOptions);
@@ -142,7 +142,7 @@ export class AuthenticationService {
   }
 
   createUser(user: any, accessToken?: string)  {
-    let User = {
+    const User = {
       email: `${user.email}`,
       password: `${user.password}`,
       email_verified: false,
@@ -158,7 +158,7 @@ export class AuthenticationService {
     const httpOptions = {
       headers: new HttpHeaders({
         'content-type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`
       })
     };
     return this.http.post(`${this.configService.domain}/api/v2/users`, User, httpOptions);
@@ -191,7 +191,7 @@ export class AuthenticationService {
         this.http.get(`${this.configService.domain}/v2/logout`, {
           headers: {
             'content-type': 'application/x-www-form-urlencoded',
-            'Authorization': `Bearer ${token}`
+            Authorization: `Bearer ${token}`
           },
           params: httpParams
         })
@@ -226,7 +226,7 @@ export class AuthenticationService {
     const httpOptions = {
       headers : new HttpHeaders({
         'content-type': 'application/x-www-form-urlencoded',
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       })
     };
     return this.http.patch(`${this.configService.domain}/api/v2/users/${id}`, httpParams, httpOptions);
@@ -236,7 +236,7 @@ export class AuthenticationService {
     const httpOptions = {
       headers : new HttpHeaders({
         'content-type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       })
     };
     const User = {
@@ -259,7 +259,7 @@ export class AuthenticationService {
       const httpOptions = {
         headers : new HttpHeaders({
           'content-type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         })
       };
       this.http.post(`${this.configService.endPoint}`, userData, httpOptions).subscribe((User: any) => {

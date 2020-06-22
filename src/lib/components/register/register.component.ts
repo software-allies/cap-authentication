@@ -18,7 +18,9 @@ import { Router } from '@angular/router';
           email
           class="form-control"
           [ngClass]="{
-            'invalidField':(!createUserForm.get('email').valid && createUserForm.get('email').touched) || (validatedForm && !createUserForm.get('email').valid || existingUser)
+            'invalidField':
+              (!createUserForm.get('email').valid && createUserForm.get('email').touched)
+              || (validatedForm && !createUserForm.get('email').valid || existingUser)
           }"
           formControlName="email"
           aria-describedby="emailHelp"/>
@@ -45,11 +47,16 @@ import { Router } from '@angular/router';
           id="password"
           class="form-control"
           [ngClass]="{
-            'invalidField':(!createUserForm.get('password').valid && createUserForm.get('password').touched) || (validatedForm && !createUserForm.get('password').valid)
+            'invalidField':
+              (!createUserForm.get('password').valid && createUserForm.get('password').touched)
+              || (validatedForm && !createUserForm.get('password').valid)
           }"
           formControlName="password"/>
 
-          <small *ngIf="!createUserForm.get('password').pristine && !createUserForm.get('password').valid" class="form-text text-center text-muted">
+          <small
+            *ngIf="!createUserForm.get('password').pristine && !createUserForm.get('password').valid"
+            class="form-text text-center text-muted"
+          >
             Your password must contain the following: 8-20 characters long, the first character must be capital (uppercase) letter, a numbers and a lowercase letter.
           </small>
           <small *ngIf="!createUserForm.get('password').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
@@ -176,7 +183,11 @@ export class AuthRegisterComponent {
   ) {
     this.existingUser = false;
     this.createUserForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.minLength(3), Validators.pattern('[a-z0-9._%-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]),
+      email: new FormControl('', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.pattern('[a-z0-9._%-]+@[a-z0-9.-]+\.[a-z]{2,3}$')
+      ]),
       password: new FormControl('', [Validators.required, Validators.minLength(8), this.capitalLetter]),
       firstName: new FormControl('', [Validators.required, Validators.minLength(2)]),
       lastName: new FormControl('', [Validators.required, Validators.minLength(2)]),

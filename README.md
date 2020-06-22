@@ -18,9 +18,12 @@ ng add cap-angular-schematic-bootstrap@latest 4.0.0 true
 
 ![Alt text](https://raw.githubusercontent.com/software-allies/cap-angular-schematic-auth-auth0/development/assets/images/cap-angular-schematic-bootstrap.png "cap-angular-schematic-bootstrap")
 
-you also have to install the dependency [@auth0/angular-jwt](https://www.npmjs.com/package/@auth0/angular-jwt) to obtain user token information.
+Other external dependencies that are required for the module to function are the following:
+* [UUID](https://www.npmjs.com/package/uuid)
+* [@auth0/angular-jwt](https://www.npmjs.com/package/@auth0/angular-jwt)
+
 ```
-npm i --save @auth0/angular-jwt
+npm i --save uuid @auth0/angular-jwt
 ```
 ---
 
@@ -46,7 +49,6 @@ into the import section
       clientId: '<your clientId>',
       clientSecret: '<your clientSecret>',
       endPoint: 'https://your-api-domain.com/api/<users>' // can be empty
-
     })
   ],
 })

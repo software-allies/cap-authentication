@@ -1,6 +1,6 @@
 {
   "name": "cap-authentication",
-  "version": "1.1.14",
+  "version": "1.1.15",
   "description": "Angular module to authenticate users in your application",
   "scripts": {
     "packagr": "ng-packagr -p ng-package.json"
@@ -34,6 +34,7 @@
     "type": "git",
     "url": "https://github.com/software-allies/cap-authentication"
   },
+  "homepage": "https://www.softwareallies.com/",
   "peerDependencies": {
     "@angular/common": "^8.2.14",
     "@angular/core": "^8.2.14",

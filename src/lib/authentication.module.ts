@@ -6,8 +6,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { ConfigService } from './services/config.service';
 import { IConfig } from './interfaces/config.interface';
 import { AuthenticationService } from './services/authentication.service';
-import { CommonModule } from "@angular/common";
-import { RouterModule } from "@angular/router";
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 import { AuthRegisterComponent } from './components/register/register.component';
 import { AuthProfileComponent } from './components/profile/profile.component';

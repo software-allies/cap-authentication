@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation, OnInit} from '@angular/core';
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 
@@ -79,7 +79,7 @@ export class AuthChangePasswordComponent implements OnInit {
 
   ngOnInit() {
     this.changeform = new FormGroup({
-      'email': new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required]),
     });
   }
 

@@ -141,7 +141,14 @@ import { Router } from '@angular/router';
                 An error occurred with the server when checking your email, try again later
             </label>
             <div class="col-12 text-center">
-                <button *ngIf="!emailSend" type="submit" (click)="emailToVerifySent()" class="btn btn-success btn-block btnSubmit">Send verification email</button>
+                <button
+                  *ngIf="!emailSend"
+                  type="submit"
+                  (click)="emailToVerifySent()"
+                  class="btn btn-success btn-block btnSubmit"
+                >
+                  Send verification email
+                </button>
                 <button *ngIf="emailSend" type="button" (click)="goToHome()" class="btn btn-default btn-block btnSubmit">Go to Home</button>
             </div>
           </div>
