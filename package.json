@@ -39,6 +39,7 @@
     "@angular/common": "^8.2.14",
     "@angular/core": "^8.2.14",
     "@auth0/angular-jwt": "^3.0.1",
+    "bootstrap": "^4.4.1",
     "uuid": "^3.3.3"
   },
   "license": "MIT",

@@ -30,7 +30,7 @@ import { Router } from '@angular/router';
           type="email"
           id="email"
           email
-          placeholder="Email address"
+          placeholder="Email address *"
           formControlName="email">
         <small id="passwordHelpBlock" class="form-text text-center text-muted">
         </small>

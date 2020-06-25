@@ -7,17 +7,15 @@ import { Router } from '@angular/router';
 @Component({
   selector: "cap-profile",
   template: `
-
 <div class="box">
   <div>
     <div class="form-content" *ngIf="user">
       <form [formGroup]="profileUserForm" (ngSubmit)="editProfile()">
         <div class="row">
           <div class="col-12">
-
             <div class="form-group">
               <small class="form-text">
-                First name
+                First name <span>*</span>
               </small>
               <input
                 type="text"
@@ -33,7 +31,7 @@ import { Router } from '@angular/router';
 
             <div class="form-group">
               <small class="form-text">
-                Last name
+                Last name <span>*</span>
               </small>
               <input
                 type="text"
@@ -50,7 +48,7 @@ import { Router } from '@angular/router';
 
             <div class="form-group">
               <small class="form-text">
-                Nickname
+                Nickname <span>*</span>
               </small>
               <input
                 type="text"
@@ -179,6 +177,9 @@ import { Router } from '@angular/router';
   background-color: transparent;
 }
 
+span {
+  color: #cb2431;
+}
 `],
   encapsulation: ViewEncapsulation.Emulated
 })

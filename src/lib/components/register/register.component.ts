@@ -6,12 +6,11 @@ import { Router } from '@angular/router';
 @Component({
   selector: "cap-register",
   template: `
-
 <div class="box">
   <div>
     <form [formGroup]="createUserForm" (ngSubmit)="createUser()">
       <div class="form-group">
-        <label for="email">Email address</label>
+        <label for="email">Email address <span>*</span></label>
         <input
           type="text"
           id="email"
@@ -41,7 +40,7 @@ import { Router } from '@angular/router';
       </div>
 
       <div class="form-group">
-        <label for="password">Password</label>
+        <label for="password">Password <span>*</span> </label>
         <input
           type="password"
           id="password"
@@ -65,10 +64,9 @@ import { Router } from '@angular/router';
       </div>
 
       <div class="form-group">
-        <label for="text">First Name</label>
+        <label for="text">First Name <span>*</span></label>
         <input  type="text"
                 class="form-control"
-                placeholder="First Name * "
                 [ngClass]="{
                   'invalidField':
                     (!createUserForm.get('firstName').valid && createUserForm.get('firstName').touched)
@@ -82,10 +80,9 @@ import { Router } from '@angular/router';
       </div>
 
       <div class="form-group">
-        <label for="text">Last Name</label>
+        <label for="text">Last Name <span>*</span></label>
         <input  type="text"
                 class="form-control"
-                placeholder="Last Name *"
                 [ngClass]="{
                   'invalidField':
                     (!createUserForm.get('lastName').valid
@@ -103,7 +100,6 @@ import { Router } from '@angular/router';
         <label for="text">Company</label>
         <input  type="text"
                 class="form-control"
-                placeholder="Company"
                 formControlName="company"/>
       </div>
 
@@ -145,6 +141,10 @@ import { Router } from '@angular/router';
 
 .invalidField {
   border-color:#dc3545;
+}
+
+span {
+  color: #cb2431;
 }
 
 /*.btnFacebook {
