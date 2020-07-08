@@ -36,6 +36,12 @@ import { Router } from '@angular/router';
               || (validatedForm && !loginUserForm.get('password').valid)}"
           formControlName="password"/>
 
+          <div class="form-group form-check">
+            <small class="form-text text-right">
+              <a routerLink="/auth/forgot-password"> Forgot password? </a>
+            </small>
+          </div>
+
           <div *ngIf="userNotValid"  class="form-control-feeback text-danger text-center">
             invalid email or password
           </div>
@@ -45,12 +51,6 @@ import { Router } from '@angular/router';
             At the moment authentication with Social networks is under development, try by Email
           </div>
           -->
-      </div>
-
-      <div class="form-group form-check">
-        <small class="form-text text-right">
-          <a routerLink="/auth/forgot-password"> Forgot password? </a>
-        </small>
       </div>
 
       <button type="submit" class="btn btn-primary btn-block">Login</button>
