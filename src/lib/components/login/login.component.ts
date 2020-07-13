@@ -1,10 +1,10 @@
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators, } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: "cap-login",
+  selector: 'cap-login',
   template: `
 <div class="box">
   <div>
@@ -116,6 +116,9 @@ export class AuthLoginComponent implements OnInit {
   socialMedia: boolean;
   validatedForm: boolean;
 
+  @Output() userLoginData = new EventEmitter();
+  @Output() userLoginError = new EventEmitter();
+
   constructor(
     private authenticationService: AuthenticationService,
     private router: Router
@@ -136,6 +139,7 @@ export class AuthLoginComponent implements OnInit {
       this.authenticationService.loginUser(this.loginUserForm.value).subscribe((token: any) => {
         this.authenticationService.getUserInfo(token.access_token).subscribe((userinfo: any) => {
           this.authenticationService.getUser(userinfo.sub, token.access_token).subscribe((user: any) => {
+            this.userLoginData.emit(userinfo);
             this.authenticationService.saveCurrentUser({
               user: userinfo.name,
               email: userinfo.email,
@@ -149,8 +153,8 @@ export class AuthLoginComponent implements OnInit {
           });
         });
       }, (error) => {
-        console.log(error);
         this.userNotValid = true;
+        this.userLoginError.emit(error);
       });
     } else {
       this.validatedForm = true;

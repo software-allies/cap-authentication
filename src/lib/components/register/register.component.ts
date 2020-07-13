@@ -1,10 +1,10 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators, } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: "cap-register",
+  selector: 'cap-register',
   template: `
 <div class="box">
   <div>
@@ -177,6 +177,10 @@ export class AuthRegisterComponent {
   socialMedia: boolean;
   validatedForm: boolean;
 
+  @Output() userRegisterData = new EventEmitter();
+  @Output() userRegisterJWT = new EventEmitter();
+  @Output() userRegisterError = new EventEmitter();
+
   constructor(
     private authenticationService: AuthenticationService,
     private router: Router,
@@ -212,7 +216,9 @@ export class AuthRegisterComponent {
       this.authenticationService.getAuth0Token().subscribe((token: any) => {
         this.authenticationService.createUser(this.createUserForm.value, token).subscribe((user: any) => {
           if (user) {
+            this.userRegisterData.emit(user);
             this.authenticationService.loginUser(this.createUserForm.value).subscribe((AccessToken: any) => {
+              this.userRegisterJWT.emit(AccessToken);
               this.authenticationService.createUserDB(this.createUserForm.value, token, user.user_id, user.user_metadata.CAP_UUID);
               this.authenticationService.saveCurrentUser({
                 user: user.name,
@@ -227,6 +233,7 @@ export class AuthRegisterComponent {
             });
           }
         }, (error) => {
+          this.userRegisterError.emit(error);
           if (error.status === 409) {
             this.existingUser = true;
           }

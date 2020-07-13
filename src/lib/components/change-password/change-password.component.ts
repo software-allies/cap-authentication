@@ -1,10 +1,10 @@
-import { Component, ViewEncapsulation, OnInit} from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: "cap-change-password",
+  selector: 'cap-change-password',
   template: `
 <div class="box">
   <div>
@@ -67,6 +67,10 @@ export class AuthChangePasswordComponent implements OnInit {
   validatedForm: boolean;
   userNotFound: boolean;
 
+  @Output() userEmail = new EventEmitter();
+  @Output() forgotPasswordRequest = new EventEmitter();
+  @Output() forgotPasswordRequestError = new EventEmitter();
+
   constructor(
     private authenticationService: AuthenticationService,
     private router: Router,
@@ -85,26 +89,35 @@ export class AuthChangePasswordComponent implements OnInit {
 
   forgorPassword() {
     if (this.changeform.valid) {
+      this.userEmail.emit(this.changeform.get(['email']).value);
       this.authenticationService.getAuth0Token().subscribe((token: any) => {
         this.authenticationService.searchUserByEmail(this.changeform.get(['email']).value, token)
             .subscribe((user: any) => {
               if (user.length) {
-                this.authenticationService.changePassword(this.changeform.get(['email']).value).subscribe((response: any) => {},
-                  (error) => {
-                    if (error.status === 200) {
-                      this.emailSend = true;
-                    } else if (error.status > 400) {
-                      this.errorEmailSend = true;
-                    }
-                });
+                this.authenticationService.changePassword(this.changeform.get(['email']).value)
+                  .subscribe((response: any) => this.forgotPasswordRequest.emit(true),
+                    (error) => {
+                      if (error.status === 200) {
+                        this.emailSend = true;
+                        this.forgotPasswordRequest.emit(true);
+                      } else if (error.status > 400) {
+                        this.forgotPasswordRequestError.emit(error);
+                        this.errorEmailSend = true;
+                      }
+                  });
                 this.userNotFound = false;
               } else {
+                this.forgotPasswordRequestError.emit({
+                  message: 'A registered user was not found with that email',
+                  status: 404
+                });
                 this.userNotFound = true;
               }
             },
             (error) => {
               this.userNotFound = true;
               this.errorEmailSend = true;
+              this.forgotPasswordRequestError.emit(error);
             });
       });
 
