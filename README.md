@@ -59,24 +59,155 @@ export class AppModule { }
 ```
 ---
 
-## HTML tags
+## Usage
+
+OutPuts are integrated in each of the packaged components for the transfer of information between the packaged component and the component that is rendering it. It will be shown immediately how you can implement them in your components. For questions or recommendations you can write to this email lenin_emmanuel@softwareallies.com
 
 *  **Authentication LogIn**
 ```
-<cap-login></cap-login>
+<cap-login
+  (userLoginData)="userLoginData($event)"
+  (userLoginError)="userLoginError($event)">
+</cap-login> 
+```
+```
+import { Component, OnInit } from '@angular/core';
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
+})
+export class LoginComponent {
+
+  userLoginData(userData: any) {
+    // console.log(userData);
+  }
+  userLoginError(UserError: any) {
+    // console.log(serError);
+  }
+  
+}
 ```
 *  **Authentication Register**
 ```
-<cap-register></cap-register>
+<cap-register
+  (userRegisterData)="userRegisterData($event)"
+  (userRegisterError)="userRegisterError($event)"
+  (userRegisterJWT)="userRegisterJWT($event)">
+</cap-register> 
+```
+```
+import { Component, OnInit } from '@angular/core';
+@Component({
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.scss']
+})
+export class RegisterComponent {
+
+  userRegisterData(UserData: any) {
+    // console.log(UserData);
+  }
+  userRegisterError(UserError: any) {
+    // console.log(UserError);
+  }
+  userRegisterJWT(JWT: any) {
+    console.log(JWT);
+  }
+  
+}
 ```
 *  **Authentication Profile**
 ```
-<cap-profile></cap-profile>
+<cap-profile
+  (userProfileData)="userProfileData($event)"
+  (userProfileError)="userProfileError($event)"
+  (userProfileUpdate)="userProfileUpdate($event)"
+  (userProfileUpdateError)="userProfileUpdateError($event)"
+  (userProfileDataBase)="userProfileDataBase($event)"
+  (userProfileDataBaseUpdate)="userProfileDataBaseUpdate($event)"
+  (userProfileDataBaseUpdateError)="userProfileDataBaseUpdateError($event)"
+  (userProfileDataBaseError)="userProfileDataBaseError($event)">
+</cap-profile> 
+```
+```
+import { Component, OnInit } from '@angular/core';
+@Component({
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.scss']
+})
+export class ProfileComponent {
+
+  userProfileData(userProfile: any) {
+    // console.log(userProfile);
+  }
+  userProfileError(profileError) {
+    // console.log(profileError);
+  }
+  userProfileUpdate(profileUpdated) {
+    // console.log(profileUpdated);
+  }
+  userProfileDataBase(profileDB) {
+    // console.log(profileDB);
+  }
+  userProfileDataBaseUpdate(profileDBUpdated) {
+    // console.log(profileDBUpdated);
+  }
+  userProfileDataBaseUpdateError(profileDBUpdatedError) {
+    // console.log(profileDBUpdatedError);
+  }
+  userProfileDataBaseError(profileDBError) {
+    // console.log(profileDBError);
+  }
+  userProfileUpdateError(prodileUpdatedError) {
+    // console.log(prodileUpdatedError);
+  }
+  
+}
 ```
 *  **Authentication Forgot Password**
 ```
-<cap-change-password></cap-change-password>
+<cap-change-password
+  (userEmail)="userEmail($event)"
+  (forgotPasswordRequest)="forgotPasswordRequest($event)"
+  (forgotPasswordRequestError)="forgotPasswordRequestError($event)">
+</cap-change-password>
 ```
+```
+import { Component, OnInit } from '@angular/core';
+@Component({
+  selector: 'app-forgot',
+  templateUrl: './forgot.component.html',
+  styleUrls: ['./forgot.component.scss']
+})
+export class ForgotComponent {
+
+  userEmail(email: any) {
+    // console.log(email);
+  }
+  forgotPasswordRequest(request: any) {
+    // console.log(request);
+  }
+  forgotPasswordRequestError(requestError: any) {
+    // console.log(requestError);
+  }
+  
+}
+```
+*  **Authentication SignOut**
+```
+import { AuthenticationService } from 'cap-authentication';
+
+export class Component{
+  constructor (public authenticationService: AuthenticationService) { }
+  
+  logoutFunction() {
+   this.authenticationService.signOut() // Return to home page 
+  }
+}
+```
+---
 
 ## Styles
 
@@ -140,5 +271,3 @@ You can see an example of how to edit this module with your design [styles.scss]
     </div>
 </div>
 ```
-
-**Note**: An object is stored in the localStorage to know the status of the User.
