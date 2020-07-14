@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 <div class="box">
   <div>
     <div class="form-content" *ngIf="user">
-      <form [formGroup]="profileUserForm" (ngSubmit)="editProfile()">
+      <form  *ngIf="updateUser" [formGroup]="profileUserForm" (ngSubmit)="editProfile()">
         <div class="row">
           <div class="col-12">
             <div class="form-group">
@@ -90,29 +90,40 @@ import { Router } from '@angular/router';
             </div>
 
             <button type="submit" class="btn btn-info btn-block btnSubmit">
-                Edit Profile
+              Save
+            </button>
+
+            <button (click)="changeView()" class="btn btn-info btn-block btnSubmit">
+              Cancel
             </button>
 
           </div>
         </div>
-        <div class="row mt-3 mb-3">
-          <div class="col-12">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item"> Email : {{user.email}}</li>
-                <li class="list-group-item"> First name: {{user.name}}</li>
-                <li class="list-group-item"> Last name: {{user.family_name}}</li>
-                <li class="list-group-item"> Nickname: {{user.nickname}} </li>
 
-                <li *ngIf="userDB" class="list-group-item"> Company: {{ userDB.Company }}</li>
-
-                <li class="list-group-item"> Verified Email: {{user.email_verified ? 'Yes' : 'No'}}</li>
-                <li class="list-group-item"> Creation Date: {{user.created_at | date:'medium'}}</li>
-                <li class="list-group-item"> Last SignIn: {{user.last_login | date:'medium'}}</li>
-            </ul>
-          </div>
-        </div>
       </form>
-      <div class="row">
+      <div *ngIf="!updateUser" class="row mt-3 mb-3">
+        <div class="col-12">
+          <ul class="list-group list-group-flush">
+              <li class="list-group-item"> Email : {{user.email}}</li>
+              <li class="list-group-item"> First name: {{user.name}}</li>
+              <li class="list-group-item"> Last name: {{user.family_name}}</li>
+              <li class="list-group-item"> Nickname: {{user.nickname}} </li>
+
+              <li *ngIf="userDB" class="list-group-item"> Company: {{ userDB.Company }}</li>
+
+              <li class="list-group-item"> Verified Email: {{user.email_verified ? 'Yes' : 'No'}}</li>
+              <li class="list-group-item"> Creation Date: {{user.created_at | date:'medium'}}</li>
+              <li class="list-group-item"> Last SignIn: {{user.last_login | date:'medium'}}</li>
+
+          </ul>
+
+          <button (click)="changeView()" type="submit" class="btn btn-success btn-block btnSubmit">
+            Edit Profile
+          </button>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.5rem" class="row">
         <div class="col-12">
           <button (click)="changePassword(user.email)" type="submit" class="btn btn-success btn-block btnSubmit">
             Change Password
@@ -207,6 +218,8 @@ export class AuthProfileComponent implements OnInit {
   authenticationServiceErrorMessage = 'A problem has occurred while establishing communication with the authentication service';
   serviceErrorBackEndMessage = 'A problem has occurred while establishing communication with the BackEnd';
 
+  updateUser: boolean;
+
   @Output() userProfileData = new EventEmitter();
   @Output() userProfileUpdate = new EventEmitter();
   @Output() userProfileUpdateError = new EventEmitter();
@@ -234,10 +247,15 @@ export class AuthProfileComponent implements OnInit {
     this.user = null;
     this.passwordUpdated = false;
     this.passwordUpdatedError = false;
+    this.updateUser = false;
   }
 
   ngOnInit() {
     this.getProfile();
+  }
+
+  changeView() {
+    this.updateUser = !this.updateUser;
   }
 
   emailToVerifySent() {
