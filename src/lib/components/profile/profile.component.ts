@@ -71,9 +71,6 @@ import { Router } from '@angular/router';
                 type="text"
                 class="form-control"
                 formControlName="company"
-                [ngClass]="{
-                  'invalidField':(!profileUserForm.get('company').valid) || (validatedForm && !profileUserForm.get('company').valid)
-                }"
               />
               <small *ngIf="!profileUserForm.get('company').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
                 Required field
@@ -89,7 +86,7 @@ import { Router } from '@angular/router';
               Error updating information, try again later
             </div>
 
-            <button type="submit" class="btn btn-info btn-block btnSubmit">
+            <button type="submit" class="btn btn-info btn-block btnSubmit mb-3">
               Save
             </button>
 
@@ -104,17 +101,16 @@ import { Router } from '@angular/router';
       <div *ngIf="!updateUser" class="row mt-3 mb-3">
         <div class="col-12">
           <ul class="list-group list-group-flush">
-              <li class="list-group-item"> Email : {{user.email}}</li>
-              <li class="list-group-item"> First name: {{user.name}}</li>
-              <li class="list-group-item"> Last name: {{user.family_name}}</li>
-              <li class="list-group-item"> Nickname: {{user.nickname}} </li>
+            <li class="list-group-item"> Email : {{user.email}}</li>
+            <li class="list-group-item"> First name: {{user.name}}</li>
+            <li class="list-group-item"> Last name: {{user.family_name}}</li>
+            <li class="list-group-item"> Nickname: {{user.nickname}} </li>
 
-              <li *ngIf="userDB" class="list-group-item"> Company: {{ userDB.Company }}</li>
+            <li *ngIf="userDB" class="list-group-item"> Company: {{ userDB.Company }}</li>
 
-              <li class="list-group-item"> Verified Email: {{user.email_verified ? 'Yes' : 'No'}}</li>
-              <li class="list-group-item"> Creation Date: {{user.created_at | date:'medium'}}</li>
-              <li class="list-group-item"> Last SignIn: {{user.last_login | date:'medium'}}</li>
-
+            <li class="list-group-item"> Verified Email: {{user.email_verified ? 'Yes' : 'No'}}</li>
+            <li class="list-group-item"> Creation Date: {{user.created_at | date:'medium'}}</li>
+            <li class="list-group-item"> Last SignIn: {{user.last_login | date:'medium'}}</li>
           </ul>
 
           <button (click)="changeView()" type="submit" class="btn btn-success btn-block btnSubmit">
@@ -123,7 +119,7 @@ import { Router } from '@angular/router';
         </div>
       </div>
 
-      <div style="margin-top: 1.5rem" class="row">
+      <div *ngIf="!updateUser" class="row">
         <div class="col-12">
           <button (click)="changePassword(user.email)" type="submit" class="btn btn-success btn-block btnSubmit">
             Change Password
@@ -136,6 +132,7 @@ import { Router } from '@angular/router';
           </label>
         </div>
       </div>
+
     </div>
     <div *ngIf="verifiedUser">
       <div class="form-content">
@@ -285,7 +282,7 @@ export class AuthProfileComponent implements OnInit {
               this.profileUserForm = new FormGroup({
                 firstname: new FormControl(User.FirstName, [Validators.required]),
                 lastname: new FormControl(User.LastName, [Validators.required]),
-                company: new FormControl(User.Company, [Validators.required]),
+                company: new FormControl(User.Company, []),
                 nickname: new FormControl(user.nickname, [Validators.required]),
               });
             }, (error: any) => {
@@ -328,7 +325,8 @@ export class AuthProfileComponent implements OnInit {
             this.userUpdated = true;
             setTimeout(() => {
               this.userUpdated = false;
-            }, 3000);
+              this.changeView();
+            }, 900);
           }
         }, ((error: any) => {
           console.log('Error ' + error.status + ': ' + this.authenticationServiceErrorMessage);
