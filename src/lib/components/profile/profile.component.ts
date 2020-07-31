@@ -101,7 +101,7 @@ import { Router } from '@angular/router';
       <div *ngIf="!updateUser" class="row mt-3 mb-3">
         <div class="col-12">
           <ul class="list-group list-group-flush">
-            <li class="list-group-item"> Email : {{user.email}}</li>
+            <li class="list-group-item"> Email: {{user.email}}</li>
             <li class="list-group-item"> First name: {{user.name}}</li>
             <li class="list-group-item"> Last name: {{user.family_name}}</li>
             <li class="list-group-item"> Nickname: {{user.nickname}} </li>
@@ -252,6 +252,8 @@ export class AuthProfileComponent implements OnInit {
   }
 
   changeView() {
+    this.passwordUpdated = false;
+    this.passwordUpdatedError = false;
     this.updateUser = !this.updateUser;
   }
 
