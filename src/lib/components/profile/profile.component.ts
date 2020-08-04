@@ -90,7 +90,7 @@ import { Router } from '@angular/router';
               Save
             </button>
 
-            <button (click)="changeView()" class="btn btn-info btn-block btnSubmit">
+            <button (click)="changeView(true)" class="btn btn-info btn-block btnSubmit">
               Cancel
             </button>
 
@@ -242,6 +242,7 @@ export class AuthProfileComponent implements OnInit {
     this.errorEmailSend = false;
     this.validatedForm = false;
     this.user = null;
+    this.userDB = null;
     this.passwordUpdated = false;
     this.passwordUpdatedError = false;
     this.updateUser = false;
@@ -251,10 +252,26 @@ export class AuthProfileComponent implements OnInit {
     this.getProfile();
   }
 
-  changeView() {
+  changeView(resetForm: boolean = false) {
     this.passwordUpdated = false;
     this.passwordUpdatedError = false;
     this.updateUser = !this.updateUser;
+    if (resetForm) {
+      if (this.userDB) {
+        this.profileUserForm = new FormGroup({
+          firstname: new FormControl(this.userDB.FirstName, [Validators.required]),
+          lastname: new FormControl(this.userDB.LastName, [Validators.required]),
+          company: new FormControl(this.userDB.Company, []),
+          nickname: new FormControl(this.user.nickname, [Validators.required]),
+        });
+      } else if (this.user) {
+        this.profileUserForm = new FormGroup({
+          firstname: new FormControl(this.user.name, [Validators.required]),
+          lastname: new FormControl(this.user.family_name, [Validators.required]),
+          nickname: new FormControl(this.user.nickname, [Validators.required]),
+        });
+      }
+    }
   }
 
   emailToVerifySent() {
