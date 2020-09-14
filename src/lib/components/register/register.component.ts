@@ -1,6 +1,7 @@
-import { Component, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
+import { Component, ViewEncapsulation, Output, EventEmitter, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication.service';
+import { Register, RegisterJWT } from '../../interfaces/authentication.interface';
 import { Router } from '@angular/router';
 
 @Component({
@@ -96,6 +97,29 @@ import { Router } from '@angular/router';
         </small>
       </div>
 
+      <div *ngIf="profileType" class="form-group">
+        <label for="text">Profile <span>*</span></label>
+        <select
+        formControlName="profile"
+        id="inputAccountType"
+        class="form-control"
+        [ngClass]="{
+          'invalidField':
+            (!createUserForm.get('profile').valid && createUserForm.get('profile').touched)
+            || (validatedForm && !createUserForm.get('profile').valid),
+          'is-valid':createUserForm.get('profile').valid
+        }"
+        >
+          <!-- <option value="" selected disabled hidden>Select a profile</option> -->
+          <option *ngFor="let type of profileTypeArray" value="{{ type }}" class="form-control">
+            {{ type }}
+          </option>
+        </select>
+        <small *ngIf="!createUserForm.get('profile').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
+          Required field
+        </small>
+      </div>
+
       <div class="form-group">
         <label for="text">Company</label>
         <input  type="text"
@@ -170,22 +194,31 @@ span {
   `],
   encapsulation: ViewEncapsulation.Emulated
 })
-export class AuthRegisterComponent {
+export class AuthRegisterComponent implements OnInit {
 
   createUserForm: FormGroup;
   existingUser: boolean;
   socialMedia: boolean;
   validatedForm: boolean;
 
-  @Output() userRegisterData = new EventEmitter();
-  @Output() userRegisterJWT = new EventEmitter();
+  @Output() userRegisterData = new EventEmitter<Register>();
+  @Output() userRegisterJWT = new EventEmitter<RegisterJWT>();
   @Output() userRegisterError = new EventEmitter();
+
+  @Input() redirectTo?: string = '/';
+  @Input() profileType?: boolean = false;
+  @Input() profileTypeArray?: string[] = ['Company', 'Student', 'University'];
 
   constructor(
     private authenticationService: AuthenticationService,
     private router: Router,
   ) {
     this.existingUser = false;
+    this.socialMedia = false;
+    this.validatedForm = false;
+  }
+
+  ngOnInit() {
     this.createUserForm = new FormGroup({
       email: new FormControl('', [
         Validators.required,
@@ -197,8 +230,9 @@ export class AuthRegisterComponent {
       lastName: new FormControl('', [Validators.required, Validators.minLength(2)]),
       company: new FormControl(''),
     });
-    this.socialMedia = false;
-    this.validatedForm = false;
+    if (this.profileType) {
+      this.createUserForm.addControl('profile', new FormControl('', Validators.required));
+    }
   }
 
   capitalLetter(control: FormControl): { [s: string]: boolean } {
@@ -216,7 +250,10 @@ export class AuthRegisterComponent {
       this.authenticationService.getAuth0Token().subscribe((token: any) => {
         this.authenticationService.createUser(this.createUserForm.value, token).subscribe((user: any) => {
           if (user) {
-            this.userRegisterData.emit(user);
+            this.userRegisterData.emit({
+              userData: this.createUserForm.value,
+              response: user
+            });
             this.authenticationService.loginUser(this.createUserForm.value).subscribe((AccessToken: any) => {
               this.userRegisterJWT.emit(AccessToken);
               this.authenticationService.createUserDB(this.createUserForm.value, token, user.user_id, user.user_metadata.CAP_UUID);
@@ -229,7 +266,7 @@ export class AuthRegisterComponent {
                 id: user.user_id,
                 cap_uuid: user.user_metadata.CAP_UUID
               });
-              this.router.navigate(['/']);
+              this.router.navigate([`${this.redirectTo}`]);
             });
           }
         }, (error) => {
