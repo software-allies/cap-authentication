@@ -13,13 +13,15 @@ import { AuthRegisterComponent } from './components/register/register.component'
 import { AuthProfileComponent } from './components/profile/profile.component';
 import { AuthLoginComponent } from './components/login/login.component';
 import { AuthChangePasswordComponent } from './components/change-password/change-password.component';
+import { AuthVerifyComponent } from './components/verify/verify.component';
 
 @NgModule({
   declarations: [
     AuthChangePasswordComponent,
     AuthRegisterComponent,
     AuthProfileComponent,
-    AuthLoginComponent
+    AuthLoginComponent,
+    AuthVerifyComponent
   ],
   imports: [
     HttpClientModule,
@@ -32,7 +34,8 @@ import { AuthChangePasswordComponent } from './components/change-password/change
     AuthChangePasswordComponent,
     AuthRegisterComponent,
     AuthProfileComponent,
-    AuthLoginComponent
+    AuthLoginComponent,
+    AuthVerifyComponent
   ],
   providers: [
     AuthenticationService,
@@ -56,4 +59,3 @@ export class AuthenticationModule {
     };
   }
 }
-
