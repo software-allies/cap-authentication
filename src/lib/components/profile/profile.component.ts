@@ -296,12 +296,12 @@ export class AuthProfileComponent implements OnInit {
           this.user = user;
           if (this.authenticationService.ApiToConsult()) {
             this.authenticationService.getUserFromAPI(user.user_id).subscribe((User: any) => {
-              this.userProfileDataBase.emit(User);
-              this.userDB = User;
+              this.userProfileDataBase.emit(User[0]);
+              this.userDB = User[0];
               this.profileUserForm = new FormGroup({
-                firstname: new FormControl(User.FirstName, [Validators.required]),
-                lastname: new FormControl(User.LastName, [Validators.required]),
-                company: new FormControl(User.Company, []),
+                firstname: new FormControl(User[0].FirstName, [Validators.required]),
+                lastname: new FormControl(User[0].LastName, [Validators.required]),
+                company: new FormControl(User[0].Company, []),
                 nickname: new FormControl(user.nickname, [Validators.required]),
               });
             }, (error: any) => {
@@ -344,7 +344,7 @@ export class AuthProfileComponent implements OnInit {
             this.userUpdated = true;
             setTimeout(() => {
               this.userUpdated = false;
-              this.changeView();
+              if (!this.userDB) this.changeView(true);
             }, 900);
           }
         }, ((error: any) => {
@@ -359,7 +359,10 @@ export class AuthProfileComponent implements OnInit {
       if (this.authenticationService.ApiToConsult()) {
         this.authenticationService.updateProfileFromAPI(this.userDB.id, this.profileUserForm.value).subscribe((userUpdated: any) => {
           this.userProfileDataBaseUpdate.emit(userUpdated);
-          this.userDB = userUpdated;
+          this.userDB.Company = this.profileUserForm.controls['company'].value;
+          this.userDB.FirstName = this.profileUserForm.controls['firstname'].value;
+          this.userDB.LastName = this.profileUserForm.controls['lastname'].value;
+          this.changeView(true)
         }, (error: any) => {
           console.log('Error ' + error.status + ': ' + this.serviceErrorBackEndMessage);
           this.userProfileDataBaseUpdateError.emit(error);
