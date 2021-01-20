@@ -283,7 +283,10 @@ export class AuthenticationService {
 
   getUserFromAPI(id: string) {
     if (this.ApiToConsult()) {
-      const url = `${this.configService.endPoint}/findOne?filter={"where":{"ExternalId":"${id}"}}`;
+      let filter = {
+        where: {ExternalId:id},
+      };
+      const url = `${this.configService.endPoint}?filter=${JSON.stringify(filter)}`;
       const httpOptions = {
         headers : new HttpHeaders({
           'Content-Type': 'application/json',
