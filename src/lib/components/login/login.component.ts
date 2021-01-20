@@ -16,13 +16,14 @@ import { Router } from '@angular/router';
           id="email"
           email
           class="form-control"
-          [ngClass]= "{
-            'invalidField':
-              (!loginUserForm.get('email').valid && loginUserForm.get('email').touched)
-              || (validatedForm && !loginUserForm.get('email').valid)}"
+          [ngClass]="
+            {'invalidField':(!loginUserForm.get('email').valid && loginUserForm.get('email').touched)
+            || (validatedForm && !loginUserForm.get('email').valid)}"
           formControlName="email"
           aria-describedby="emailHelp"/>
-        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        <small *ngIf="!loginUserForm.get('email').valid && validatedForm"[ngStyle]="{'color':'#dc3545'}" class="form-text">
+            Required field
+        </small>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
@@ -30,12 +31,13 @@ import { Router } from '@angular/router';
           type="password"
           id="password"
           class="form-control"
-          [ngClass]="{
-            'invalidField':
-              (!loginUserForm.get('password').valid && loginUserForm.get('password').touched)
-              || (validatedForm && !loginUserForm.get('password').valid)}"
+          [ngClass]="
+            {'invalidField':(!loginUserForm.get('password').valid && loginUserForm.get('password').touched)
+            || (validatedForm && !loginUserForm.get('password').valid)}"
           formControlName="password"/>
-
+        <small *ngIf="!loginUserForm.get('password').valid && validatedForm"[ngStyle]="{'color':'#dc3545'}" class="form-text">
+          Required field
+        </small>
           <div class="form-group form-check">
             <small class="form-text text-right">
               <a routerLink="/auth/forgot-password"> Forgot password? </a>
@@ -75,7 +77,6 @@ import { Router } from '@angular/router';
     align-items: center;
     justify-content: center;
   }
-
   .box>div {
     height: max-content;
     border-radius: 10px;
@@ -84,28 +85,9 @@ import { Router } from '@angular/router';
     width: 450px;
     margin: 40px;
   }
-
-  /*.btnFacebook
-  {
-    border:none;
-    border-radius:1.5rem;
-    padding: 1%;
-    width: 100%;
-    cursor: pointer;
-    background: #0000FF;
-    color: #fff;
+  .invalidField{
+    border-color:#dc3545;
   }
-
-  .btnGoogle
-  {
-    border:none;
-    border-radius:1.5rem;
-    padding: 1%;
-    width: 100%;
-    cursor: pointer;
-    background: #FF0000;
-    color: #fff;
-  }*/
   `],
   encapsulation: ViewEncapsulation.Emulated
 })
