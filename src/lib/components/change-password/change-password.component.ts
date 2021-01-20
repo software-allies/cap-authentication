@@ -1,132 +1,126 @@
-import { Component, ViewEncapsulation, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { AuthenticationService } from '../../services/authentication.service';
-import { Router } from '@angular/router';
+import { Component, OnInit, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
+import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 @Component({
-  selector: 'cap-change-password',
+  selector: "cap-change-password",
   template: `
 <div class="box">
   <div>
-    <form [formGroup]="changeform" (ngSubmit)="forgorPassword()">
+    <form [formGroup]="resetPassword" (ngSubmit)="changePassword()">
+
       <div class="form-group">
-        <label for="email" *ngIf="!emailSend" class="col-12  text-center col-form-label">
-          Enter your email address and we will send you a link to reset your password.
-        </label>
-        <label for="email" *ngIf="emailSend" class="col-12  text-center col-form-label">
-          An e-mail was sent to your email address that you provided, there you can change your password.
-        </label>
-        <label for="email" *ngIf="errorEmailSend" class="col-12 text-danger text-center col-form-label">
-          an error occurred with the server when checking your email, try again later.
-        </label>
-        <label for="email" *ngIf="userNotFound" class="col-12 text-danger text-center col-form-label">
-          There is none account using this email address.
-        </label>
-        <input *ngIf="!emailSend"
-          [ngClass]="{
-            'invalidField':validatedForm
-          }"
+        <label for="passowrd">Password <span>*</span></label>
+        <input
+          type="password"
+          id="password"
           class="form-control"
-          type="email"
-          id="email"
-          email
-          placeholder="Email address *"
-          formControlName="email">
-        <small id="passwordHelpBlock" class="form-text text-center text-muted">
+          [ngClass]="
+            {'invalidField':(!resetPassword.get('password').valid && resetPassword.get('password').touched)
+            || (validatedForm && !resetPassword.get('password').valid)}"
+          [ngClass]="{
+            'invalidField':
+              (!resetPassword.get('password').valid && resetPassword.get('password').touched)
+              || (validatedForm && !resetPassword.get('password').valid),
+            'is-valid':resetPassword.get('password').valid
+          }"
+          formControlName="password"
+          aria-describedby="emailHelp"
+        />
+        <password-strength-meter [password]="resetPassword.get('password').value"></password-strength-meter>
+        <small
+          *ngIf="!resetPassword.get('password').pristine && !resetPassword.get('password').valid"
+          class="form-text text-center text-muted"
+        >
+          Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
+        </small>
+        <small *ngIf="!resetPassword.get('password').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
+          Required field
         </small>
       </div>
-      <button *ngIf="!emailSend" type="submit" class="btn btn-primary btn-block">Send Email</button>
-      <button *ngIf="emailSend" type="button" (click)="goToHome()" class="btn btn-secondary btn-block">Go to Home</button>
+
+      <div class="form-group">
+        <label for="password">Confirm Password <span>*</span></label>
+        <input
+          type="password"
+          id="password"
+          class="form-control"
+          [ngClass]="
+            {'invalidField':(!resetPassword.get('confirmPassword').valid && resetPassword.get('confirmPassword').touched)
+            || (validatedForm && !resetPassword.get('confirmPassword').valid)}"
+          formControlName="confirmPassword"
+        />
+        <small *ngIf="!resetPassword.get('password').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
+          Required field
+        </small>
+      </div>
+      <div *ngIf="confirmationPassword"  class="form-control-feeback text-danger text-center">
+        Passwords don't match.
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Reset Password</button>
     </form>
   </div>
 </div>
   `,
   styles: [`
-.box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+  .box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-.box>div {
-  height: max-content;
-  border-radius: 10px;
-  border: 1px solid #f2f2f2;
-  padding: 35px;
-  width: 450px;
-  margin: 40px;
-}
+  .box>div {
+    height: max-content;
+    border-radius: 10px;
+    border: 1px solid #f2f2f2;
+    padding: 35px;
+    width: 450px;
+    margin: 40px;
+  }
+  .invalidField{
+    border-color:#dc3545;
+  }
+  button {
+    outline: none;
+  }
   `],
   encapsulation: ViewEncapsulation.Emulated
 })
 export class AuthChangePasswordComponent implements OnInit {
 
-  changeform: FormGroup;
-  emailSend: boolean;
-  errorEmailSend: boolean;
+  resetPassword: FormGroup;
   validatedForm: boolean;
-  userNotFound: boolean;
+  confirmationPassword: boolean;
 
-  @Output() userEmail = new EventEmitter();
-  @Output() forgotPasswordRequest = new EventEmitter();
-  @Output() forgotPasswordRequestError = new EventEmitter();
+  @Output() resetPassowrd = new EventEmitter<string>();
 
-  constructor(
-    private authenticationService: AuthenticationService,
-    private router: Router,
-  ) {
-    this.emailSend = false;
-    this.errorEmailSend = false;
+  constructor() {
     this.validatedForm = false;
-    this.userNotFound = false;
+    this.confirmationPassword = false;
   }
 
   ngOnInit() {
-    this.changeform = new FormGroup({
-      email: new FormControl('', [Validators.required]),
+    this.resetPassword = new FormGroup({
+      password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+      confirmPassword: new FormControl('', [Validators.required]),
     });
   }
 
-  forgorPassword() {
-    if (this.changeform.valid) {
-      this.userEmail.emit(this.changeform.get(['email']).value);
-      this.authenticationService.getAuth0Token().subscribe((token: any) => {
-        this.authenticationService.searchUserByEmail(this.changeform.get(['email']).value, token)
-            .subscribe((user: any) => {
-              if (user.length) {
-                this.authenticationService.changePassword(this.changeform.get(['email']).value)
-                  .subscribe((response: any) => this.forgotPasswordRequest.emit(true),
-                    (error) => {
-                      if (error.status === 200) {
-                        this.emailSend = true;
-                        this.forgotPasswordRequest.emit(true);
-                      } else if (error.status > 400) {
-                        this.forgotPasswordRequestError.emit(error);
-                        this.errorEmailSend = true;
-                      }
-                  });
-                this.userNotFound = false;
-              } else {
-                this.forgotPasswordRequestError.emit({
-                  message: 'A registered user was not found with that email',
-                  status: 404
-                });
-                this.userNotFound = true;
-              }
-            },
-            (error) => {
-              this.userNotFound = true;
-              this.errorEmailSend = true;
-              this.forgotPasswordRequestError.emit(error);
-            });
-      });
-
-    } else {
-      this.validatedForm = true;
+  passwordConfirming(): boolean {
+    if (this.resetPassword.get('password').value === this.resetPassword.get('confirmPassword').value) {
+      this.confirmationPassword = false;
+      return true;
+    } else {
+      this.confirmationPassword = true;
+      return false;
     }
   }
 
-  goToHome() {
-    this.router.navigate(['/']);
+  changePassword() {
+    if (this.resetPassword.valid && this.passwordConfirming()) {
+      this.resetPassowrd.emit(this.resetPassword.get('password').value)
+    } else {
+      this.validatedForm = true;
+    }
   }
 }
