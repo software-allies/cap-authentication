@@ -8,12 +8,14 @@ import { IConfig } from './interfaces/config.interface';
 import { AuthenticationService } from './services/authentication.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { PasswordStrengthMeterModule } from 'angular-password-strength-meter';
 
 import { AuthRegisterComponent } from './components/register/register.component';
 import { AuthProfileComponent } from './components/profile/profile.component';
 import { AuthLoginComponent } from './components/login/login.component';
 import { AuthChangePasswordComponent } from './components/change-password/change-password.component';
 import { AuthVerifyComponent } from './components/verify/verify.component';
+import { AuthForgotPasswordComponent } from './components/forgot/forgot.component';
 
 @NgModule({
   declarations: [
@@ -21,21 +23,24 @@ import { AuthVerifyComponent } from './components/verify/verify.component';
     AuthRegisterComponent,
     AuthProfileComponent,
     AuthLoginComponent,
-    AuthVerifyComponent
+    AuthVerifyComponent,
+    AuthForgotPasswordComponent
   ],
   imports: [
     HttpClientModule,
     ReactiveFormsModule,
     CommonModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    PasswordStrengthMeterModule
   ],
   exports: [
     AuthChangePasswordComponent,
     AuthRegisterComponent,
     AuthProfileComponent,
     AuthLoginComponent,
-    AuthVerifyComponent
+    AuthVerifyComponent,
+    AuthForgotPasswordComponent
   ],
   providers: [
     AuthenticationService,
