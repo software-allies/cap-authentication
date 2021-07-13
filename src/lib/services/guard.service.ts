@@ -11,10 +11,10 @@ export class GuardService implements CanActivate {
   ) {}
 
   canActivate() {
-    if (this.authenticationService.isUserLoggedIn()) {
+    if (this.authenticationService.userIsLogged()) {
       return true;
     }
-    this.router.navigate(['/auth/login']);
+    this.router.navigate(['/']);
     return false;
   }
 }
