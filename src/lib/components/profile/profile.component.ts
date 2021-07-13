@@ -1,376 +1,238 @@
-import { Component, Inject, PLATFORM_ID, ViewEncapsulation, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Inject, PLATFORM_ID, ViewEncapsulation, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication.service';
-import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'cap-profile',
   template: `
-<div class="box">
-  <div>
-    <div class="form-content" *ngIf="user">
-      <form  *ngIf="updateUser" [formGroup]="profileUserForm" (ngSubmit)="editProfile()">
-        <div class="row">
-          <div class="col-12">
-            <div class="form-group">
-              <small class="form-text">
-                First name <span>*</span>
-              </small>
-              <input
-                type="text"
-                class="form-control"
-                formControlName="firstname"
-                [ngClass]="{
-                  'invalidField':(!profileUserForm.get('firstname').valid) || (validatedForm && !profileUserForm.get('firstname').valid)}"
-              />
-              <small *ngIf="!profileUserForm.get('firstname').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}"class="form-text">
-                  Required field
-              </small>
-            </div>
+<div class="register">
+  <div class="register__form">
+    <div class="form-container">
 
-            <div class="form-group">
-              <small class="form-text">
-                Last name <span>*</span>
-              </small>
-              <input
-                type="text"
-                class="form-control"
-                formControlName="lastname"
-                [ngClass]="{
-                  'invalidField':(!profileUserForm.get('lastname').valid) || (validatedForm && !profileUserForm.get('lastname').valid)
-                }"
-              />
-              <small *ngIf="!profileUserForm.get('lastname').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
-                Required field
-              </small>
-            </div>
-
-            <div class="form-group">
-              <small class="form-text">
-                Nickname <span>*</span>
-              </small>
-              <input
-                type="text"
-                class="form-control"
-                formControlName="nickname"
-                [ngClass]="{
-                  'invalidField':(!profileUserForm.get('nickname').valid) || (validatedForm && !profileUserForm.get('nickname').valid)
-                }"
-              />
-              <small *ngIf="!profileUserForm.get('nickname').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
-                Required field
-              </small>
-            </div>
-
-            <div class="form-group" *ngIf="userDB">
-              <small class="form-text">
-                Company
-              </small>
-              <input
-                type="text"
-                class="form-control"
-                formControlName="company"
-              />
-              <small *ngIf="!profileUserForm.get('company').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
-                Required field
-              </small>
-            </div>
-
-
-            <div *ngIf="userUpdated" class="form-control-feeback mb-2 text-success text-center">
-              User updated successfully
-            </div>
-
-            <div *ngIf="errorUpdate" class="form-control-feeback mb-2 text-danger text-center">
-              Error updating information, try again later
-            </div>
-
-            <button type="submit" class="btn btn-info btn-block btnSubmit mb-3">
-              Save
-            </button>
-
-            <button (click)="changeView(true)" class="btn btn-info btn-block btnSubmit">
-              Cancel
-            </button>
-
+      <div *ngIf="!editView">
+        <ng-container *ngIf="authUser || authUserDB">
+          <p><span>Email:</span> {{(authUserDB && authUserDB.Email) ? authUserDB.Email : authUser.email}}</p>
+          <p><span>First name:</span> {{(authUserDB && authUserDB.FirstName) ? authUserDB.FirstName : authUser.name}}</p>
+          <p><span>Last name:</span> {{(authUserDB && authUserDB.LastName) ? authUserDB.LastName: authUser.family_name}}</p>
+          <p><span>Nickname:</span> {{authUser.nickname}}</p>
+          <p *ngIf="authUserDB"><span>Company:</span> {{ authUserDB.Company }}</p>
+          <p><span>Verified Email:</span> {{authUser.email_verified ? 'Yes' : 'No'}}</p>
+          <p><span>Creation Date:</span> {{authUser.created_at | date:'medium'}}</p>
+          <p><span>Last SignIn:</span> {{authUser.last_login | date:'medium'}}</p>
+          <div class="button-container">
+            <button (click)="editView = !editView" type="submit" class="btns btns--blue">Edit Profile</button>
           </div>
-        </div>
-
-      </form>
-      <div *ngIf="!updateUser" class="row mt-3 mb-3">
-        <div class="col-12">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item"> Email: {{user.email}}</li>
-            <li class="list-group-item"> First name: {{user.name}}</li>
-            <li class="list-group-item"> Last name: {{user.family_name}}</li>
-            <li class="list-group-item"> Nickname: {{user.nickname}} </li>
-
-            <li *ngIf="userDB" class="list-group-item"> Company: {{ userDB.Company }}</li>
-
-            <li class="list-group-item"> Verified Email: {{user.email_verified ? 'Yes' : 'No'}}</li>
-            <li class="list-group-item"> Creation Date: {{user.created_at | date:'medium'}}</li>
-            <li class="list-group-item"> Last SignIn: {{user.last_login | date:'medium'}}</li>
-          </ul>
-
-          <button (click)="changeView()" type="submit" class="btn btn-success btn-block btnSubmit">
-            Edit Profile
-          </button>
-        </div>
+        </ng-container>
       </div>
 
-      <div *ngIf="!updateUser" class="row">
-        <div class="col-12">
-          <button (click)="changePassword(user.email)" type="submit" class="btn btn-success btn-block btnSubmit">
-            Change Password
-          </button>
-          <label *ngIf="passwordUpdated" class="col-12 text-center col-form-label">
-            An e-mail was sent to your email address that you provided, there you can change your password.
-          </label>
-          <label *ngIf="passwordUpdatedError" class="col-12 text-danger text-center col-form-label">
-            An error occurred with the server when checking your email, try again later
-          </label>
-        </div>
-      </div>
+      <ng-container  *ngIf="(authUserDB || authUser) && editView">
+        <form [formGroup]="profileUserForm" (ngSubmit)="editProfile()" class="form">
+          <div class="form__group">
+            <input
+              id="first-name"
+              type="text"
+              class="form__input u-border-light"
+              placeholder="First name"
+              formControlName="firstname"
+              [ngClass]="{
+                'invalidField':(!profileUserForm.get('firstname').valid) || (validatedForm && !profileUserForm.get('firstname').valid)
+              }"
+            >
+            <label for="first-name" class="form__label">First name</label>
+          </div>
+          <div class="form__group">
+            <input
+              id="last-name"
+              type="text"
+              class="form__input u-border-light"
+              placeholder="Last name*"
+              formControlName="lastname"
+              [ngClass]="{
+                'invalidField':(!profileUserForm.get('lastname').valid) || (validatedForm && !profileUserForm.get('lastname').valid)
+              }"
+            >
+            <label for="last-name" class="form__label">Last name</label>
+          </div>
+          <div class="form__group">
+            <input
+              id="nickname"
+              type="text"
+              class="form__input u-border-light"
+              placeholder="Nickname"
+              formControlName="nickname"
+              [ngClass]="{
+                'invalidField':(!profileUserForm.get('nickname').valid) || (validatedForm && !profileUserForm.get('nickname').valid)
+              }"
+            >
+            <label for="nickname" class="form__label">Nickname</label>
+          </div>
+          <div class="form__group" *ngIf="authUserDB">
+            <input
+              id="company"
+              type="text"
+              class="form__input u-border-light"
+              placeholder="Company"
+              formControlName="company"
+            >
+            <label for="company" class="form__label">Company</label>
+          </div>
+          <div class="button-container">
+            <button type="submit" class="btns btns--blue mr-5">Save</button>
+          </div>
+          <div class="button-container">
+            <button type="submit" class="btns btns--blue mr-5" (click)="changeView(true)">cancel</button>
+          </div>
+        </form>
 
+      </ng-container>
     </div>
-    <div *ngIf="verifiedUser">
-      <div class="form-content">
-          <div class="form-group d-flex justify-content-center row text-center">
-            <label *ngIf="!emailSend" class="col-12 text-center col-form-label">
-                Please verify your Account
-            </label>
-            <label *ngIf="emailSend" class="col-12 text-center col-form-label">
-                An e-mail was sent to your email address that you provided, there you can verify your email.
-            </label>
-            <label *ngIf="errorEmailSend" class="col-12 text-danger text-center col-form-label">
-                An error occurred with the server when checking your email, try again later
-            </label>
-            <div class="col-12 text-center">
-                <button
-                  *ngIf="!emailSend"
-                  type="submit"
-                  (click)="emailToVerifySent()"
-                  class="btn btn-success btn-block btnSubmit"
-                >
-                  Send verification email
-                </button>
-                <button *ngIf="emailSend" type="button" (click)="goToHome()" class="btn btn-default btn-block btnSubmit">Go to Home</button>
-            </div>
-          </div>
-      </div>
+    <div class="form-title-container text-break">
+      <h2 class="heading-secondary--light u-text-uppercase u-center-text u-margin-top-small u-text-white">
+        {{titleComponent}}
+      </h2>
     </div>
   </div>
-</div>`,
+</div>
+`,
   styles: [`
-
-.box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+p {
+  font-size: 1.8rem;
 }
-
-.box>div {
-  height: max-content;
-  border-radius: 10px;
-  border: 1px solid #f2f2f2;
-  padding: 35px;
-  width: 650px;
-  margin: 40px;
-}
-
-.box .list-group-item {
-  background-color: transparent;
-}
-
 span {
-  color: #cb2431;
+  font-weight:600;
 }
-
 .invalidField {
-  border-color:#dc3545;
+  border-color:#dc3545!important;
 }
 `],
   encapsulation: ViewEncapsulation.Emulated
 })
 export class AuthProfileComponent implements OnInit {
-
-  profileUserForm: FormGroup;
-
-  userUpdated: boolean;
-  userId: string;
-  user: any;
-  userDB: any;
-
-  errorUpdate: boolean;
-  errorEmailSend: boolean;
-
-  verifiedUser: boolean;
-  emailSend: boolean;
-  validatedForm: boolean;
-
-  passwordUpdated: boolean;
-  passwordUpdatedError: boolean;
-
-  authenticationServiceErrorMessage = 'A problem has occurred while establishing communication with the authentication service';
-  serviceErrorBackEndMessage = 'A problem has occurred while establishing communication with the BackEnd';
-
-  updateUser: boolean;
+  /**
+   * Inputs & Outputs
+   */
+  @Input() unverifiedUserRedirectTo? = '/'
+  @Input() userDataErrorRedirect? = '/'
+  @Input() titleComponent? = 'Profile';
 
   @Output() userProfileData = new EventEmitter();
+  @Output() userProfileError = new EventEmitter();
   @Output() userProfileUpdate = new EventEmitter();
   @Output() userProfileUpdateError = new EventEmitter();
-  @Output() userProfileError = new EventEmitter();
 
   @Output() userProfileDataBase = new EventEmitter();
+  @Output() userProfileDataBaseError = new EventEmitter();
   @Output() userProfileDataBaseUpdate = new EventEmitter();
   @Output() userProfileDataBaseUpdateError = new EventEmitter();
-  @Output() userProfileDataBaseError = new EventEmitter();
 
-  constructor(
-    private authenticationService: AuthenticationService,
-    private router: Router,
-    @Inject(PLATFORM_ID) private platformId
-  ) {
-    if (isPlatformBrowser(this.platformId)) {
-      this.userId = localStorage.getItem('User') ? JSON.parse(localStorage.getItem('User')).id : this.router.navigate(['/']);
-    }
-    this.userUpdated = false;
-    this.errorUpdate = false;
-    this.verifiedUser = false;
-    this.emailSend = false;
-    this.errorEmailSend = false;
-    this.validatedForm = false;
-    this.user = null;
-    this.userDB = null;
-    this.passwordUpdated = false;
-    this.passwordUpdatedError = false;
-    this.updateUser = false;
+  public profileUserForm: FormGroup;
+  public userId: string;
+  public authUser: any = null;
+  public authUserDB: any = null;
+  public userVerified: boolean = null;
+
+  public passwordUpdatedError = false;
+  public passwordUpdated = false;
+  public errorEmailSend = false;
+  public validatedForm = false;
+  public emailSend = false;
+  public editView = false;
+
+  constructor(private authenticationService: AuthenticationService, private router: Router) {
+    this.userId = this.authenticationService.getItemFromCookies('id') ? this.authenticationService.getItemFromCookies('id') : this.router.navigate(['/']);
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.getProfile();
   }
 
   changeView(resetForm: boolean = false) {
-    this.passwordUpdated = false;
-    this.passwordUpdatedError = false;
-    this.updateUser = !this.updateUser;
+    this.editView = false
     if (resetForm) {
-      if (this.userDB) {
+      if (this.authUserDB) {
         this.profileUserForm = new FormGroup({
-          firstname: new FormControl(this.userDB.FirstName, [Validators.required]),
-          lastname: new FormControl(this.userDB.LastName, [Validators.required]),
-          company: new FormControl(this.userDB.Company, []),
-          nickname: new FormControl(this.user.nickname, [Validators.required]),
+          firstname: new FormControl(this.authUserDB.FirstName, [Validators.required]),
+          lastname: new FormControl(this.authUserDB.LastName, [Validators.required]),
+          company: new FormControl(this.authUserDB.Company, []),
+          nickname: new FormControl(this.authUser.nickname, [Validators.required]),
         });
-      } else if (this.user) {
+      } else if (this.authUser) {
         this.profileUserForm = new FormGroup({
-          firstname: new FormControl(this.user.name, [Validators.required]),
-          lastname: new FormControl(this.user.family_name, [Validators.required]),
-          nickname: new FormControl(this.user.nickname, [Validators.required]),
+          firstname: new FormControl(this.authUser.name, [Validators.required]),
+          lastname: new FormControl(this.authUser.family_name, [Validators.required]),
+          nickname: new FormControl(this.authUser.nickname, [Validators.required]),
         });
       }
     }
-  }
-
-  emailToVerifySent() {
-    this.authenticationService.getAuth0Token().subscribe((token: string) => {
-      this.authenticationService.verifyEmail(this.userId, token).subscribe((status: any) => {
-        if (status) {
-          this.emailSend = true;
-        }
-      }, (error => this.errorEmailSend = true));
-    });
-  }
-
-  goToHome() {
-    this.router.navigate(['/']);
   }
 
   getProfile() {
     this.authenticationService.getAuth0Token().subscribe((token: string) => {
-      this.authenticationService.getUser(this.userId, token).subscribe((user: any) => {
+      this.authenticationService.getUser(this.userId, token).subscribe(async (user: any) => {
         this.userProfileData.emit(user);
         if (user && user.email_verified) {
-          this.user = user;
-          if (this.authenticationService.ApiToConsult()) {
-            this.authenticationService.getUserFromAPI(user.user_id).subscribe((User: any) => {
-              this.userProfileDataBase.emit(User[0]);
-              this.userDB = User[0];
-              this.profileUserForm = new FormGroup({
-                firstname: new FormControl(User[0].FirstName, [Validators.required]),
-                lastname: new FormControl(User[0].LastName, [Validators.required]),
-                company: new FormControl(User[0].Company, []),
-                nickname: new FormControl(user.nickname, [Validators.required]),
-              });
-            }, (error: any) => {
-              this.userProfileDataBaseError.emit(error);
-              console.log('Error ' + error.status + ': ' + this.serviceErrorBackEndMessage);
-              this.profileUserForm = new FormGroup({
-                firstname: new FormControl(user.name, [Validators.required]),
-                lastname: new FormControl(user.family_name, [Validators.required]),
-                nickname: new FormControl(user.nickname, [Validators.required]),
-              });
-            });
-          } else {
+          this.authUser = user;
+          this.authUserDB = await this.getUser({where: {ExternalId:this.userId}});
+          if (this.authUserDB) {
+            this.userProfileDataBase.emit(this.authUserDB);
             this.profileUserForm = new FormGroup({
-              firstname: new FormControl(user.name, [Validators.required]),
-              lastname: new FormControl(user.family_name, [Validators.required]),
-              nickname: new FormControl(user.nickname, [Validators.required]),
+              firstname: new FormControl(this.authUserDB.FirstName, [Validators.required]),
+              lastname: new FormControl(this.authUserDB.LastName, [Validators.required]),
+              company: new FormControl(this.authUserDB.Company, []),
+              nickname: new FormControl(this.authUser.nickname, [Validators.required]),
+            });
+          } else if (user) {
+            this.profileUserForm = new FormGroup({
+              firstname: new FormControl(this.authUser.name, [Validators.required]),
+              lastname: new FormControl(this.authUser.family_name, [Validators.required]),
+              nickname: new FormControl(this.authUser.nickname, [Validators.required]),
             });
           }
-        } else if (!user.email_verified) {
-          this.verifiedUser = true;
-        }
+        } else this.router.navigate([this.unverifiedUserRedirectTo]);
       }, ((error: any) => {
-        console.log('Error ' + error.status + ': ' + this.authenticationServiceErrorMessage);
         this.userProfileError.emit(error);
-        this.router.navigate(['/']);
+        this.router.navigate([this.userDataErrorRedirect]);
       }));
     }, (error: any) => {
-      console.log('Error ' + error.status + ': ' + this.authenticationServiceErrorMessage);
-      this.router.navigate(['/']);
+      this.userProfileError.emit(error);
+      this.router.navigate([this.userDataErrorRedirect]);
     });
   }
 
-  editProfile() {
+  async editProfile() {
     if (this.profileUserForm.valid) {
-      this.authenticationService.getAuth0Token().subscribe((token: string) => {
+      console.log(this.profileUserForm.value);
+      await this.authenticationService.getAuth0Token().subscribe((token: string) => {
         this.authenticationService.updateProfile(this.profileUserForm.value, this.userId, token).subscribe((userUpdated: any) => {
-          if (userUpdated) {
-            this.userProfileUpdate.emit(userUpdated);
-            this.user = userUpdated;
-            this.userUpdated = true;
-            setTimeout(() => {
-              this.userUpdated = false;
-              if (!this.userDB) this.changeView(true);
-            }, 900);
-          }
-        }, ((error: any) => {
-          console.log('Error ' + error.status + ': ' + this.authenticationServiceErrorMessage);
-          this.errorUpdate = true;
-          this.userProfileUpdateError.emit(error);
-          setTimeout(() => {
-            this.errorUpdate = false;
-          }, 3000);
-        }));
-      }, (error: any) => console.log('Error ' + error.status + ': ' + this.authenticationServiceErrorMessage));
+          this.userProfileUpdate.emit(userUpdated);
+          this.authUser = userUpdated;
+          this.changeView(true);
+        }, ((error: any) => this.userProfileUpdateError.emit(error)));
+      }, (error: any) => this.userProfileUpdateError.emit(error));
+
       if (this.authenticationService.ApiToConsult()) {
-        this.authenticationService.updateProfileFromAPI(this.userDB.id, this.profileUserForm.value).subscribe((userUpdated: any) => {
-          this.userProfileDataBaseUpdate.emit(userUpdated);
-          this.userDB.Company = this.profileUserForm.controls['company'].value;
-          this.userDB.FirstName = this.profileUserForm.controls['firstname'].value;
-          this.userDB.LastName = this.profileUserForm.controls['lastname'].value;
-          this.changeView(true)
-        }, (error: any) => {
-          console.log('Error ' + error.status + ': ' + this.serviceErrorBackEndMessage);
-          this.userProfileDataBaseUpdateError.emit(error);
+        await this.authenticationService.updateProfileFromAPI(this.authUserDB.SACAP__UUID__c,
+          {
+            FirstName: this.profileUserForm.controls['firstname'].value,
+            LastName: this.profileUserForm.controls['lastname'].value,
+            Company: this.profileUserForm.controls['company'].value
+          }).toPromise().then(() => {
+            this.authUserDB.Company = this.profileUserForm.controls['company'].value;
+            this.authUserDB.FirstName = this.profileUserForm.controls['firstname'].value;
+            this.authUserDB.LastName = this.profileUserForm.controls['lastname'].value;
+            this.userProfileDataBaseUpdate.emit(this.authUserDB);
+            this.editView = false;
+          }).catch((error) => {
+            this.userProfileDataBaseUpdateError.emit(error);
         });
       }
-    } else {
-      this.validatedForm = true;
-    }
+    } else this.validatedForm = true;
+    // await this.changeView(true);
+  }
+
+  getUser(filter: object){
+    return this.authenticationService.getUserFromEndPoint(filter).toPromise().then((account:any) => account[0]).catch(() => null);
   }
 
   changePassword(email: string) {
@@ -380,6 +242,15 @@ export class AuthProfileComponent implements OnInit {
       } else if (res.status >= 400) {
         this.passwordUpdatedError = true;
       }
+    });
+  }
+  emailToVerifySent() {
+    this.authenticationService.getAuth0Token().subscribe((token: string) => {
+      this.authenticationService.verifyEmail(this.userId, token).subscribe((status: any) => {
+        if (status) {
+          this.emailSend = true;
+        }
+      }, (error => this.errorEmailSend = true));
     });
   }
 }
