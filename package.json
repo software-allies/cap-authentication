@@ -1,6 +1,6 @@
 {
   "name": "cap-authentication",
-  "version": "1.1.24",
+  "version": "1.2.3",
   "description": "Angular module to authenticate users in your application",
   "scripts": {
     "packagr": "ng-packagr -p ng-package.json"
@@ -39,6 +39,7 @@
     "@angular/common": "^8.2.14",
     "@angular/core": "^8.2.14",
     "angular-password-strength-meter": "2.0.0",
+    "ngx-cookie-service": "^12.0.0",
     "@auth0/angular-jwt": "^3.0.1",
     "bootstrap": "^4.4.1",
     "uuid": "^3.3.3",
