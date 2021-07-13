@@ -4,7 +4,10 @@
   "lib": {
     "entryFile": "src/public-api.ts",
     "umdModuleIds": {
-      "@auth0/angular-jwt" : "angularJwt",
+      "util": "util",
+      "angular-password-strength-meter": "angular-password-strength-meter",
+      "ngx-cookie-service": "ngxCookieService",
+      "@auth0/angular-jwt": "angularJwt",
       "uuid": "uuid"
     }
   }
