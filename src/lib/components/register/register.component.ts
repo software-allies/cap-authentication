@@ -7,216 +7,196 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'cap-register',
   template: `
-<div class="box">
-  <div>
-    <form [formGroup]="createUserForm" (ngSubmit)="createUser()">
-      <div class="form-group">
-        <label for="email">Email address <span>*</span></label>
-        <input
-          type="text"
-          id="email"
-          email
-          class="form-control"
-          [ngClass]="{
-            'invalidField':
-              (!createUserForm.get('email').valid && createUserForm.get('email').touched)
-              || (validatedForm && !createUserForm.get('email').valid || existingUser)
-          }"
-          formControlName="email"
-          aria-describedby="emailHelp"/>
-        <small
-          id="emailHelp"
-          class="form-text text-muted"
-          *ngIf="!(!createUserForm.get('email').pristine && !createUserForm.get('email').valid)"
-        >
-          We'll never share your email with anyone else.
-        </small>
-        <small
-          id="emailHelp"
-          class="form-text text-muted"
-          *ngIf="(!createUserForm.get('email').pristine && !createUserForm.get('email').valid)"
-        >
-          Please enter a valid email address.
-        </small>
-      </div>
-
-      <div class="form-group">
-        <label for="password">Password <span>*</span> </label>
-        <input
-          type="password"
-          id="password"
-          class="form-control"
-          [ngClass]="{
-            'invalidField':
-              (!createUserForm.get('password').valid && createUserForm.get('password').touched)
-              || (validatedForm && !createUserForm.get('password').valid)
-          }"
-          formControlName="password"/>
-
-          <small
-            *ngIf="!createUserForm.get('password').pristine && !createUserForm.get('password').valid"
-            class="form-text text-center text-muted"
+<div class="register">
+  <div class="register__form">
+    <div class="form-container">
+      <form [formGroup]="createUserForm" (ngSubmit)="createUser()" class="form">
+        <div class="form__group">
+          <input
+            id="email"
+            type="email"
+            class="form__input u-border-light"
+            placeholder="Email adress *"
+            formControlName="email"
+            [ngClass]="{
+              'invalidField':
+                (!createUserForm.get('email').valid && createUserForm.get('email').touched)
+                || (validatedForm && !createUserForm.get('email').valid || existingUser)
+            }"
           >
-            Your password must contain the following: 8-20 characters long, the first character must be capital (uppercase) letter, a numbers and a lowercase letter.
-          </small>
-          <small *ngIf="!createUserForm.get('password').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
-            Required field
-          </small>
-      </div>
+          <label for="email" class="form__label">Email adress *</label>
+        </div>
+        <div class="form__group">
+          <input
+            id="password"
+            type="password"
+            class="form__input u-border-light"
+            placeholder="Password *"
+            formControlName="password"
+            [ngClass]="{
+              'invalidField':
+                (!createUserForm.get('password').valid && createUserForm.get('password').touched)
+                || (validatedForm && !createUserForm.get('password').valid)
+            }"
+          >
+          <label for="password" class="form__label">Password *</label>
+        </div>
+        <ng-container *ngIf="this.confirmPasswordInput">
+          <div class="form__group">
+            <input
+              id="confirmPassword"
+              type="password"
+              class="form__input u-border-light"
+              placeholder="Confirm password *"
+              formControlName="confirmPassword"
+              [ngClass]="{
+                'invalidField':
+                  (!createUserForm.get('confirmPassword').valid && createUserForm.get('confirmPassword').touched)
+                  || (validatedForm && !createUserForm.get('confirmPassword').valid)
+              }"
+            >
+            <label for="confirmPassword" class="form__label">Confirm password *</label>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="this.firstNameInput">
+          <div class="form__group">
+            <input
+              id="first-name"
+              type="text"
+              class="form__input u-border-light"
+              placeholder="First name *"
+              formControlName="firstName"
+              [ngClass]="{
+                'invalidField':
+                  (!createUserForm.get('lastName').valid && createUserForm.get('lastName').touched)
+                  || (validatedForm && !createUserForm.get('lastName').valid)
+              }"
+            >
+            <label for="first-name" class="form__label">First name</label>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="lastNameInput">
+          <div class="form__group">
+            <input
+              id="last-name"
+              type="text"
+              class="form__input u-border-light"
+              placeholder="Last name *"
+              formControlName="lastName"
+              [ngClass]="{
+                'invalidField':
+                  (!createUserForm.get('lastName').valid && createUserForm.get('lastName').touched)
+                  || (validatedForm && !createUserForm.get('lastName').valid)
+              }"
+            >
+            <label for="last-name" class="form__label">Last name</label>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="this.profileInput">
+          <div class="form__group">
+            <select
+              id="profile"
+              class="form__input u-border-light"
+              placeholder="Profile"
+              formControlName="profile"
+              [ngClass]="{
+                'invalidField':
+                  (!createUserForm.get('profile').valid && createUserForm.get('profile').touched)
+                  || (validatedForm && !createUserForm.get('profile').valid)
+              }"
+              >
+              <option value="{{null}}">-- Select --</option>
+              <option *ngFor="let type of profileArrayValues" value="{{ type.value }}">
+                {{ type.field }}
+              </option>
+            </select>
+            <label for="profile" class="form__label__spacing">&nbsp;</label>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="this.companyInput">
+          <div class="form__group">
+            <input
+              id="company"
+              type="text"
+              class="form__input u-border-light"
+              placeholder="Company"
+              formControlName="company"
+              [ngClass]="{
+                'invalidField':
+                  (!createUserForm.get('company').valid && createUserForm.get('company').touched)
+                  || (validatedForm && !createUserForm.get('company').valid)
+              }"
+            >
+            <label for="company" class="form__label">Company</label>
+          </div>
+        </ng-container>
 
-      <div class="form-group">
-        <label for="text">First Name <span>*</span></label>
-        <input  type="text"
-                class="form-control"
-                [ngClass]="{
-                  'invalidField':
-                    (!createUserForm.get('firstName').valid && createUserForm.get('firstName').touched)
-                    || (validatedForm && !createUserForm.get('firstName').valid),
-                  'is-valid':createUserForm.get('firstName').valid
-                }"
-                formControlName="firstName"/>
-        <small *ngIf="!createUserForm.get('firstName').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
-          Required field
-        </small>
-      </div>
+        <div style="padding:0rem 2rem;width: 100%;">
+          <label id="form__label__error" class="form__label__error">
+          </label>
+        </div>
+        <div style="padding:0rem 2rem;width: 100%;">
+          <label id="form__label__succeses" class="form__label__succeses">
+          </label>
+        </div>
 
-      <div class="form-group">
-        <label for="text">Last Name <span>*</span></label>
-        <input  type="text"
-                class="form-control"
-                [ngClass]="{
-                  'invalidField':
-                    (!createUserForm.get('lastName').valid
-                    && createUserForm.get('lastName').touched)
-                    || (validatedForm && !createUserForm.get('lastName').valid),
-                  'is-valid':createUserForm.get('lastName').valid
-                }"
-                formControlName="lastName"/>
-        <small *ngIf="!createUserForm.get('lastName').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
-          Required field
-        </small>
-      </div>
-
-      <div *ngIf="profileType" class="form-group">
-        <label for="text">Profile <span>*</span></label>
-        <select
-        formControlName="profile"
-        id="inputAccountType"
-        class="form-control"
-        [ngClass]="{
-          'invalidField':
-            (!createUserForm.get('profile').valid && createUserForm.get('profile').touched)
-            || (validatedForm && !createUserForm.get('profile').valid),
-          'is-valid':createUserForm.get('profile').valid
-        }"
-        >
-          <!-- <option value="" selected disabled hidden>Select a profile</option> -->
-          <option *ngFor="let type of profileTypeArray" value="{{ type }}" class="form-control">
-            {{ type }}
-          </option>
-        </select>
-        <small *ngIf="!createUserForm.get('profile').valid && validatedForm" [ngStyle]="{'color':'#dc3545'}" class="form-text">
-          Required field
-        </small>
-      </div>
-
-      <div class="form-group">
-        <label for="text">Company</label>
-        <input  type="text"
-                class="form-control"
-                formControlName="company"/>
-      </div>
-
-      <div *ngIf="existingUser"  class="form-control-feeback text-danger text-center">
-        An Account with this username already exists.
-      </div>
-
-      <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
-
-      <!--
-      <button (click)="signUpSocialMedia(true)" type="button" class="btnFacebook ">Facebook</button>
-      <button (click)="signUpSocialMedia(false)" type="button" class="btnGoogle ">Google</button>
-
-      <div *ngIf="socialMedia"  class="form-control-feeback text-danger text-center">
-        At the moment authentication with Social networks is under development, try by Email
-      </div>
-      -->
-
-    </form>
+        <div class="button-container">
+          <button type="submit" class="btns btns--blue">Create</button>
+        </div>
+      </form>
+    </div>
+    <div class="form-title-container text-break">
+      <h2 class="heading-secondary--light u-text-uppercase u-center-text u-margin-top-small u-text-white">
+        {{titleComponent}}
+      </h2>
+    </div>
   </div>
 </div>
-
   `,
   styles: [`
-.box {
+.register {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.box>div {
-  height: max-content;
-  border-radius: 10px;
-  border: 1px solid #f2f2f2;
-  padding: 35px;
-  width: 450px;
-  margin: 40px;
-}
-
-.invalidField {
-  border-color:#dc3545;
-}
-
-span {
-  color: #cb2431;
-}
-
-/*.btnFacebook {
-  border:none;
-  border-radius:1.5rem;
-  padding: 1%;
-  width: 33%;
-  cursor: pointer;
-  background: #0000FF;
-  color: #fff;
-}
-
-.btnGoogle {
-  border:none;
-  border-radius:1.5rem;
-  padding: 1%;
-  width: 33%;
-  cursor: pointer;
-  background: #FF0000;
-  color: #fff;
-}*/
-
-  `],
+label { margin-bottom: 0rem!important; }
+.invalidField { border-color:#dc3545!important; }
+span { color: #cb2431; }
+`],
   encapsulation: ViewEncapsulation.Emulated
 })
 export class AuthRegisterComponent implements OnInit {
 
-  createUserForm: FormGroup;
-  existingUser: boolean;
-  socialMedia: boolean;
-  validatedForm: boolean;
+  public createUserForm: FormGroup;
+  public existingUser: boolean = false;
+  public socialMedia: boolean = false;
+  public validatedForm: boolean = false;
+
+  /**
+   * Inputs & Outputs
+   */
+  @Input() confirmPasswordInput? = true;
+  @Input() firstNameInput? = true;
+  @Input() lastNameInput? = true;
+  @Input() profileInput? = false;
+  @Input() companyInput? = true;
+  @Input() titleComponent? = 'Create your Account';
+  @Input() redirectAfterTo?: string = '/';
+  @Input() profileArrayValues?: Array<{field: string, value: string, id?: number}> = [
+    { field: 'Company', value: 'Company', id: 1 },
+    { field: 'Student', value: 'Student', id: 2 },
+    { field: 'University', value: 'University', id: 3 }
+  ];
 
   @Output() userRegisterData = new EventEmitter<Register>();
   @Output() userRegisterJWT = new EventEmitter<RegisterJWT>();
   @Output() userRegisterError = new EventEmitter();
 
-  @Input() redirectTo?: string = '/';
-  @Input() profileType?: boolean = false;
-  @Input() profileTypeArray?: string[] = ['Company', 'Student', 'University'];
-
   constructor(
     private authenticationService: AuthenticationService,
     private router: Router,
-  ) {
-    this.existingUser = false;
-    this.socialMedia = false;
-    this.validatedForm = false;
-  }
+  ) { }
 
   ngOnInit() {
     this.createUserForm = new FormGroup({
@@ -226,13 +206,12 @@ export class AuthRegisterComponent implements OnInit {
         Validators.pattern('[a-z0-9._%-]+@[a-z0-9.-]+\.[a-z]{2,3}$')
       ]),
       password: new FormControl('', [Validators.required, Validators.minLength(8), this.capitalLetter]),
-      firstName: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      lastName: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      company: new FormControl(''),
     });
-    if (this.profileType) {
-      this.createUserForm.addControl('profile', new FormControl('', Validators.required));
-    }
+    if (this.confirmPasswordInput) this.createUserForm.addControl('confirmPassword', new FormControl('', Validators.required));
+    if (this.firstNameInput) this.createUserForm.addControl('firstName', new FormControl('', Validators.required));
+    if (this.lastNameInput) this.createUserForm.addControl('lastName', new FormControl('', Validators.required));
+    if (this.profileInput) this.createUserForm.addControl('profile', new FormControl(''));
+    if (this.companyInput) this.createUserForm.addControl('company', new FormControl(''));
   }
 
   capitalLetter(control: FormControl): { [s: string]: boolean } {
@@ -244,6 +223,7 @@ export class AuthRegisterComponent implements OnInit {
       capitalLetter: true
     };
   }
+
 
   createUser() {
     if (this.createUserForm.valid) {
@@ -257,34 +237,41 @@ export class AuthRegisterComponent implements OnInit {
             this.authenticationService.loginUser(this.createUserForm.value).subscribe((AccessToken: any) => {
               this.userRegisterJWT.emit(AccessToken);
               this.authenticationService.createUserDB(this.createUserForm.value, token, user.user_id, user.user_metadata.CAP_UUID);
-              this.authenticationService.saveCurrentUser({
+              this.authenticationService.saveSessionInCookies({
                 user: user.name,
                 email: user.email,
+                email_verified: user.email_verified,
                 refresh_token: AccessToken.refresh_token,
                 token: AccessToken.access_token,
                 token_id: AccessToken.id_token,
                 id: user.user_id,
                 cap_uuid: user.user_metadata.CAP_UUID
               });
-              this.router.navigate([`${this.redirectTo}`]);
+              this.router.navigate([`${this.redirectAfterTo}`]);
             });
           }
         }, (error) => {
           this.userRegisterError.emit(error);
           if (error.status === 409) {
-            this.existingUser = true;
+            this.showMessage('#form__label__error', 'An account already exists with this email', );
           }
         });
       });
-    } else {
-      this.validatedForm = true;
-    }
+    } else this.validatedForm = true;
   }
 
-  signUpSocialMedia(socialMedia?: boolean) {
-    this.socialMedia = true;
-    setTimeout(() => {
-      this.socialMedia = false;
-    }, 3000);
+  showMessage(element: string, textMessage: string, disappear: boolean = true) {
+    const messageError = document.querySelector(element) as HTMLElement;
+    messageError.style.padding = '1rem 2rem';
+    messageError.innerHTML = textMessage;
+    messageError.style.visibility = 'visible';
+    messageError.style.opacity = '1';
+    if (disappear) {
+      setTimeout(()=>{
+        messageError.style.visibility = 'hidden';
+        messageError.style.opacity = '0';
+        messageError.style.padding = '.5rem 2rem';
+      }, 3000);
+    }
   }
 }
