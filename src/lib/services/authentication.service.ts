@@ -8,31 +8,109 @@ import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
 import { Observable } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
+import { isNullOrUndefined } from 'util';
 
-@Injectable(
-  {
-    providedIn: 'root'
-  }
-)
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthenticationService {
+
+  private cookiesIndex: string = 'logged_in';
+
   constructor(
     private configService: ConfigService,
     private stateService: StateService,
+    private cookieService: CookieService,
     private http: HttpClient,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId,
-  ) {
-    this.stateService.setState('isLogged', this.isUserLoggedIn());
+  ) { }
+
+
+  /**
+   *
+   * Stores the object it receives in cookies
+   * @param session Object
+   */
+  saveSessionInCookies(session: object): void {
+    let dateNow = new Date();
+    dateNow.setUTCHours(dateNow.getUTCHours() + 10);
+    this.cookieService.set(this.cookiesIndex, JSON.stringify(session),{expires:dateNow});
+    this.saveCurrentUserAll(session);
   }
 
+  /**
+   * Function that receives the cookies field and if it finds it returns it, otherwise it will return false by exception of 'email_verified'
+   * @param item : 'user' | 'email' | 'email_verified' | 'token' | 'refresh_token' | 'token_id' | 'id' | 'cap_uuid'
+   */
+  getItemFromCookies(item: 'user' | 'email' | 'email_verified' | 'token' | 'refresh_token' | 'token_id' | 'id' | 'cap_uuid') {
+    if (this.cookieService.check(this.cookiesIndex)){
+      let cookies: object = JSON.parse(this.cookieService.get(this.cookiesIndex));
+      return cookies[item];
+    } else return false
+  }
+
+  /**
+   * GuardServices
+   */
+  userIsLogged(): boolean {
+    let status = this.cookieService.check(this.cookiesIndex);
+    if (status) {
+      if (isNullOrUndefined(this.stateService.state.isLogged) || !this.stateService.state.isLogged) {
+        let credentials = JSON.parse(this.cookieService.get(this.cookiesIndex));
+        this.saveCurrentUserAll(credentials);
+      }
+    } else this.stateService.setState('isLogged', status);
+    return status;
+  }
+
+  /**
+   *
+   * Apply in the app.component.ts
+   *
+   *  constructor( private authenticationService:AuthenticationService) {
+   *    this.run();
+   *  }
+   *
+   *  async run() {
+   *    this.showMenu = await this.authenticationService.initialLoading();
+   *  }
+   */
+  initialLoading(): boolean{
+    let status = this.cookieService.check(this.cookiesIndex);
+    if (status) {
+      let credentials = JSON.parse(this.cookieService.get(this.cookiesIndex));
+      this.saveCurrentUserAll(credentials);
+    } else this.stateService.setState('isLogged', status);
+    return true;
+  }
+
+  saveCurrentUserAll(userInformation) {
+    this.stateService.setAllState({
+      isLogged: true,
+      email_verified: userInformation.email_verified,
+      user: userInformation.user,
+      email: userInformation.email,
+      uuid: userInformation.cap_uuid,
+      uid: userInformation.id
+    });
+  }
+
+  /**
+   * Deprecated
+   * @param user
+   */
   saveCurrentUser(user: {}) {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('User', JSON.stringify(user));
-      // Set isLogged State to true
       this.stateService.setState('isLogged', true);
     }
   }
 
+  /**
+   * Deprecated
+   */
   isUserLoggedIn(): boolean | void {
     if (isPlatformBrowser(this.platformId) && localStorage.getItem('User')) {
       const userStorage = JSON.parse(localStorage.getItem('User'));
@@ -181,6 +259,24 @@ export class AuthenticationService {
     return this.http.post(`${this.configService.domain}/oauth/token`, httpParams, httpOptions);
   }
 
+
+  /**
+   * Remplazar por signOutAux()
+   */
+  signOutAux() {
+    if (this.cookieService.check(this.cookiesIndex)) {
+      this.cookieService.delete(this.cookiesIndex);
+      this.stateService.setState('isLogged', false);
+      this.router.navigate(['/']);
+    } else {
+      this.stateService.setState('isLogged', false);
+      this.router.navigate(['/']);
+    }
+  }
+
+  /**
+   * Remplazar por signOutAux()
+   */
   signOut() {
     if (isPlatformBrowser(this.platformId)) {
       if (localStorage.getItem('User')) {
@@ -281,6 +377,17 @@ export class AuthenticationService {
     });
   }
 
+  getUserFromEndPoint(filter: object): Observable<Array<any>>{
+      const httpOptions = {
+        headers : new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.getToken()}`
+        })
+      };
+      const url = `${this.configService.endPoint}?filter=${JSON.stringify(filter)}`;
+      return this.http.get<[any]>(url)
+  }
+
   getUserFromAPI(id: string) {
     if (this.ApiToConsult()) {
       let filter = {
@@ -297,23 +404,14 @@ export class AuthenticationService {
     }
   }
 
-  updateProfileFromAPI(id: string, data: any) {
-    if (this.ApiToConsult()) {
-      const httpOptions = {
-        headers : new HttpHeaders({
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.getToken()}`
-        })
-      };
-      return this.http.patch(
-        `${this.configService.endPoint}/${id}`,
-        {
-          FirstName: data.firstname,
-          LastName: data.lastname,
-          Company: data.company
-        },
-        httpOptions);
-    }
+  updateProfileFromAPI(uuid: string, data: object) {
+    const httpOptions = {
+      headers : new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.getToken()}`
+      })
+    };
+    return this.http.patch(`${this.configService.endPoint}/${uuid}`, data, httpOptions);
   }
 
   ApiToConsult(): boolean {
